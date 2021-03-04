@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>短信充值</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+      <style>
+          body{
+
+          }
+      </style>
+  </head>
+  <body style="height: auto">
+        <header class="header" id="header">
+                <a class="headerLeft" onclick="api.closeWin()">
+                    <i class="icon iconfont iconback"></i>
+                </a>
+                <div class="headerTle">短信购买</div>       
+        </header>
+
+        <div class="recharge" id="vue">            
+            <div class="rechargeInner">
+                <div class="rechargeInfo">
+                    <dl>
+                        <dt>当前余量:<b>{{msg_rm}}</b>条</dt> 
+                        <dd><span href="" onclick="rechargeRecord()">充值记录</span></dd>
+                    </dl>
+                </div>
+                <div class="price">
+                   <ul class="priceList">
+                      <li @click="selt(msg_num1,msg_price1,1)" :class="flag==1?'curr':''" >
+                          <dl>
+                              <dt>{{msg_price1}}元</dt>
+                              <dd>（{{msg_num1}}条短信）</dd>
+                          </dl>
+                      </li>
+                      <li @click="selt(msg_num2,msg_price2,2)" :class="flag==2?'curr':''">
+                            <dl>
+                                <dt>{{msg_price2}}元</dt>
+                                <dd>（{{msg_num2}}条短信）</dd>
+                            </dl>
+                        </li>
+                        <li @click="selt(msg_num3,msg_price3,3)" :class="flag==3?'curr':''">
+                                <dl>
+                                    <dt>{{msg_price3}}元</dt>
+                                    <dd>（{{msg_num3}}条短信）</dd>
+                                </dl>
+                        </li>
+                         <li @click="selt(msg_num4,msg_price4,4)" :class="flag==4?'curr':''">
+                                    <dl>
+                                        <dt>{{msg_price4}}元</dt>
+                                        <dd>（{{msg_num4}}条短信）</dd>
+                                    </dl>
+                                </li>    
+                        <li @click="selt(msg_num5,msg_price5,5)" :class="flag==5?'curr':''">
+                                        <dl>
+                                            <dt>{{msg_price5}}元</dt>
+                                            <dd>（{{msg_num5}}条短信）</dd>
+                                        </dl>
+                         </li>
+                         <li @click="selt(msg_num6,msg_price6,6)" :class="flag==6?'curr':''">
+                                            <dl>
+                                                <dt>{{msg_price6}}元</dt>
+                                                <dd>（{{msg_num6}}条短信）</dd>
+                                            </dl>
+                         </li>     
+                   </ul>
+                </div>              
+                <div class="attention">
+                   <h3>注意事项</h3>
+                   <ul class="attList">
+                       <li>充值短信钱就务必详细阅读以下条款，选择以后则默认认同一下内容：</li>
+                       <li>一</li>
+                       <li>资费标准：</li>
+                       <li>充值1000元=10000条短信有效期10天</li>
+                       <li>充值2000元送2000条=22000条（有效期20天）</li>
+                       <li>充值4000元送4000条=10000条（有效期50天）</li>
+                       <li>二</li>
+                       <li>用户碧玺保证所发送信息内容的合法性<br>病毒哦所发短信内容承担法律责任</li>
+                       <li>三</li>
+                       <li>由于火灾，自然灾害战争或者正则。国家或者移动运营商政策等不可抗因素不能履行或不能完全履行合同导致的
+                           短信群发业务无法继续，双方互不追究责任
+                       </li>
+                       <li>短信条数自充值成功开始计算时间，要在规定的有效期内发送完毕，过期将自动清空短信条数</li>
+                       <li>四</li>
+                   </ul>
+                </div>
+
+            </div>
+
+            <div class="botArea">
+                <div class="botArea_inner">
+                     <div class="price">{{msgPrice}}</div>
+                     <div class="btnRecharge" @click="buy">立即支付</div>
+                </div>
+                 
+            </div>
+        </div>
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/vue.min.js"></script>
+  <script type="text/javascript" src="../script/tools.js"></script>
+  <script type="text/javascript">
+      var vm;
+      apiready = function(){
+
+          fixbar();
+         vm =new Vue({
+              el:"#vue",
+              data:{
+                 msg_rm:"",
+                 msg_num1:"",
+                 msg_num2:"",
+                 msg_num3:"",
+                 msg_num4:"",
+                 msg_num5:"",
+                 msg_num6:"",
+                 msg_price1:"",
+                 msg_price2:"",
+                 msg_price3:"",
+                 msg_price4:"",
+                 msg_price5:"",
+                 msg_price6:"",
+                
+                msgNum:"",
+                msgPrice:"",
+
+                flag:1,
+                type:1
+
+              },
+              mounted:function(){
+                  this.init();
+
+              },
+              methods:{
+                init(){
+                      
+                      var sdata={uid:$api.getStorage("uid")}
+                      apidata({
+                           url:"/api/jed/sys_param",
+                           data:sdata
+                        },function(ret){
+                           if(ret){
+                               console.log(JSON.stringify(ret));
+                               vm.msg_num1=ret.data.msg_num1;
+                               vm.msg_num2=ret.data.msg_num2;
+                               vm.msg_num3=ret.data.msg_num3;
+                               vm.msg_num4=ret.data.msg_num4;
+                               vm.msg_num5=ret.data.msg_num5;
+                               vm.msg_num6=ret.data.msg_num6;
+
+                               vm.msg_price1=ret.data.msg_price1;
+                               vm.msg_price2=ret.data.msg_price2;
+                               vm.msg_price3=ret.data.msg_price3;
+                               vm.msg_price4=ret.data.msg_price4;
+                               vm.msg_price5=ret.data.msg_price5;
+                               vm.msg_price6=ret.data.msg_price6;
+
+                               vm.msgPrice=ret.data.msg_price1;
+                               vm.msgNum=ret.data.msg_num1;
+                           }
+
+                        },function(err){
+
+                        });
+                        apidata({
+                           url:"/api/jed/user_info",
+                           data:sdata
+                        },function(ret){
+                           if(ret){
+                               console.log(JSON.stringify(ret));
+                               vm.msg_rm=ret.data.msg_last;
+                           }
+
+                        },function(err){
+
+                        })
+
+                },
+
+
+                selt(num,price,flag){
+                 vm.msgNum=num;
+                 vm.msgPrice=price;
+                 vm.flag=flag;
+                 vm.type=flag;
+                },
+
+                buy(){
+                  console.log("我要购买短信");
+                  var sdata={
+                      uid:$api.getStorage("uid"),
+                      pay_way:2,
+                      type:vm.type,
+                      num:vm.msgNum,
+                      total:vm.msgPrice
+                
+                  }
+
+                  console.log(JSON.stringify(sdata))
+                  apidata({
+                        url:"/api/jed/get_msg",
+                        data:sdata
+                    },function(ret){
+                          console.log(JSON.stringify(ret));
+                          /*  */
+                                   if(ret.status==200){                                       
+                          var order=ret.url;
+                          var aliPayPlus = api.require('aliPayPlus');
+
+                        aliPayPlus.payOrder({
+                            orderInfo: order
+                        }, function(ret, err) {
+
+                            console.log(JSON.stringify(ret))
+                       
+                        });
+                        }else{
+                            showTip(ret.return_msg,500,"middle")
+                        }
+                        
+               
+                    },function(err){
+                        console.log(JSON.stringify(err))
+                    })
+
+                }
+
+
+              }
+
+         });
+         /*vue end*/
+
+
+
+      };
+
+
+    function rechargeRecord(){
+        api.openWin({
+            name:"shortletterRechargeRecord",
+            url:"./shortletterRechargeRecord.html"
+        })
+    }
+
+
+
+
+  </script>
+
+  <style>
+      html,body{background-color: white;}
+.recharge{ font-size: 14px;padding: 68px 0 0 0;}
+  
+  .rechargeInfo{overflow: hidden;}
+  .rechargeInfo dl{ 
+     margin: 20px; 
+     border-radius:10px;
+      display: flex;
+      font-size: 16px;
+      justify-content: space-between;
+      align-items: center;
+     background: #217bfb;
+     padding: 20px 15px;
+  }
+  .rechargeInfo dl dt{ color: white}
+  .rechargeInfo dl dd{ font-size: 12px;position: relative ;  color: white}
+
+  .rechargeInfo dl dd::before{
+       position: absolute;
+       content: "";
+       left: -10px;top:-4px;
+       width: 1px;
+       background: #525757;
+       height: 30px;
+    
+       
+       }
+  
+  .price{ height: auto; overflow: hidden;}
+  .price {padding:0 0 0 2%}
+  .price li{  
+      float: left;
+    width: 30%;
+    margin: 10px 0 10px 2%;
+  }
+  .price li.curr{
+    background:#d8f3f2;
+  }
+
+  .price li dl{width: 98%; margin: 0 auto; background: white; text-align: center;
+    padding: 15px 0px;
+    box-sizing: border-box;
+    border:1px solid white;
+    border-radius:10px
+  }
+
+  .price li.curr dl{
+    border:1px solid #217bfb;
+  }
+  .price li dl dt{font-size: 20px;color: #217bfb; margin: 5px ;}
+  .price li dl dd{margin: 5px 0}
+  
+  .attention{margin: 20px 20px 0 20px; font-size: 14px; padding: 0 0 60px 0}
+
+ .botArea{position:fixed;width: 100%;bottom: 0;}
+ .botArea .botArea_inner{height: 50px; display: flex; align-items: center;background: white;line-height: 50px;text-align: center}
+ .botArea .botArea_inner .price{ width: 60%;}
+ .botArea .botArea_inner .btnRecharge{width: 40%;background: #217bfb;color: white;}
+  </style>
+  </html>

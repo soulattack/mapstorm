@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>招标</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <style>
+         
+      </style>
+  </head>
+  <body>
+        <div class="header">
+                <div class="title">
+                    招标
+                </div>
+                <div class="headernumber" data-val="87652" id="todayAdded">
+                </div>
+                <p>...今日新增条...</p>
+                <div class="headerbottom">
+                    <img src="../image/sousuo.png" alt="">
+                    <input  name="" value=""  placeholder="搜索行业/企业名称" tapmode onclick="search()">
+                    <span>取消</span>
+                </div>
+            </div>
+            <div class="nav" >
+                <div class="navbox" tapmode onclick="Bidding('')">
+                    <img src="../image/icon1.png" alt="1">
+                    <p>招标信息</p>
+                </div>
+                <div class="navbox"  tapmode onclick="Bidding(2)">
+                    <img src="../image/icon1.png" alt="1">
+                    <p>中标信息</p>
+                </div>
+                <div class="navbox" tapmode onclick="enterprise()">
+                    <img src="../image/icon1.png" alt="1">
+                    <p>企业查询</p>
+                </div>
+                <div class="navbox"  tapmode onclick="subscribe()">
+                    <img src="../image/icon1.png" alt="1">
+                    <p>订阅</p>
+                </div>
+            </div>
+            <div class="bodys">
+                <ul class="tab">
+                    <li  class="cur">订阅推荐</li>
+                    <li>浏览记录</li>
+                </ul>
+                <div class="box" style="min-height:800px;background: red">
+                    <div class="wrap SoKing on ceshi" id="vue"> 
+                            <div class="content" v-for="(item,index) in list" :key="item.id" @click="Tender_details(item)">
+                            
+                                    <p  v-if="item.status==0"><span>预告</span>{{item.title}}</p>
+                                    <p  v-if="item.status==1"><span>招标</span>{{item.title}}</p>
+                                    <p v-if="item.status==2"><span>中标</span>{{item.title}}</p>
+                   
+                                <img class="pic" v-if="item.is_attention ==1" src="../image/guanzhu.png" alt=""  @click="follow(item)">
+                                <img class="pic" v-if="item.is_attention ==2" src="../image/soucang.png" alt="" @click="follow(item)">
+                                <div class="contentbottom">
+                                    <img style="padding-top: 8px; height: 12px;" src="../image/address.png" alt="">
+                                    <div class="name">招标单位：{{item.company}}</div>
+                                    <img style="padding-top: 8px; " src="../image/time.png" alt="2">
+                            
+                                    <div>{{timelist[index]}}</div>
+                            
+                                    <div class="yusuan">{{item.price}}预算</div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="wrap two ">
+                        记录
+                    </div>
+                </div>
+            </div>
+  </body>
+
+  <style>
+        body,html{background:#eee;}
+        .header{background: #4AB6B4;color: white;padding-bottom: 6px;position: fixed;top: 0px;width: 100%;z-index: 999;}
+        .header .title{text-align: center;height: 30px; line-height: 30px;font-size: 18px;}
+        .headernumber{display: flex;justify-content: center;}
+
+        .headernumber span{background: #1F9F98;width: 30px;height: 30px;line-height: 30px;border-radius: 5px;text-align: center;margin-left: 10px; display: inline-block;}
+        .header p {text-align: center;height: 30px;line-height: 30px;}
+        .headerbottom {height: 30px;line-height: 30px;position: relative;}
+        .headerbottom input{width: 75%; background: white;margin-left: 12px;padding-left: 30px;height: 30px;line-height: 30px;outline: medium;border-radius: 10px;}
+        .headerbottom img{width: 20px; height: 20px;position: absolute;top: 5px;left: 25px;}
+        .nav{display: flex;width: 94%;margin-left: 3%;background: white;margin-top: 140px;margin-bottom: 10px;padding: 10px 0;border-radius: 10px;}
+        .nav .navbox{width: 25%;text-align: center;}
+        .nav .navbox img{width: 50px; height: 50px;}
+        .box .wrap {display: none;background: #eee;}
+        .box{margin:0 3%;}
+        .box .SoKing{display: block;}
+        .tab { margin-left: 3%;width: 94%;padding: 0;list-style: none;display: flex;background: white;height: 30px;border-radius: 10px 10px 0 0;}
+        .tab li {height: 30px;color: black;text-align: center;line-height: 30px;font-size: 14px;
+            color: #ccc;margin-left: 20px;margin-bottom: 5px;border: 1px;}
+        .on {display: block;}
+        .tab li.cur {color: black;border-bottom: 1px solid orange;}
+        .content{padding: 0 10px;line-height: 25px;position: relative;margin-bottom: 10px;background: white;border-radius: 10px;padding-top: 5px;}
+        .content:first-child{border-radius:  0 0 10px 10px;}
+        .content .pic {width: 20px; height: 20px;position: absolute;top: 10px;right: 10px;}
+        
+        .content p{width: 85%; height: auto;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;overflow: hidden;}
+        .content p span{width: 40px;height: 20px;background: #23CC93;color: white;line-height: 20px;text-align: center;border-radius: 8px;}
+        .contentbottom{display: flex;vertical-align: middle;line-height: 30px;font-size: 12px;justify-content: space-between;}
+        .contentbottom .name {overflow: hidden;text-overflow:ellipsis;white-space: nowrap;width: 150px;}
+        .contentbottom img{width: 10px; height: 12px; vertical-align: middle;padding-top: 0;}
+        .yusuan{color: orange;}
+    </style>
+
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+
+  <script type="text/javascript">
+
+      apiready = function(){
+        vm = new Vue({
+           el: "#vue",
+           data:{
+            list:[],
+            timelist:[]
+           },
+           created() {
+           },
+           mounted:function(){
+            this.getData()
+           },
+           methods: {
+             getData(){
+                  datas(0)
+             },
+           },
+       })
+
+       /*
+           api.addEventListener({
+                name:'viewappear'
+            }, function(ret, err){ 
+                vm.list=[];
+                vm.timelist = [];       
+                datas(0); 
+        });
+       */
+   
+ //     add();
+
+    };
+
+   
+//新增条数
+    var num=$("#todayAdded").attr("data-val");
+   var arr=num.toString().split("");
+   var str="";
+   for(var i=0;i<arr.length;i++){
+      str+="<span>"+arr[i]+"</span>"
+   }
+   $("#todayAdded").empty().append(str);
+ //选项卡
+ $(document).ready(function() {
+     $(".tab li").click(function() {
+         $(".tab li").eq($(this).index()).addClass("cur").siblings().removeClass('cur');
+         $(".box .wrap").hide().eq($(this).index()).show();
+         //另一种方法: $("div").eq($(".tab li").index(this)).addClass("on").siblings().removeClass('on');
+     });
+ });
+ //进入招标和中标页面
+ function Bidding (type){
+     api.openWin({
+         name: 'Bidding',
+         url: './Bidding.html',
+         pageParam: {
+             type: type
+         }
+     });
+ }
+ var size=10,index=0;
+ //新增数据
+ function add(){
+     api.addEventListener({
+             name: 'scrolltobottom',
+             extra: {threshold: 10 }
+          }, function(ret, err) {
+                   index+=size;
+                   datas(index);
+        });
+  }
+ //获取数据
+ function datas(index){
+    //  console.log(vm);
+     
+    var sdata={
+                  uid:$api.getStorage("uid"),
+                  start:index,
+                  num:size,  
+              };
+              apidata({
+                  url:"/api/jed/bidding_lists",
+                  data:sdata
+                 },function(ret){
+                   if(ret){
+                       
+                       if(ret.data.length==0){
+                        showTip("没有更多数据啦！！！！",700,"bottom");
+                    }
+                     console.log(JSON.stringify(ret));
+                    
+                       ret.data.forEach(element => {
+                           var update=Number(element.update_time)*1000;//数据的发布时间戳 
+                               var a = formatDate(element.update_time);
+                               vm.timelist.push(a);
+                               vm.list.push(element);     
+                      });
+                   }
+                 },function(err){
+                 })
+}
+ 
+//企业查询
+function enterprise(){
+    api.openWin({
+        name: 'enterprise',
+        url: './enterprise.html',
+
+    });
+}
+//时间戳转换
+function formatDate(datetime) {
+                var date = new Date(datetime*1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+                var year = date.getFullYear(),
+                    month = ("0" + (date.getMonth() + 1)).slice(-2),
+                    sdate = ("0" + date.getDate()).slice(-2);
+                    // hour = ("0" + date.getHours()).slice(-2),
+                    // minute = ("0" + date.getMinutes()).slice(-2),
+                    // second = ("0" + date.getSeconds()).slice(-2);
+                // 拼接
+                // var result = year + "-"+ month +"-"+ sdate +" "+ hour +":"+ minute +":" + second;
+                var result = year + "-"+ month +"-"+ sdate ;
+                // 返回
+                return result;
+            }
+//去详情页
+function Tender_details(obj){
+    api.openWin({
+        name: 'Tender_details',
+        url: './Tender_details.html',
+        pageParam: {
+            item: obj
+        }
+    });
+
+}
+//去搜索历史页
+function search(){
+    api.openWin({
+        name: 'search',
+        url: './search.html',
+    });
+
+}
+//收藏
+
+function follow(obj){
+   
+    event.stopPropagation();
+  
+    
+    var id = obj.id
+    apidata({
+        url:'/api/jed/attention_add',
+        data:{
+            uid:$api.getStorage('uid'),
+            bid:id
+        }
+    },function(ret){
+        var attention = obj.is_attention;
+      
+              if( attention===1){
+                showTip("取消成功",'700','bottom');
+                obj.is_attention =2;
+              }else {
+                showTip("关注成功",'700','bottom')
+                obj.is_attention=1;
+               
+                console.log('2');
+                
+              }
+      
+         
+       
+        console.log(JSON.stringify(ret));
+    },function(err){
+        console.log(JSON.stringify(err));
+        
+    })
+}
+
+
+
+  </script>
+  </html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>地图采集</title>
+    <!-- <link rel="stylesheet" type="text/css" href="./css/api.css" /> -->
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/css.css" />
+    <link rel="stylesheet" type="text/css" href="../css/mobileSelect.css" />
+
+    <script type="text/javascript"
+        src="https://api.map.baidu.com/api?v=2.0&ak=Sk2jbVWPdmZK0QEGiQ8aB3WuzAOVh1Rk"></script>
+
+
+</head>
+
+<body>
+    <div class="mw">
+                <header class="header" id="header">
+                    <a class="headerLeft" onclick="api.closeWin()">
+                        <i class="icon iconfont iconback"></i>
+                    </a>
+                    <div class="headerTle">城市采集</div>
+                    <!----> 
+                    <a class="headerRight" onclick="tolist()" >
+                            <i class="icon iconfont iconList"></i>
+                    </a> 
+                </header>
+                <div class="cdtBox" id="cdt">
+                   <div class="cdtArea">
+                       <div class="areaWrap">
+                          <b >采集区域</b>
+                          <span class="city" id="city" >选择区域</span>
+                       </div>                   
+                   </div>
+                   <div class="cdtType">
+                       <div class="typeWrap">
+                          <i class="i_search"></i> <input  id="industry" type="text" value="" placeholder="请输入关键词">
+                       </div>
+                   </div>
+                </div>
+                <div class="map"  >                 
+                        <div id="l-map"></div>                      
+                </div>
+               <div class="btn">
+                     <a href="javascript:;" id="start">开始采集</a>
+               </div>
+
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script src="../script/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript" src="../script/mobileSelect.min.js"></script>
+
+<script src="../script/mycity.js"> </script>
+<script type="text/javascript">
+
+    function tolist() {
+        api.openWin({
+            name: 'mapSpiderList',
+            url: './mapSpiderList.html',
+            reload:true
+        })
+    }
+  
+</script>
+
+<script type="text/javascript" src="../script/mapmax.js"></script>
+</html>
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0;padding: 0;
+    }
+    .header{z-index:1000;}
+    .mw {
+        height: 100%;
+    }
+
+ .cdtBox{width: 100%; padding: 72px 0 0 0;background: white;position: relative;z-index: 12;}
+
+ .cdtArea{ padding: 10px 10px;}
+ .areaWrap{position:relative; height: 20px; display: flex;justify-content: space-between;align-items: center}
+ .areaWrap b{font-size: 16px;font-weight: 400}
+ .areaWrap span{margin: 0 25px 0 0;color:#666}
+ .areaWrap::after{
+    position: absolute;
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-top:1px solid #6a6a6a;
+    border-left:1px solid #6a6a6a;
+    transform: rotate(135deg);
+    right:10px;
+    top:5px;
+
+  }
+  .cdtType{padding: 10px; background: #ededed}
+  .typeWrap{padding: 4px;border:1px solid #217bfb;border-radius:3px; display: flex;align-items: center ;background: white}
+.i_search{ display: block;width: 25px;height: 25px; 
+  /* background: url(../image/i_search.png); */
+  background-size: cover}
+  #industry{width: 100%;border:none;height: 36px}
+#bmap {
+        height: 100%;
+        width: 100%;
+ }
+ .map{margin:0px 0 0 0;z-index: 12}
+   
+ .btn{position: fixed;width: 100%; height: 40px; line-height: 40px;text-align: center; background: #217bfb;bottom: 0px;color:white;font-size: 18px;z-index: 12;}
+ .btn a{color:white}
+ 
+ .shin{position:absolute;bottom:100px; width:100%;z-index: 12;}
+ .itemWrap .item{ width:100%; text-align:center;height:26px;line-height:26px}
+ .itemWrap .item span{background:rgba(0,0,0,0.5); padding:3px 8px;color:white;border-radius:8px;
+   text-overflow: ellipsis;overflow: hidden;white-space: nowrap;
+   max-width: 50%;
+   display: inline-block;
+ }
+ .btn a{display: block; text-decoration: none;}
+ .map{
+     position: absolute;
+     width: 100%;
+     height: 100vh;
+     top: 0;
+     z-index: 10;
+ }
+#l-map{
+     height:100%;width:100%;
+}
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

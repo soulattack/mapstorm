@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>短信充值记录</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+      <style>
+          body{
+background-color: white;
+          }
+      </style>
+  </head>
+  <body style="height: auto">
+        <header class="header" id="header">
+                <a class="headerLeft" onclick="api.closeWin()">
+                    <i class="icon iconfont iconback"></i>
+                </a>
+                <div class="headerTle">短信购买记录</div>       
+        </header>
+
+        <div class="record" id="vue">            
+               <div class="listWrap">
+                 <ul class="list">
+                     <!---       
+                         <li>
+                       <dl>
+                           <dt>
+                               <b>充值成功</b>
+                               <span>-100</span>
+                           </dt>
+                           <dd>
+                             
+                               <span>{{timeFormat(1603074115000)}}</span>
+                               <span>短信数量：2100条</span>
+                           </dd>
+                       </dl>
+                     </li>    -->
+                 </ul>
+               </div>
+        </div>
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/vue.min.js"></script>
+  <script type="text/javascript" src="../script/tools.js"></script>
+  <script type="text/javascript">
+  
+
+
+
+      var vm;
+      var index=0;
+      var size=10;
+      apiready=function(){
+          fixbar();
+
+        vm=new Vue({
+            el:"#vue",
+            data:{
+                list:[]
+            },
+            mounted:function(){
+               this.init();
+            },
+            methods:{
+                init(){
+
+                     datas(0)
+
+                }
+
+            }
+
+        }) ;
+        
+        
+    /*vue end**/
+
+
+    /*加载事件*/
+
+    api.addEventListener({
+        name: 'scrolltobottom',
+        extra: {threshold: 10 }  
+    },function(ret,err){
+         console.log("触底事件");
+
+           index+=size;
+          // datas(index);
+
+    })
+      
+    
+
+    }
+
+/*api end*/
+     
+
+function datas(index) {
+          var sdata={
+                        uid:$api.getStorage("uid"),
+                        start:index,
+                        num:size
+                    };
+                    console.log(JSON.stringify(sdata))
+                    apidata({
+                        url:"/api/jed/get_msg_lists",
+                        data:sdata
+                    },function(ret){
+
+                      console.log(JSON.stringify(ret));
+                    if(ret.data.length==0){
+                             showTip("没有数据",1000,"middle")
+                    }
+
+
+                    
+                    },function(err){
+
+                    })
+
+  
+    
+}
+
+
+
+
+  </script>
+
+  <style>
+      html,body{background-color: white;}
+.record{ font-size: 14px;padding: 68px 0 0 0;}
+.record .listWrap{ margin: 10px; background: white;border-radius: 10px;padding: 15px;}
+.list{}
+.list li{border-bottom: 1px solid #d3d3d3; padding-bottom: 8px;}
+.list li dl{color: #a6a6a6}
+.list li dl dt{display: flex;justify-content: space-between;margin: 5px 0;color:#0c0c0c; font-size: 16px;}
+.list li dl dt b{ font-weight: normal}
+.list li dl dd{}
+.list li dl dd{display: flex;justify-content: space-between}
+</style>
+</html>

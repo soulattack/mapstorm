@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>短信群发</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/mobileSelect.css" />
+    <style>
+        html,
+        body {
+            background-color: white !important;
+        }
+
+        #msgCont {
+            outline: medium;
+        }
+
+        .groupsend {
+            font-size: 14px;
+            padding: 65px 0 0 0
+        }
+
+        .gsWrap {
+            background: white;
+            border-radius: 15px;
+            padding: 10px 15px;
+        }
+
+        .gsList li {
+            margin: 15px 0
+        }
+
+        .gsList li .flex {
+            display: flex
+        }
+
+        .gsList li .flex dd {
+            width: 80%;
+            position: relative;
+        }
+
+        .gsList li .flex input {
+            height: 100%;
+            background: #eee;
+            border-radius: 10px;
+            padding-left: 10px;
+        }
+
+        .gsList li dl dt {
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .gsList li dl dt span {
+            color: #217bfb;
+        }
+
+        .gsList li dl dt b {
+            font-size: 16px;
+            font-weight: normal;
+            position: relative;
+            padding: 0 10px;
+            height: 30px;
+            line-height: 30px;
+            display: inline-block;
+        }
+
+        .gsList li dl dt b::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 3px;
+            height: 50%;
+            margin-top: -7px;
+            background: #217bfb;
+        }
+
+        .area dd {
+            width: 88%;
+            margin: 0 0 0 12%
+        }
+
+        .area textarea {
+            background: #eee;
+            resize: none;
+            width: 90%;
+            padding: 10px 5%;
+        }
+
+        .gsList li.btnArea {
+            margin: 50px 0 20px 12%
+        }
+
+        .gsList li.btnArea input {
+            display: block;
+            width: 80%;
+            height: 36px;
+            background: #217bfb;
+            color: white;
+            margin: 0 auto;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        #phoneNumGroup {
+            outline: none
+        }
+
+        #down {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            transform: rotate(90deg);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header">
+        <a class="headerLeft" onclick="api.closeWin()">
+            <i class="icon iconfont iconback"></i>
+        </a>
+        <div class="headerTle">发送短信</div>
+    </header>
+    <div class="groupsend">
+        <div class="gsWrap">
+            <ul class="gsList">
+                <li>
+                    <dl class="area">
+                        <dt>
+                            <b>目标号码</b>
+                        </dt>
+                        <dd>
+                            <textarea name="" id="phoneNumGroup" cols="30" rows="6" readonly></textarea>
+                        </dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl class="area">
+                        <dt><b>信息内容</b>
+                            <span onclick="mdExport()"><i class="icon iconfont iconjia"></i></span>
+                        </dt>
+                        <dd>
+                            <textarea name="" id="msgCont" cols="30" rows="6" placeholder="请选择短信模板" readonly></textarea>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="btnArea">
+                    <input type="button" name="" id="" value="确认发送" onclick="nowSend()">
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript" src="../script/mobileSelect.min.js"></script>
+<script type="text/javascript">
+    var mid = "", tradeType = '';
+    apiready = function () {
+        fixbar();
+        var infos = api.pageParam.item;
+        var phonefrom = api.pageParam.phone;
+        $("#phoneNumGroup").val(phonefrom)
+    };
+    function numExport1() {
+        var contacts = api.require('contacts');
+        contacts.select(function (ret, err) {
+            if (ret) {
+                console.log(JSON.stringify(ret));
+                if (ret.phones) {
+                    var str = $("#phoneNumGroup").val();
+                    $("#phoneNumGroup").val(str + ret.phones[0]["呼叫手机"] + ",")
+                } else {
+                    showTip("你没有选择联系人", 1200, "middle");
+                }
+            } else {
+                //  alert(JSON.stringify(err));
+            }
+        });
+    }
+    function numExport() {
+        var contacts = api.require('contacts');
+        contacts.select(function (ret, err) {
+            contacts.queryByPage({
+                count: 5,
+                pageIndex: 0
+            }, function (ret, err) {
+                if (ret) {
+                    var str = $("#phoneNumGroup").val();
+                    $("#phoneNumGroup").val(str + ret.contacts[0].phones[0]["工作"] + ",")
+                } else {
+                    console.log(JSON.stringify(err));
+                }
+            });
+        });
+    }
+
+    /*导入模板*/
+    function mdExport() {
+        api.openWin({
+            name: "myGroupSendChoose",
+            url: "./myGroupSendChoose.html",
+            reload: true
+        })
+    }
+    function hasReadFunc(cc) {
+        console.log(JSON.stringify(cc));
+        var obj = JSON.parse(cc);
+        $("#msgCont").empty().append(obj.content);
+        mid = obj.id;
+    }
+    function nowSend() {
+        var str = $("#phoneNumGroup").val();
+        var arr = $("#phoneNumGroup").val().split(",");
+        var len = arr.length;
+        if (mid == "" || mid == undefined || mid == null) {
+            showTip("短信模板不能为空 去选一个吧", 1000, "middle");
+            return
+        }
+        var sdata = {
+            uid: $api.getStorage("uid"),
+            phone_str: "18252160456",
+            num: "1",
+            m_id: mid.toString()
+        };
+        apidata({
+            url: "/api/jed/msg_to_users",
+            data: sdata
+        }, function (ret) {
+            if (ret) {
+                showTip(ret.return_msg, 1000, "middle")
+            }
+        });
+    }
+</script>
+
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>模板列表</title>
+
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+ 
+      <style>
+       
+      </style>
+  </head>
+  <body>
+        <header class="header" id="">
+                <a class="headerLeft" >
+                    <i class="icon iconfont iconback"></i>
+                </a>
+                <div class="headerTle">添加模板</div>       
+        </header>
+
+        <div class="shortletter">
+              <div class="mouldWrap">
+                  <ul class="mouldList">
+                      <!-- 
+                           <li>
+                          <dl>
+                              <dt><span>徐州</span>-<span>餐饮</span> </dt>
+                              <dd>
+                                  【xx科技】尊敬的客户，我是xx科技，为你提供精准服务为你提供精准服务为你提供精准服务为你提供精准服务为你提供精准服务
+                              </dd>
+                          </dl>
+                      </li>
+                       -->
+                     
+              
+                  </ul>
+              </div>
+        </div>
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/vue.min.js"></script>
+  <script type="text/javascript" src="../script/tools.js"></script>
+  <script type="text/javascript">
+      
+      var vm;
+      apiready = function(){
+          fixbar();
+     
+
+
+           
+
+
+      };
+  </script>
+
+  <style>
+
+      body{height: auto;}
+    .shortletter{font-size: 14px;}
+    .mouldWrap{ margin: 10px 20px;border-radius:15px; padding: 10px 15px; background: white}
+    .mouldList li {margin: 10px 0;border-bottom:1px solid #c2c0c0;padding:10px 0 8px 0; }
+    .mouldList li dt{ margin: 0 0 5px 0;font-size:16px}
+    .mouldList li dd{padding: 0 0 0 10px}
+  </style>
+  </html>

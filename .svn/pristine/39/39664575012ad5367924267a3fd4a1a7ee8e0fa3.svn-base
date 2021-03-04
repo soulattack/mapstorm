@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+
+      <link rel="stylesheet" type="text/css" href="../css/api.css" />
+      <link rel="stylesheet" type="text/css" href="../css/base.css" />
+      <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+      <link rel="stylesheet" type="text/css" href="../css/style.css" />
+      <link rel="stylesheet" type="text/css" href="../css/css.css" />
+      <style>
+     
+      </style>
+  </head>
+  <body>
+    <div class="mw" id="vue">
+        <header class="header" id="header">
+            <a class="headerLeft" onclick="api.closeWin()">
+                <i class="icon iconfont iconback"></i>
+            </a>
+            <div class="headerTle" onclick="tovips()">采集结果</div>
+        </header>
+        <!-- <div class="uBox" id="">
+          GGGGGG
+        </div> -->
+
+        <div class="result">
+             <div class="rswrap">
+                          <ul class="list">
+                              <li v-for="(item,index) in list" :key="item.id">
+                                  <dl>
+                                      <dt><span>{{item.log}}</span></dt>
+                                      <dd>                              
+                                        <span v-if="isVip">{{item.tel}}</span>
+                                        <span v-else>{{item.tel.substr(0, 3) + '****' + item.tel.substr(7)}}</span>                                     
+                                    </dd>
+                                    <dd>
+                                        {{item.user}}
+                                    </dd>
+                                  </dl>                              
+                              </li>    
+                              <div v-if="!list.length"  class="empty">本次检索数据为空</div>                  
+                          </ul>
+             </div>
+        </div>
+    <div class="botBoard">
+        <ul>
+            <li><span @click="importPhone">导入通讯录</span></li>
+            <li><span @click="sendGroup">群发短信</span></li>
+            <li><span @click="importTable">导出表格</span></li>
+        </ul>
+    </div>
+      
+</div>
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script src="../script/jquery-1.7.2.min.js"></script>
+  <script src="../script/vue.min.js"></script>
+  <script type="text/javascript" src="../script/tools.js"></script>
+
+
+  <script type="text/javascript">
+   var param,currUser ;
+   var vm;
+   var dbx;
+ // console.log(JSON.stringify(new Date()) )
+  apiready = function(){
+             fixbar();
+             dbx=api.require("db");
+             currentUser();
+             param = api.pageParam.key;
+             currUser=api.pageParam.user;
+          //   console.log(param);
+     var vm=new Vue({
+         el:"#vue",
+         data:{
+            list:[],
+            listPhone:[],
+            isVip:false,
+            isshow:false
+         },
+         mounted:function(){
+             this.userinfo();
+      
+         this.getDatax()
+         },
+         methods:{
+            getData(){
+
+                
+                var db = openDatabase('test001', '1.0', 'Test DB', 2 * 1024 * 1024);
+                    db.transaction(function (tx) {
+                                       
+                        console.log(param);
+                        console.log(currUser);
+                      var sqlstring='SELECT * FROM LOGS where keytime="'+param+'"' +'and user="'+currUser+'"';
+                    
+                        
+                        tx.executeSql(sqlstring, [], function (tx, results) {
+                         console.log(JSON.stringify(results.rows) );
+                         var arr=[];
+                         var  arrphones=[];
+
+                        
+                         for(var i=0;i< results.rows.length;i++){
+                            arr.push(results.rows.item(i));
+                            arrphones.push( results.rows.item(i).tel)
+                         }
+                     
+                         console.log(JSON.stringify(arr))
+                          vm.list=arr;
+                          vm.listPhone=arrphones;
+                          vm.list.isshow=arr.length;
+                          console.log(JSON.stringify(vm.listPhone))
+                        }, null);
+                    });
+            },
+            getDatax(){
+                console.log(param);
+                console.log(api.pageParam.user);
+               this.opendb();
+               dbx.selectSql({
+                name: 'mydb',
+                sql: 'SELECT * FROM MSG where keytime="'+param+'"' +'and user="'+currUser+'"'
+               //  sql: 'SELECT * FROM MSG '
+                    }, function(ret, err) {
+                        if (ret.status) {
+                            console.log(JSON.stringify(ret));
+                            var arr=[];
+                           var  arrphones=[];
+                           for(var i=0;i< ret.data.length;i++){
+                            arr.push(ret.data[i]);
+                            arrphones.push( ret.data[i].tel)
+                         }
+                     
+                         console.log(JSON.stringify(arr))
+                          vm.list=arr;
+                          vm.listPhone=arrphones;
+                          vm.list.isshow=arr.length;
+                          console.log(JSON.stringify(vm.listPhone))
+                        
+                                
+
+                        } else {
+                            console.log(JSON.stringify(err));
+                        }
+                });
+            },
+            opendb(){
+                    var db_ret = dbx.openDatabase({
+                    name : 'mydb',
+                    path : 'fs://spiderdb.db'
+                    }, function(ret, err) {
+                        if (ret.status) {
+                    
+                            console.log('本地数据库连接成功');
+                        
+                        } else {
+                        
+                            api.toast({
+                                msg : '本地数据库连接失败'
+                            });
+                        }
+                });
+            },
+            userinfo() {
+                apidata({
+                    url: "/api/jed/user_info",
+                    data: {
+                        uid: $api.getStorage("uid"),
+                    }
+                }, function (ret) {
+                    if(ret.status==200){
+                      if (ret.data.is_vip == 1) {
+                                            vm.isVip = true;
+                                            /*获取行业*/
+                                            
+                                        console.log("VIP:"+vm.isVip)
+                                        } else {
+                                    
+                                            return;
+                                        }
+
+                    }else{
+                        showTip("您还没有登录请先登录",1200,"middle");
+                        setTimeout(function () {
+                           api.openWin({
+                            name: 'login',
+                             url: 'login.html',
+                           reload: true
+                           });
+                          }, 1000);
+                        return;
+                    }
+                   
+                });
+             },
+             importPhone(){
+                if (!vm.isVip) {
+                        tip();
+                        return;
+                    }
+                api.confirm({
+                        title: '提示',
+                        msg: '确定添加联系人到通讯录 ',
+                        buttons: ['确定', '取消']
+                    }, function (ret, err) {
+                        var list = vm.list;
+                        if (ret.buttonIndex == 1) {
+                           console.log(JSON.stringify(ret));
+                           console.log(JSON.stringify(list));
+                            if (ret) {
+                                var inum = 0;
+                                for (var i = 0; i < list.length; i++) {
+                                    if (list[i].tel) {
+                                        var contacts = api.require('DVContacts');
+                                        contacts.add({
+                                            firstName:"KYB000"+(i+1)+"-"+list[i].log,
+                                            phones: [{
+                                                '工作': list[i].tel
+                                            }],
+                                            company: list[i].log,
+                                        }, function (ret, err) {
+                                            if (ret) {
+                                                if (ret.status == true) {
+                                                    inum++;
+                                                }
+                                            } else {
+                                                console.log(JSON.stringify(err));
+                                            }
+                                        });
+                                    }
+                                    // if (i == list.length - 1) {
+                                        showTip("成功导入" + (i + 1) + "个联系人", 2000, "middle");
+                                        
+                                    // }
+                                }
+                            }
+                        }
+                    })
+             },
+             sendGroup(){
+                if (!vm.isVip) {
+                        tip();
+                        return;
+                    }
+                    var phones = vm.listPhone
+                    api.openWin({
+                        name: 'myGroupSend',
+                        url: 'myGroupSend.html',
+                        reload: true,
+                        pageParam: {
+                            phone: phones
+                        }
+                    })
+             },
+             importTable(){
+               if (!vm.isVip) {
+                    tip();
+                     return;
+                }
+                var jsonData = vm.list;
+
+                console.log(JSON.stringify(jsonData))
+
+                if (jsonData.length == 0) {
+                    showTip('请选择数据', '500', 'bottom');
+                    return;
+                }
+                apidata({
+                    url: "/api/jed/to_excel",
+                    data: {
+                        uid: $api.getStorage("uid"),
+                        lists: jsonData
+                    }
+                }, function (ret) {
+                    if (ret.status == 146) {
+                        showTip(ret.return_msg, '1500', 'bottom');
+                        return;
+                    }
+                    var urls = ret.data;
+                    api.download({
+                        url: urls
+                    }, function (ret, err) {
+                        var url = ret.savePath;
+                        showTip('导出地址为:' + url, '5000', 'bottom')
+                    })
+                })
+             }
+
+         }
+        })
+
+        api.addEventListener({
+           name: 'pageReload'
+        }, function(ret, err) {
+          if (ret.value.state == 'yes') {
+             // abc();
+             console.log("监听到 重新刷新")
+           }
+       });
+
+ };
+function myreload(){
+
+    console.log("cxsx !!!");
+    window.location.reload()
+}
+
+
+    /*会员开通提示窗*/
+    function tip() {
+        var dialogBox = api.require('dialogBox');
+        dialogBox.taskPlan({
+            rect: {
+                w: 300
+            },
+            texts: {
+                mainTitle: '温馨提示',
+                subTitle: '',
+                content: [{
+                    text: '权限不足，请开通会员解锁所有功能'
+                }],
+                btnTitle: '开通会员'
+            },
+            styles: {
+                bg: '#fff',
+                corner: 10,
+                main: {
+                    marginT: 20,
+                    color: '#636363',
+                    size: 18,
+                    bold: true,
+                },
+                sub: {
+                    marginT: 0,
+                    color: '#999999',
+                    size: 12,
+                },
+                content: [{
+                    bg: '#fff',
+                    marginT: 0,
+                    marginB: 30,
+                    w: 280,
+                    h: 40,
+                    align: 'center',
+                    color: '#bcbcbc',
+                    size: 16
+                }],
+                ok: {
+                    marginB: 10,
+                    marginL: 10,
+                    marginR: 0,
+                    w: 280,
+                    h: 40,
+                    bg: '#217bfb',
+                    color: '#fff',
+                    size: 16,
+                    corner: 10
+                }
+            },
+            tapClose: true
+        }, function (ret) {
+            if (ret.eventType == 'ok') {
+                api.openWin({
+                    name: 'memberCenter',
+                    url: './memberCenter.html',
+                    reload: true
+                })
+                var dialogBox = api.require('dialogBox');
+                dialogBox.close({
+                    dialogName: 'taskPlan'
+                });
+            }
+        });
+    }
+
+
+  function tovips(){
+    api.openWin({
+                    name: 'memberCenter',
+                    url: './memberCenter.html',
+                    reload: true
+                })
+  }
+
+ function currentUser(){
+  console.log("XXXAAAA")
+   var usr= $api.getStorage("uid");
+   console.log("user:"+usr)
+
+ }
+
+
+</script>
+
+
+
+
+
+
+  </script>
+  </html>
+  <style>
+   .result{padding: 68px 0 0 0}
+    .list {padding-bottom: 44px; background: white; padding: 0 10px}
+    .list li{ padding: 8px 0;border-bottom: 1px solid #eee;}
+    .list li dl dt{margin: 0 0 3px 0 }
+    .list li dl dd{ font-size: 12px}
+    .botBoard{position: fixed;width: 100%;bottom: 0; background: white;}
+    .botBoard ul{display: flex;height: 44px; align-items: center}
+    .botBoard ul li{flex:1; text-align: center}
+    .empty{ padding: 20px; text-align: center;font-size: 16px;}
+  </style>

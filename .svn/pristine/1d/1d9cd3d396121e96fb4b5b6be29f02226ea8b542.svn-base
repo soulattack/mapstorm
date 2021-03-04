@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>提现记录</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+      <style>
+          body{
+
+          }
+      </style>
+  </head>
+  <body style="height: auto">
+        <header class="header" id="header">
+                <a class="headerLeft" onclick="api.closeWin()">
+                    <i class="icon iconfont iconback"></i>
+                </a>
+                <div class="headerTle">提现记录</div>       
+        </header>
+
+        <div class="record" id="vue">            
+               <div class="listWrap" >
+                 <ul class="list" v-show="isShow">                  
+                     <li v-for="(item,index) in list" :key="item.id"> 
+                        <div>
+                             <span class="amount">{{item.amount}}</span>
+                             <span class="time">{{item.add_time}}</span>
+                             <span class="status">{{item.staus}}</span>
+                        </div>
+                       
+                     </li>
+
+                   
+                 </ul>  
+                 <div v-show="!isShow"  class="listTip">
+                         <p>没有数据啦</p>
+                     </div>
+               </div>
+        </div>
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/vue.min.js"></script>
+  <script type="text/javascript" src="../script/tools.js"></script>
+  <script type="text/javascript">
+      var vm;
+      var index=0,size=10;
+      apiready=function(){
+          fixbar();
+
+        vm=new Vue({
+            el:"#vue",
+            data:{
+                list:[],
+                isShow:true,
+            },
+            mounted:function(){
+                         this.init();
+            },
+            methods:{
+                init(){
+
+                      datas(0)
+
+                }
+
+            }
+
+        }) ;
+        
+        
+    /*vue end**/
+
+
+    /*加载事件*/
+
+    api.addEventListener({
+        name: 'scrolltobottom',
+        extra: {threshold: 10 }  
+    },function(ret,err){
+         console.log("触底事件");
+
+           index+=size;
+           datas(index);
+
+    })
+      
+    
+
+    }
+
+/*api end*/
+     
+
+function datas(index) {
+          var sdata={
+                        uid:$api.getStorage("uid"),
+                        start:index,
+                        num:size
+                    };
+                    console.log(JSON.stringify(sdata))
+                    apidata({
+                        url:"/api/jed/withdrawal_lists",
+                        data:sdata
+                    },function(ret){
+
+                      console.log(JSON.stringify(ret));
+                    if(ret.data.length==0){
+                             vm.isShow=false;
+                           //  showTip("没有数据",1000,"middle")
+                    }else if(ret.data.length>0){
+                        vm.isShow=true;
+                    }
+                      
+                    
+
+                    
+                    },function(err){
+
+                    })
+
+  
+    
+}
+
+
+
+
+  </script>
+
+  <style>
+.record{ font-size: 14px;padding: 68px 0 0 0;}
+.record .listWrap{ }
+.list{margin: 10px; background: white;border-radius: 10px;padding: 15px;}
+.list li{border-bottom: 1px solid #d3d3d3; padding-bottom: 8px;}
+.list li dl{color: #a6a6a6}
+.list li dl dt{display: flex;justify-content: space-between;margin: 5px 0;color:#0c0c0c; font-size: 16px;}
+.list li dl dt b{ font-weight: normal}
+.list li dl dd{}
+.list li dl dd{display: flex;justify-content: space-between}
+.listTip{text-align: center; margin: 20px 0 0 0}
+</style>
+</html>

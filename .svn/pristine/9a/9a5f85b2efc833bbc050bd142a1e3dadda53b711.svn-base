@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>通知</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/css.css" />
+    <style>
+        html,
+        body {
+            background-color: white;
+        }
+
+        .noticeList li {
+            width: 100%;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header">
+        <a class="headerLeft" onclick="api.closeWin()">
+            <i class="icon iconfont iconback"></i>
+        </a>
+        <div class="headerTle">通知</div>
+    </header>
+    <div class="m" style="padding: 70px 0 10px;margin: 0;" id="vue">
+        <div class="notice" style="margin: 0;padding: 0;">
+            <ul class="noticeList" style="margin: 10px 0;">
+                <li v-for="(item,index) in list" :key="item.id" @click="toDetail(item)">
+                    <dl>
+                        <dt>{{item.title}}</dt>
+                        <dd>{{item.description}}</dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/normal.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript" src="../script/jquery-3.4.1.min.js"></script>
+<script src="../script/vue.min.js"></script>
+<script type="text/javascript">
+    var vm;
+    apiready = function () {
+        fixbar();
+        vm = new Vue({
+            el: "#vue",
+            data: {
+                list: []
+            },
+            mounted: function () {
+                this.getData()
+            },
+            methods: {
+                /*获取数据*/
+                getData() {
+                    var sdata = {
+                        uid: $api.getStorage("uid"),
+                        type: 1
+                    }
+                    apidata({
+                        url: "/api/jed/sys_article",
+                        data: sdata
+                    }, function (ret) {
+                        vm.list = ret.data;
+                    })
+                },
+                /*查看详情*/
+                toDetail(item) {
+                    api.openWin({
+                        name: 'noticeDetail',
+                        url: 'noticeDetail.html',
+                        pageParam: {
+                            item: item
+                        }
+                    })
+                }
+            }
+        })
+    }
+</script>
+
+</html>

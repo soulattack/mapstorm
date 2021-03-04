@@ -1,0 +1,246 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>home</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <style>
+        header {
+            background-color: #f2f2f2;
+        }
+
+        header ul li {
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            display: none;
+            color: #323237;
+            position: relative;
+            font-size: 16px;
+        }
+
+        header ul li.active {
+            display: block;
+        }
+
+        #footer {
+            background-color: #f2f2f2;
+        }
+
+        #footer ul li {
+            padding-top: 30px;
+            padding-bottom: 4px;
+            background: url() no-repeat center 2px;
+            background-size: auto 20px;
+            text-align: center;
+        }
+
+        #footer ul li.active {
+            color: #217bfb;
+        }
+
+        /* #footer ul li:nth-child(1){ background-image: url(../image/bottombtn0101.png); } */
+        #footer ul li:nth-child(1) {
+            background-image: url(../image/pic/index.png);
+        }
+
+        #footer ul li:nth-child(2) {
+            background-image: url(../image/pic/record.png);
+        }
+
+        #footer ul li:nth-child(3) {
+            background-image: url(../image/pic/gongxu.png);
+        }
+
+        #footer ul li:nth-child(4) {
+            background-image: url(../image/pic/my.png);
+        }
+
+        #footer ul li:nth-child(5) {
+            background-image: url(../image/pic/index.png);
+        }
+
+        #footer ul li:nth-child(1).active {
+            background-image: url(../image/pic/index1.png);
+        }
+
+        #footer ul li:nth-child(2).active {
+            background-image: url(../image/pic/record1.png);
+        }
+
+        #footer ul li:nth-child(3).active {
+            background-image: url(../image/pic/gongxu1.png);
+        }
+
+        #footer ul li:nth-child(4).active {
+            background-image: url(../image/pic/my1.png);
+        }
+
+        #footer ul li:nth-child(5).active { 
+            background-image: url(../image/pic/index.png);
+        }
+
+        .flex-con {
+            overflow: auto
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap" class="flex-wrap flex-vertical">
+        <div id="main" class="flex-con"></div>
+        <div id="footer" class="border-t">
+            <ul class="flex-wrap">
+                <li tapmode="hover" onclick="throttle(randomSwitchBtn( this ),1000);" class="flex-con active">首页</li>
+                <li tapmode="hover" onclick="throttle(randomSwitchBtn( this ),1000);" class="flex-con">客源</li>
+                <li tapmode="hover" onclick="throttle(randomSwitchBtn( this ),1000);" class="flex-con">供需</li>
+                <li tapmode="hover" onclick=" throttle(randomSwitchBtn( this ),1000);" class="flex-con">我的</li>
+               
+            </ul>
+        </div>
+    </div>
+</body>
+<!-- 
+      <li tapmode="hover" onclick="randomSwitchBtn( this )" class="flex-con active">首页</li>
+                <li tapmode="hover" onclick="randomSwitchBtn( this )" class="flex-con">客源</li>
+                <li tapmode="hover" onclick="randomSwitchBtn( this )" class="flex-con">供需</li>
+                <li tapmode="hover" onclick=" randomSwitchBtn( this )" class="flex-con">我的</li>
+ -->
+</html>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript" src="../script/jquery-1.7.2.min.js"></script>
+<!--   -->
+<script type="text/javascript" src="../script/logout.js"></script>
+
+<script type="text/javascript">
+    apiready = function () {
+      ExitApp();
+        $api.fixStatusBar($api.dom('header'));
+        api.setStatusBarStyle({
+            style: 'light',
+            color: '#217bfb'
+        });
+        funIniGroup(0);
+    }
+    function funIniGroup(obj) {
+        var eHeaderLis = $api.domAll('header li'), frames = [];
+        frames = [
+            {
+                name: "index",
+                url: "./index.html"
+            },
+            {
+                name: "tourist",
+                url: "./tourist.html"
+            },
+            {
+                name: "popularize",
+                url: "./popularize.html"
+            },
+            {
+                name: "personalCenter",
+                url: "./personalCenter.html"
+            }
+        ];
+        var page = 0;
+        if (obj == 0 || obj == 1) {
+            var page = obj;
+            var eFootLis = $api.domAll('#footer li'),
+                eHeaderLis = $api.domAll('header li');
+            for (var i = 0, len = eFootLis.length; i < len; i++) {
+                $api.removeCls(eFootLis[i], 'active');
+                $api.removeCls(eHeaderLis[i], 'active');
+            }
+            $api.addCls(eFootLis[obj], 'active');
+            $api.addCls(eHeaderLis[obj], 'active');
+        }
+        api.openFrameGroup({
+            name: 'group',
+            scrollEnabled: false,
+            rect: {
+                x: 0,
+                y: 24,     //    y: $api.dom('header').offsetHeight,
+                w: api.winWidth,
+                h: $api.dom('#main').offsetHeight - 24
+            },
+            index: 0,
+            preload: 0,
+            frames: frames
+        }, function (ret, err) { });
+    }
+
+    /*随意切换按钮*/
+    function randomSwitchBtn(tag) {
+        var nowTime = new Date().getTime();
+       var clickTime = $(this).attr("ctime");
+    //   if(clickTime != 'undefined' && (nowTime - clickTime < 2000)){
+      //   return false;
+     //  }else{
+               // $(this).attr("ctime",nowTime);
+                var eFootLis = $api.domAll('#footer li'),
+                            eHeaderLis = $api.domAll('header li'),
+                            index = 0;
+                        for (var i = 0, len = eFootLis.length; i < len; i++) {
+                            if (tag == eFootLis[i]) {
+                                index = i;
+                            } else {
+                                $api.removeCls(eFootLis[i], 'active');
+                                $api.removeCls(eHeaderLis[i], 'active');
+                            }
+                        }
+                        $api.addCls(eFootLis[index], 'active');
+                        $api.addCls(eHeaderLis[index], 'active');
+                        /*判断是否登录*/
+                        let uid = $api.getStorage('uid');
+                        if (index != 0 && (uid == null || uid == "" || uid == undefined)) {
+                            showTip("暂未登录，请先去登录！", 1000, "middlecity");
+                            setTimeout(function () {
+                                api.openWin({
+                                    name: 'login',
+                                    url: 'login.html',
+                                     reload: true
+                                });
+                            }, 1000);
+                            return;
+                        }
+                        api.setFrameGroupIndex({
+                            name: 'group',
+                            index: index,
+                            reload: true
+                        });
+     //  }
+
+       
+
+
+
+    }
+
+    function setTab(x) {
+        var eFootLis = $api.domAll('#footer li');
+        api.setFrameGroupIndex({
+            name: 'group',
+            index: x,
+            reload: true
+        });
+    }
+
+    function throttle(func, delay) {
+        var prev = Date.now();
+        return function () {
+            var context = this;
+            var args = arguments;
+            var now = Date.now();
+            if (now - prev >= delay) {
+                func.apply(context, args);
+                prev = Date.now();
+            }
+        }
+    }
+</script>

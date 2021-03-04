@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>短信内容模板</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+</head>
+
+<body>
+    <div class="" id="vue">
+        <header class="header" id="header">
+            <a class="headerLeft" onclick="api.closeWin()">
+                <i class="icon iconfont iconback"></i>
+            </a>
+            <div class="headerTle">短信内容模板</div>
+            <a class="headerRight" onclick="toAdd()">
+                <i class="icon iconfont iconjia"></i>
+            </a>
+        </header>
+        <div class="tabs">
+            <ul class="tabList">
+                <li :class="flag==1?'curr':''" @click="changetype(1)"><span>已审核<b>({{examinedNum}})</b></span></li>
+                <li :class="flag==2?'curr':''" @click="changetype(2)"><span>未审核<b>({{noExamineNum}})</b></span></li> ·
+                <li :class="flag==3?'curr':''" @click="changetype(3)"><span>已驳回<b>({{rejectNum}})</b></span></li> ·
+            </ul>
+        </div>
+        <div class="shortletter">
+
+            <div class="sl_inner">
+
+                <div class="mouldWrap">
+                    <ul class="mouldList" v-show="flag==1">
+                        <li v-for="(item,index) in listGet" :key="item.id" @click="toDetail(item)">
+                            <dl>
+                                <dt>
+                                    <div class="rName"><span>{{item.area}}</span><span>{{item.title}}</span></div>
+                                </dt>
+                                <dd class="hasArr">
+                                    {{item.content}}
+                                </dd>
+                            </dl>
+                        </li>
+                    </ul>
+                    <ul class="mouldList" v-show="flag==2">
+                        <li v-for="(item,index) in listWill" :key="item.id">
+                            <dl>
+                                <dt>
+                                    <div class="rName"><span>{{item.area}}</span><span>{{item.title}}</span></div>
+                                </dt>
+                                <dd>
+                                    {{item.content}}
+                                </dd>
+                            </dl>
+                        </li>
+                    </ul>
+                    <ul class="mouldList" v-show="flag==3">
+                        <li v-for="(item,index) in listPass" :key="item.id">
+                            <dl>
+                                <dt>
+                                    <div class="rName"><span>{{item.area}}</span><span>{{item.title}}</span></div>
+                                </dt>
+                                <dd>
+                                    {{item.content}}
+                                </dd>
+                            </dl>
+                        </li>
+                    </ul>
+
+                </div>
+                <div v-show="isShow" id="ms">暂无数据</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<!-- <script type="text/javascript" src="../script/normal.js"></script> -->
+<script type="text/javascript">
+
+    var vm;
+    var size = 8, idx = 0;
+    var idx1 = 0;
+    var idx2 = 0;
+    var idx3 = 0;
+    var statusType = 1;       //模板审核状态类型 
+    apiready = function () {
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+
+        vm = new Vue({
+            el: "#vue",
+            data: {
+                status: statusType,
+                flag: 1,
+                examinedNum: 0,
+                noExamineNum: 0,
+                rejectNum: 0,
+                list: [],
+                listGet: [],           //已通过(已经审核通过的)
+                listWill: [],           // 未通过（审核中 待通过） 
+                listPass: [],          // 已驳回（已审核 被驳回）
+                isShow: null,
+                start: idx,
+                num: size
+            },
+            mounted: function () {
+                this.getList();
+
+                getNum();
+            },
+            methods: {
+
+                /* 获取模板列表*/
+                getList() {
+                    datas(0, idx);
+                    datas(1, idx);
+                    datas(2, idx);
+                },
+
+
+                changetype(item) {
+                    this.flag = item;
+                    //  this.status=item;
+
+                    // console.log("当前状态代码"+this.status)
+
+                    switch (item) {
+                        case 1:
+                            this.status = 1;
+                            break;
+
+                        case 2:
+                            this.status = 0;
+                            break;
+
+
+                        case 3:
+                            this.status = 2;
+                            break;
+                        default:
+                            console.log("noren");
+                    }
+                    console.log("当前的请求状态status" + this.status)
+
+                },
+
+                toDetail(item) {
+
+                    console.log("我要查看模板ID：" + item.id);
+
+                    api.openWin({
+                        name: 'shortletterMouldEdit',
+                        url: './shortletterMouldEdit.html',
+                        pageParam: {
+                            id: item.id
+                        }
+                    });
+                }
+
+
+            }
+
+        })
+
+        /*vue end*/
+        add();
+
+
+    }
+
+
+    /*apiready end*/
+
+    function add() {
+        api.addEventListener({
+            name: 'scrolltobottom',
+            extra: { threshold: 10 }
+        }, function (ret, err) {
+
+
+            console.log("我要加载的状态" + vm.status);
+
+            if (vm.status == 1) {
+                idx1 += size;
+                datas(1, idx1);
+            }
+            if (vm.status == 0) {
+                idx2 += size;
+                datas(0, idx2);
+            }
+            if (vm.status == 2) {
+                idx3 += size;
+                datas(2, idx3);
+            }
+
+            //  idx+=size;
+            // datas(0);
+
+        });
+    }
+
+
+    function datas(status, pageIndex) {
+        console.log("获取模板列表");
+        var sdata = {
+            uid: $api.getStorage("uid"),
+            status: status,              // 0待审核 1已通过 2 已驳回
+            start: pageIndex,
+            num: size
+        };
+        apidata({
+            url: "/api/jed/model_msg_lists",
+            data: sdata
+        }, function (ret) {
+            console.log(JSON.stringify(ret));
+
+            if (ret) {
+                // vm.isShow=!ret.data.length;
+                if (ret.data.length == 0) {
+                    showTip("没有更多数据啦！！！", 700, "middle");
+                }
+
+                if (status == 0) {
+
+                    ret.data.forEach(element => {
+                        vm.listWill.push(element);
+                    });
+                }
+                if (status == 1) {
+
+                    ret.data.forEach(element => {
+                        vm.listGet.push(element);
+                    });
+                }
+                if (status == 2) {
+
+                    ret.data.forEach(element => {
+                        vm.listPass.push(element);
+                    });
+                }
+
+            }
+
+        }, function (err) {
+
+        })
+
+    };
+
+    function getNum() {
+        var sdata = {
+            uid: $api.getStorage("uid"),
+
+        };
+        apidata({
+            url: "/api/jed/model_msg_lists_num",
+            data: sdata
+        }, function (ret) {
+            console.log(JSON.stringify(ret));
+            if (ret) {
+                console.log("打印数量")
+                vm.examinedNum = ret.data.get;
+                vm.noExamineNum = ret.data.will;
+                vm.rejectNum = ret.data.pass;
+            }
+
+        }, function (err) {
+
+        })
+    }
+    function toAdd() {
+
+        api.openWin({
+            name: "shortletterMouldAdd",
+            url: "./shortletterMouldAdd.html"
+        })
+    }
+
+</script>
+
+
+<style>
+    html,
+    body {
+        background-color: white;
+    }
+
+    .tabs {
+        position: fixed;
+        width: 100%;
+        top: 0px;
+        z-index: 10;
+        background: #ededed;
+        padding: 68px 0 0 0;
+        border-bottom: 1px solid #d7d7d7
+    }
+
+    .tabs .tabList {
+        display: flex;
+        padding: 10px;
+        background: white;
+        /* margin: 20px 20px 0 20px; */
+        font-size: 15px;
+        color: #3b3b3b
+    }
+
+    .tabs .tabList li {
+        flex: 1;
+        text-align: center;
+        border-right: 1px solid #eee
+    }
+
+    .tabs .tabList li.curr {
+        color: #12ada9
+    }
+
+    .tabs .tabList li:last-child {
+        border-right: none
+    }
+
+    .tabs .tabList b {
+        font-size: 14px;
+    }
+
+    .shortletter {
+        padding: 44px 0 0 0;
+        /* padding: 68px 0 0 0; */
+        font-size: 14px;
+    }
+
+    .sl_inner {
+        padding: 60px 0 30px 0
+    }
+
+
+
+
+    .mouldWrap {
+        /* margin:  10px; border-radius:10px;
+    margin: 0 20px; */
+        background: white;
+
+
+    }
+
+    .mouldList {
+        overflow: hidden;
+    }
+
+    .mouldList li {
+        margin: 10px 0;
+        padding: 0 20px;
+        border-bottom: 1px solid #c2c0c0;
+        border-bottom: 1px solid #eee;
+
+
+        color: #666
+    }
+
+    /* .mouldList li:last-child{
+    border-bottom:none;
+ } */
+    .mouldList li dt {
+        margin: 0 0 5px 0;
+        font-size: 16px;
+        display: flex
+    }
+
+    .mouldList li dt .rName {
+        flex: 1;
+        padding: 0 7px;
+    }
+
+    .mouldList li dt .rTime {
+        font-size: 14px;
+        position: relative;
+        margin: 0 15px 0 0
+    }
+
+    .mouldList li dt .rTime::after {
+        content: "";
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-top: 1px solid #666;
+        border-left: 1px solid #666;
+        transform: rotate(135deg);
+        top: 4px
+    }
+
+    .mouldList li dd {
+        padding: 0 25px 0 10px;
+        position: relative
+    }
+
+    .mouldList li dd.hasArr::after {
+        content: "";
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        display: block;
+        border-top: 1px solid #3f3f3f;
+        border-left: 1px solid #3f3f3f;
+        transform: rotate(135deg);
+        right: 4px;
+        top: -5px;
+    }
+
+    #ms {
+        margin: 10px;
+        text-align: center;
+        color: #666
+    }
+</style>
+
+</html>

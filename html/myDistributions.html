@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>我的代理</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+ 
+      <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+      <style>
+        
+      </style>
+  </head>
+  <body>
+        <header class="header" id="header">
+            <a class="headerLeft" onclick="api.closeWin()">
+                <i class="icon iconfont iconback"></i>
+            </a>
+                <div class="headerTle">我的分销</div>
+         </header>
+
+         <div class="f"  id="vue">
+             <div class="distribution">
+               <!-- 
+                  <div class="dtbInfos">
+                    <dl>
+                        <dt>
+                            <div class="dc">
+                                <span>佣金可提金额</span>
+                                <b class="can">{{money}}</b>
+                            </div>
+                            <div class="withdraw" onclick="withdraw()">
+                                 <span class="btnWithdraw">提现</span>
+                            </div>
+                        </dt>
+                        <dd class="dm1">
+                            <div class="d1"><span>今日佣金</span><b>{{commissionToday}}</b></div>
+                            <div class="d2"><span>本月佣金</span><b>{{commissionThisMonth}}</b></div>
+                        </dd>
+                        <dd class="dm2">
+                           <div class="d1"><span>总额</span><b>{{commissionTotal}}</b></div>
+                           <div class="d2"><span>上月佣金</span><b>{{commissionPrevMonth}}</b></div>
+                        </dd>
+                    </dl>
+                </div>
+                -->
+               
+
+            
+                <div class="dtListWrap">
+                   <!-- <div class="dtTle"> <span>分销记录</span>   -->
+                    <!-- <a href="">更多</a> -->
+                  </div>
+                   <ul class="dtList">
+                      <li v-for="(item,index) in list" :key="item.id">
+                          <dl>
+                              <dt><img src="../image/user/u2.jpg" alt=""></dt>
+                              <dd class="dx1">
+                                  <div class="ms01">
+                                     <div>
+                                         <span class="uName">{{item.phone}}</span> 
+                                         <b :class="'uLv uLv'+item.u_sort">{{formatLv(item.u_sort)}}</b>
+                                      </div>
+                                     <div>  <span class="uVip">{{formatVip(item.vip_type)}}</span> </div>
+                            
+                                  
+                                   </div>
+                                  <!-- <div class="ms02"></div> -->
+                                  <div class="ms03"><span>{{timeFormat(item.vip_start)}}</span> </div>
+                                  <!-- <div> 格式： {{ff(item.vip_type) }}   </div>
+                                  <div> 格式： {{item.vip_type|ffx }}   </div> -->
+                              </dd>
+                              <dd class="dx2">
+                                    <div class="mr01"><span>￥佣金{{item.money}}</span> </div>
+                                    <!-- <div class="mr02"><span>{{item.vipcost}}</span> </div> -->
+                              </dd> 
+                          </dl>
+                      </li>
+                   </ul>
+                   <div class="listTip" v-show="!isShow">
+                      暂无数据
+                   </div>
+                </div>
+             </div>
+         </div>
+
+
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/vue.min.js"></script>
+  <script type="text/javascript" src="../script/tools.js"></script>
+
+  <script type="text/javascript">
+   
+   var vm;
+   apiready=function(){
+       fixbar();
+      vm=new Vue({
+          el:"#vue",
+          data:{
+            commissionToday:"",
+            commissionPrevMonth:"",
+            commissionThisMonth:"",
+            commissionTotal:"",
+            money:"",
+            list:[],
+            vipList:[],
+            vips:{},
+            isShow:null
+
+          },
+
+          created:function(){
+            this.vip()
+          },
+          mounted:function(){
+              this.init()
+          },
+
+          filters: {
+                    ffx(vip) {
+                      var sort="";
+                          console.log(  vm.vips);
+                          switch(vip){
+           case 1:
+           sort=vm.vips.vipm;
+           break;
+           case 2:
+           sort=vm.vips.vips;
+           break;
+           case 3:
+           sort=vm.vips.vipy;
+           break;
+         }
+
+          return sort+'xxx';
+                                 
+            
+        }
+       },
+
+          methods:{
+              init(){
+                  console.log("初始化数据");
+
+                  var sdata={uid:$api.getStorage("uid")};
+                  apidata({
+                        url:"/api/jed/fx_index",
+                        data:sdata
+                   
+                  },function(ret){
+                   if(ret){
+                       console.log(JSON.stringify(ret));
+
+                       vm.commissionToday=ret.data.today;
+                       vm.commissionPrevMonth=ret.data.month_last;
+                       vm.commissionThisMonth=ret.data.month_this;
+                       vm.commissionTotal=ret.data.total;
+                       vm.money=ret.data.money;
+                       //vm.list=ret.data.lists;
+                       var xlist=ret.data.lists;
+                      xlist.forEach(ele=>{
+                        //ele.vipcost=ele.vip_type+"eee";
+                        ele.vipcost=getPri(ele.vip_type);
+                        vm.list.push(ele);
+
+                      })
+                       console.log(JSON.stringify(vm.list) )
+                      
+                      vm.isShow=vm.list.length;
+
+                    
+
+                   }
+                  },function(){
+
+                  })
+
+
+              },
+  
+
+              vip(){
+                var sdata={uid:$api.getStorage("uid")};
+
+
+  
+                apidata({
+                    url:"/api/jed/sys_param",
+                    data:sdata
+                
+                
+                
+                },function(ret){
+                    console.log(JSON.stringify(ret));
+
+                    //  callback(ret)
+                    
+                    
+                    vm.vips.vipm=ret.data.month_price;
+                    vm.vips.vips=ret.data.season_price;
+                    vm.vips.vipy=ret.data.year_price;
+    console.log("vips")
+    console.log( JSON.stringify(vm.vips) )
+
+
+                
+                    },function(err){
+
+                    })
+
+
+             }
+                            
+
+
+
+          }
+      })
+   
+     
+     
+    }
+
+   function withdraw(){
+       console.log("去提现");
+       api.openWin({
+           name:"withdraw",
+           url:"./withdraw.html"
+       })
+   }
+
+  function formatLv(lv){
+         var sort="";
+         switch(lv){
+           case 1:
+           sort="一级代理";
+           break;
+           case 2:
+           sort="二级代理";
+           break;
+           case 3:
+           sort="三级代理";
+           break;
+         }
+         return sort;
+  }
+
+  function formatVip(vip){
+         var sort="";
+         switch(vip){
+           case 1:
+           sort="月卡会员";
+           break;
+           case 2:
+           sort="季卡会员";
+           break;
+           case 3:
+           sort="年卡会员";
+           break;
+         }
+         return sort;
+  }
+
+
+  function vipCost(type){
+
+        getget();
+   
+}
+
+
+function ff(item){
+      console.log("ff的形参："+item);
+      var sdata={uid:$api.getStorage("uid")};
+
+var data=""
+  
+apidata({
+     url:"/api/jed/sys_param",
+     data:sdata
+ 
+   
+   
+ },function(ret){
+      console.log(JSON.stringify(ret));
+ 
+      
+       
+           
+      
+    //   var vipm=ret.data.month_price;
+    //   var vips=ret.data.season_price;
+    //   var vipy=ret.data.year_price;
+ 
+
+
+
+ 
+ },function(err){
+
+ })
+
+       
+   callback(data)
+
+};
+
+function callback(data){    
+     var rs="";
+    if(item===1){
+             rs=data.month_price
+       } 
+       if(item===2){
+             rs=data.season_price
+       } 
+      
+       if(item===3){
+             rs=data.year_price
+       } 
+
+       return rs;
+}
+
+
+function getPri(type){
+    var cost="";
+    var sdata={uid:$api.getStorage("uid")};
+
+
+  
+    apidata({
+         url:"/api/jed/sys_param",
+         data:sdata
+     
+       
+       
+     },function(ret){
+          console.log(JSON.stringify(ret));
+
+         //  callback(ret)
+          
+          
+          var vipm=ret.data.month_price;
+          var vips=ret.data.season_price;
+          var vipy=ret.data.year_price;
+
+        //   switch(type){
+        //    case 1:
+        //    cost=vipm;
+        //    break;
+        //    case 2:
+        //    cost=vips;
+        //    break;
+        //    case 3:
+        //    cost=vipy;
+        //    break;
+        //  }
+        // console.log("cost:"+cost);
+
+
+
+     
+     },function(err){
+
+     })
+ 
+     console.log("函数的cost："+cost)
+     return cost;
+}
+
+var dx={};
+
+
+function  ix(){
+    var sdata={uid:$api.getStorage("uid")};
+
+
+  
+apidata({
+     url:"/api/jed/sys_param",
+     data:sdata
+ 
+ },function(ret){
+      console.log(JSON.stringify(ret));
+
+     //  callback(ret)
+      
+      
+
+       dx.vipm=ret.data.month_price;
+       dx.vips=ret.data.season_price;
+       dx.vipy=ret.data.year_price;
+
+    console.log( JSON.stringify(dx) );  
+
+  
+ 
+   },function(err){
+
+  })
+
+}
+
+
+
+
+function getPri1(type){
+   console.log(type);
+   var co=""
+    getget(function(rs){
+        console.log(JSON.stringify(rs));
+        var m=rs.data.month_price;
+        var s=rs.data.season_price;
+        var y=rs.data.year_price;
+        switch(type){
+           case 1:
+           co=m;
+           break;
+           case 2:
+           co=s;
+           break;
+           case 3:
+           co=y;
+           break;
+         }
+  console.log("co:"+co)
+
+    })
+
+    return co;
+}
+
+
+  function getget(callback){
+      var sdata={uid:$api.getStorage("uid")};
+    apidata({
+         url:"/api/jed/sys_param",
+         data:sdata
+       
+     },function(ret){
+        //  console.log(JSON.stringify(ret));
+
+           callback(ret)
+          /*
+          
+               var vipm=ret.data.month_price;
+          var vips=ret.data.season_price;
+          var vipy=ret.data.year_price;
+
+          switch(type){
+           case 1:
+           cost=vipm;
+           break;
+           case 2:
+           cost=vips;
+           break;
+           case 3:
+           cost=vipy;
+           break;
+         }
+          */
+     
+     },function(err){
+
+     })
+  }
+
+
+  </script>
+
+
+
+<style>
+  .distribution{font-size: 14px; margin: 0 20px; padding: 68px 0 0 0}
+  .dtbInfos{margin: 10px 0 0 0}
+  .dtbInfos dl{
+    /* border:1px solid #12acaa; */
+    border:1px solid #217bfb;
+     border-radius:10px;background: white; 
+    }
+  .dtbInfos dl dt{
+      padding: 20px;
+      /* background: #12acaa; */
+      background: #217bfb;
+     color: white;
+     border-radius:10px;
+     box-shadow: 0 0px 6px 2px #9f9f9f;
+     display: flex
+}
+
+.dtbInfos dl dt .dc{ flex: 1;}
+.dtbInfos dl dt .dc .can{ display: block; padding: 4px 0 0 0;font-size: 14px;height: 24px; line-height: 24px}
+.dtbInfos dl dt .withdraw{width: 25%;}
+.dtbInfos dl dt .withdraw span{
+    display: block; background: white;border-radius:15px; color:#12acaa;
+    text-align: center;
+    padding:6px 10px; 
+    
+}
+.dtbInfos dl dd{border-radius:10px; display: flex; padding: 10px 20px}
+.dm1{ margin: 10px 0 0  0 }
+.dm2{ margin:  0 0 10px 0 }
+.dtbInfos dl dd div{ flex: 1}
+.dtbInfos dl dd div span{ width: 45%;}
+.dtbInfos dl dd div b{font-weight: normal} 
+
+
+.dtTle{ padding: 10px 0; margin: 10px 0 0 0;  display: flex;justify-content: space-between}
+/* .dtTle span{} */
+.dtTle a{color:#666;}
+.dtList{ 
+  background: white; border-radius: 10px;
+  /* padding: 10px 5px */
+  }
+
+.dtList li dl{display: flex;color:#666; padding: 5px 10px;border-bottom:1px solid #d0cdcd;align-items: center;}
+.dtList li dl dt{width: 50px;height: 50px; margin: 0 10px 0 0}
+.dtList li dl dt img{ width: 50px;height: 50px; border-radius: 50%}
+
+.dtList li dl dd.dx1{ flex:1;}
+.dtList li dl dd.dx1 div{ width: 100%}
+.dtList li dl dd.dx1 .ms01{ font-size:14px;color:#333;}
+.dtList li dl dd.dx1 .ms01 span{ margin: 3px 0;}
+.dtList li dl dd.dx1 .ms01 b{margin: 3px 0}
+.dtList li dl dd.dx1 .uLv{
+   display: inline-block;
+    margin: 0 0 0 0px;
+     padding: 2px 6px; 
+   
+    border-radius:6px;
+    font-size: 12px;
+    font-weight: normal;
+    }
+    .dtList li dl dd.dx1 .uLv1{
+       background: #b2dfdc;color: teal;
+    }
+    .dtList li dl dd.dx1 .uLv2{
+       background: #ff9597;color: #a30002;
+    }
+    .dtList li dl dd.dx1 .uLv3{
+       background: #fefec3;color: #c9873c;
+    }
+ .dtList li dl dd.dx1  .uVip{
+              font-size: 12px;
+   }
+.dtList li dl dd.dx1 .ms02{ margin: 5px 0}
+.dtList li dl dd.dx1 .ms03{ font-size: 12px;}
+.dtList li dl dd.dx2{width: 25%; text-align: right}
+
+.dtList li dl dd.dx2 .mr01{ color:#222;font-size: 16px;height: 24px;font-weight: bold;width: 100%}
+/* .dtList li dl dd.dx2 .mr01 span{ } */
+.dtList li dl dd.dx2 .mr02{ margin: 5px 0; width: 100%}
+
+/* .dtList li dl dd span{width: 100%;overflow: hidden; white-space: nowrap; text-overflow: ellipsis} */
+
+.uName{
+  display: block
+}
+
+.listTip{text-align: center}
+</style>
+
+</html>

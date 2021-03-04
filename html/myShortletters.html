@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>我的短信</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+ 
+  </head>
+  <body>
+        <header class="header" id="">
+                <a class="headerLeft" >
+                    <i class="icon iconfont iconback"></i>
+                </a>
+                <div class="headerTle">我的短信</div>
+                <a class="headerRight addMsg">
+                    <i class="icon iconfont iconicon_addmessage"></i>
+                </a>
+            </header>
+
+            <!--  -->
+       <div class="shortletter">
+          <ul class="itemList">
+            <li>
+                <div>
+                    <i class="icon iconfont iconmessage"></i><span>短信记录</span>
+                </div>
+            </li>
+            <li>
+              <div>
+                 <i class="icon iconfont iconmessages-outlined"></i><span>短信模板</span>
+               </div>
+           </li>
+           <li>
+                <div>
+                     <i class="icon iconfont iconchongzhi1 "></i><span>短信充值</span>
+                 </div>
+              </li>
+
+            
+          </ul>
+       </div>
+             
+
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript">
+      apiready = function(){
+
+      };
+  </script>
+  </html>
+<style>
+ .shortletter{font-size: 16px}
+ .shortletter .itemList{ margin: 20px 15px}
+ .shortletter .itemList li{ margin:  10px 0; padding: 10px 15px; background: white; border-radius:15px;position: relative;}
+ .shortletter .itemList li::after{
+    content: "";
+    position: absolute;
+    right: 15px;
+    top:15px;
+
+    width: 13px;
+    height: 13px;
+    transform: rotate(135deg);
+    border-top:2px solid #666;
+    border-left:2px solid #666;
+
+    
+}
+ .shortletter .itemList li i{ font-size: 20px;}
+ .shortletter .itemList li span{ font-size: 18px; margin: 0 5px}
+
+ .addMsg{margin: 0 15px 0 0;color:cadetblue}
+ .addMsg i{font-size: 20px; font-weight: bold}
+ .headerLeft i{font-size: 26px;margin: 0 0 0 10px}
+</style>

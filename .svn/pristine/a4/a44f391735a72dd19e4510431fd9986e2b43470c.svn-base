@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>首页</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/iconfont/iconfont.css">
+    <style>
+        html,
+        body {
+            background-color: white;
+        }
+
+        .top {
+            background-color: #217bfb;
+            padding: 10px 20px 20px 20px;
+            color: white
+        }
+
+        /* .nav {display: flex;justify-content: space-between;}
+      .nav .navleft{display: flex;height: 30px;line-height: 30px;}
+      .nav .navleft div{width: 25px;height: 25px;border-radius: 50%;}
+      .nav .navleft img{width: 100%;height: 100%;border-radius: 50%;} */
+        .logo {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+        }
+
+        .logo .logoleft {
+            height: 60px;
+            line-height: 60px;
+            display: flex;
+        }
+
+        .logo .logoleft div {
+            padding-top: 10px;
+        }
+
+        .logo .logoleft div img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo .logoleft b {
+            font-size: 20px;
+            line-height: 60px;
+            padding-left: 5px;
+        }
+
+        .logo .logoright {
+            width: 200px;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f14242;
+        }
+
+        .logo .right {
+            margin-top: 12px;
+        }
+
+        .input {
+            background-color: white;
+            height: 40px;
+            line-height: 40px;
+            display: flex;
+            border-radius: 10px;
+        }
+
+        .input .search {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            color: #217bfb;
+            font-size: 16px;
+        }
+
+        .input input {
+            background-color: white;
+            text-align: left;
+            width: calc(100% - 40px);
+            font-size: 16px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .notice {
+            display: flex;
+            padding: 10px 0;
+            height: 15px;
+            line-height: 15px;
+            font-size: 16px;
+        }
+
+        .notice .notleft {
+            border-right: 1px solid white;
+            padding-right: 5px;
+        }
+
+        .notice #notright {
+            height: 14px;
+            margin-left: 5px;
+        }
+
+        .main {
+            background-color: white;
+            display: flex;
+            flex-wrap: wrap;
+            text-align: center;
+            padding: 2vh 0;
+        }
+
+        .main .item {
+            width: 25%;
+        }
+
+        .main .item .imgbox {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 10px auto;
+            background-color: #f3f7fc;
+        }
+
+        .main .item .imgbox img {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            line-height: 70px;
+        }
+
+        .main .item p {
+            font-size: 14px;
+            height: 30px;
+            color: #7d7d7d;
+        }
+
+        /* .active{
+          background-color: #dedede;
+          
+          }  */
+        .boxactive {
+            background-color: white;
+        }
+
+        */ .bottom {
+            width: 100%;
+            height: 150px;
+        }
+
+        .bottom img {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* @keyframes bgcolor{
+          center{}
+      } */
+    </style>
+</head>
+
+<body>
+    <div class="top">
+        <div class="logo">
+            <div></div>
+            <div class="logoleft">
+                <b class="logotitle" style="font-size:28px;">客源帮</b>
+            </div>
+            <div class="right" onclick="gonotic()">
+                <span class="iconfont iconmessage" style="font-size: 30px;"></span>
+            </div>
+        </div>
+        <div class="input" onclick="itemdetail(1)">
+            <span class="iconfont iconsearch search"></span>
+            <input type="text" disabled="true" placeholder="请输入企业，行业关键字">
+        </div>
+    </div>
+    <div class="main">
+        <div class="item " onclick="toMap()">
+            <div class="imgbox ">
+                <img src="../image/pic/guanjian.png" alt="">
+            </div>
+            <p>关键字采集</p>
+        </div>
+        <div class="item" onclick="itemdetail(1)">
+            <div class="imgbox">
+                <img src="../image/pic/allcompany.png" alt="">
+            </div>
+            <p>全国企业</p>
+        </div>
+        <div class="item" onclick="tourist()">
+            <div class="imgbox">
+                <img src="../image/pic/nearby.png" alt="">
+            </div>
+            <p>城市客源</p>
+        </div>
+        <div class="item" onclick="itemdetail(3)">
+            <div class="imgbox">
+                <img src="../image/pic/yunying.png" alt="">
+            </div>
+            <p>运营商客源</p>
+        </div>
+        <div class="item" onclick="itemdetail(4)">
+            <div class="imgbox">
+                <img src="../image/pic/qiye.png" alt="">
+            </div>
+            <p>企业黄页</p>
+        </div>
+        <div class="item" onclick="itemdetail(5)">
+            <div class="imgbox">
+                <img src="../image/user/11.png" alt="">
+            </div>
+            <p>企业官网</p>
+        </div>
+        <div class="item" onclick="itemdetail(6)">
+            <div class="imgbox">
+                <img src="../image/pic/haibao.png" alt="">
+            </div>
+            <p>IDC</p>
+        </div>
+        <div class="item" onclick="itemdetail(7)">
+            <div class="imgbox">
+                <img src="../image/pic/hangye.png" alt="">
+            </div>
+            <p>公司查询</p>
+        </div>
+    </div>
+    <div class="bottom" onclick="about()">
+        <img src="../image/banner/b1.png" alt="">
+    </div>
+    <!-- <div class="" onclick="toMap()" style="padding: 15px;">
+        去地图
+    </div> -->
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript" src="../script/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="../script/logout.js"></script>
+<script type="text/javascript">
+    
+$(document).ready(function(){
+
+});
+
+  apiready=function(){
+    ExitApp();
+      
+
+  }
+
+ 
+
+ 
+
+    /*城市客源*/
+    function tourist() {
+        /*判断是否登录*/
+        let uid = $api.getStorage('uid');
+        if (uid == null || uid == "" || uid == undefined) {
+            showTip("暂未登录，请先去登录！", 1000, "middlecity");
+            setTimeout(function () {
+                api.openWin({
+                    name: 'login',
+                    url: 'login.html',
+                    reload: true
+                });
+            }, 1000);
+            return;
+        }
+        var jsfun = "funIniGroup(1)";
+        api.execScript({
+            name: "home",
+            winName: "home",
+            script: jsfun
+        });
+        api.setFrameGroupIndex({
+            name: 'group',
+            index: 1
+        });
+    }
+
+    /*点击跳转页面*/
+    function itemdetail(obj) {
+        /*判断是否登录*/
+        if (obj == 1 || obj == 3 || obj == 4) {
+            let uid = $api.getStorage('uid');
+            if (uid == null || uid == "" || uid == undefined) {
+                showTip("暂未登录，请先去登录！", 1000, "middlecity");
+                setTimeout(function () {
+                    api.openWin({
+                        name: 'login',
+                        url: 'login.html',
+                        reload: true
+                    });
+                }, 1000);
+                return;
+            }
+        }
+        /*全国企业*/
+        if (obj == 1) {
+            api.openWin({
+                name: 'alleEnterprise1',
+                url: './alleEnterprise.html',
+                reload: true
+            })
+        }
+        /*运营商客源*/
+        if (obj == 3) {
+            api.openWin({
+                name: 'resource',
+                url: './resource.html',
+                reload: true
+            })
+        }
+        /*企业黄页*/
+        if (obj == 4) {
+            api.openWin({
+                name: 'business',
+                url: './business.html',
+                reload: true
+            })
+        }
+        /*企业官网*/
+        if (obj == 5) {
+            api.openWin({
+                name: 'IDC',
+                url: './IDC.html',
+                reload: true,
+                pageParam: {
+                    name: '企业官网',
+                    url: 'http://m.greatzk.com',
+                }
+            })
+        }
+        /*IDC*/
+        if (obj == 6) {
+            api.openWin({
+                name: 'IDC',
+                url: './IDC.html',
+                reload: true,
+                pageParam: {
+                    name: 'IDC',
+                    url: 'https://www.playyun.top/',
+                }
+            })
+        }
+        /*公司查询*/
+        if (obj == 7) {
+            api.openWin({
+                name: 'IDC',
+                url: './IDC.html',
+                reload: true,
+                pageParam: {
+                    name: '公司查询',
+                    url: 'https://aiqicha.baidu.com/m',
+                }
+            })
+        }
+    }
+
+    /*跳转至公告页面*/
+    function gonotic() {
+        /*判断是否登录*/
+        let uid = $api.getStorage('uid');
+        if (uid == null || uid == "" || uid == undefined) {
+            showTip("暂未登录，请先去登录！", 1000, "middlecity");
+            setTimeout(function () {
+                api.openWin({
+                    name: 'login',
+                    url: 'login.html',
+                    reload: true
+                });
+            }, 1000);
+            return;
+        }
+        api.openWin({
+            name: 'notice',
+            url: './notice.html',
+            reload: true
+        })
+    }
+
+    /*使用问题*/
+    function about() {
+        api.openWin({
+            name: 'article',
+            url: './article.html',
+            reload: true,
+            pageParam: {
+                id: 10
+            }
+        })
+    }
+
+    /*地图*/
+    function toMap() {
+        api.openWin({
+            name: 'mapr',
+            url: './mapr.html',
+            reload:true
+        })
+    }
+</script>
+
+</html>

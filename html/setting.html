@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>个人中心</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/css.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <style>
+        .m {
+            padding: 68px 0 0 0
+        }
+    
+        html,
+        body {
+            background-color: white;
+        }
+    
+        .setting .settingList {
+            font-size: 16px;
+            /* margin: 10px 0 0 0; */
+            background: white;
+            color: #202020
+        }
+    
+        .setting .settingList li {
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+            padding: 9px 2.5rem 9px 0;
+            background: white;
+            border-bottom: 1px solid #eee;
+            height: 3rem;
+            position: relative;
+        }
+    
+        .setting .settingList li.hasArrow::after {
+            position: absolute;
+            right: 10px;
+            top: 23px;
+            content: "";
+            border-top: 2px solid #797979;
+            border-left: 2px solid #797979;
+            width: 10px;
+            height: 10px;
+            transform: rotate(135deg);
+        }
+
+        .setting .settingList li:last-child {
+            border-bottom: none;
+        }
+    
+        .setting .settingList li .ii01 {
+            width: 5rem;
+            text-align: center
+        }
+    
+        .setting .settingList li .ii02 {
+            flex: 1;
+            text-align: right;
+        }
+    
+        .setting .settingList li .ii02 img {
+            width: 3rem;
+            height: 3rem;
+            display: inline-block;
+            border-radius: 50%;
+        }
+    
+    
+        .btaArea button {
+            display: block;
+            height: 44px;
+            line-height: 44px;
+            text-align: center;
+            background: #217bfb;
+            color: white;
+            width: 90%;
+            margin: 10px auto;
+            border-radius: 5px;
+            font-size: 16px
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header">
+        <a class="headerLeft" tapmode onclick="api.closeWin()">
+            <i class="icon iconfont iconback"></i>
+        </a>
+        <div class="headerTle">设置</div>
+    </header>
+    <div class="m">
+        <div class="setting">
+            <ul class="settingList">
+                <li onclick="toArc(4)">
+                    <div class="ii01"><span>隐私协议</span></div>
+                </li>
+                <li onclick="toArc(5)">
+                    <div class="ii01"><span>用户协议</span></div>
+                </li>
+                <li onclick="toArc(6)">
+                    <div class="ii01"><span>使用声明</span></div>
+                </li>
+            </ul>
+            <div class="btaArea">
+                <button onclick="logout()">退出登录</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        fixbar()
+    };
+    function toArc(item) {
+        api.openWin({
+            name: 'article',
+            url: 'article.html',
+            pageParam: {
+                id: item
+            }
+        })
+    };
+    /*退出登录*/
+    function logout() {
+        api.confirm({
+            title: '确认退出APP吗',
+            buttons: ['确定', '取消']
+        }, function (ret, err) {
+            if (ret && ret.buttonIndex == 1) {
+                apidata({
+                    url: "/api/jed/logout",
+                    data: {
+                        uid: $api.getStorage("uid")
+                    }
+                }, function (ret) {
+                    if (ret.status = 200) {
+                        showTip(ret.return_msg, 1000, "middle");
+                    //    $api.clearStorage();
+                        $api.rmStorage('uid');
+                        $api.rmStorage('phone');
+                        $api.rmStorage('sign');
+                        $api.rmStorage('sign_o');
+                        
+                        setTimeout(function(){
+                            api.closeWin();
+                            var jsfun = "setTab(0)";
+                            api.execScript({
+                                name: "home",
+                                winName: "home",
+                                script: jsfun
+                            });
+                            var jsfun2 = "funIniGroup(0)";
+                            api.execScript({
+                                name: "home",
+                                winName: "home",
+                                script: jsfun2
+                            });
+                           
+                            api.openWin({
+                                name: 'login',
+                                url: './login.html',
+                                reload: true
+                            });
+                        },1000);
+                    } else {
+                        showTip(ret.returm_msg, 800, "middle");
+                    }
+                });
+            }
+        })
+    }
+</script>
+</html>

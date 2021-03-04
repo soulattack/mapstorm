@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>登录</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <style>
+        html{background: white}
+        body {
+            background-color: white;
+        }
+
+        .empty {
+            padding: 20px 0;
+        }
+
+        .box {
+            width: 80%;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .box .Oin {
+            height: 50px;
+            line-height: 50px;
+            width: 100%;
+            border-bottom: 1px solid #f5f5f5;
+            display: flex;
+            font-size: 16px;
+        }
+
+        .box .Oin input {
+            width: 80%;
+            outline: medium;
+            padding-left: 5px;
+        }
+
+        .top {
+            width: 100px;
+            height: 100px;
+            margin: 50px auto;
+        }
+
+        .top img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .test {
+            padding-top: 20px;
+            color: #217bfb
+        }
+
+        .test .left {
+            display: inline-block;
+            width: 78%;
+            text-align: left;
+        }
+
+        .test .right {
+            display: inline-block;
+            text-align: right;
+        }
+
+        .Obtn {
+            display: inline-block;
+            width: 90%;
+            height: 50px;
+            line-height: 50px;
+            background-color: #217bfb;
+            color: white;
+            font-size: 24px;
+            border-radius: 10px;
+            margin-top: 50px;
+            margin-left: 5%;
+            font-weight: normal;
+            outline: medium;
+        }
+
+        .footer {
+            position: fixed;
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            color: #999999;
+            text-align: center;
+            bottom: 10px;
+            z-index: 10;
+        }
+
+        .footer span {
+            color: #217bfb;
+        }
+
+        .cover{position: fixed; top:0;width: 100%;height: 100%;z-index: 100; background: rgba(0,0,0,0.5)}
+        .cover .treatyWrap{width: 80vw;margin: 20vh auto;background: white;position: relative;  font-size: 14px}
+         .treatyWrap .tle{ text-align: center; padding: 15px 0;position: absolute;width: 100%; top:0;background: white}
+        .operate{position: absolute;width: 100%; height: 50px; bottom: 0; display: flex;border-top:1px solid #eee;background: white}
+        .operate span{flex: 1;text-align: center; font-size: 16px;line-height: 50px}
+        .operate span:first-child{border-right:1px solid #eee}
+        .operate span a.btnRefuse{color: #666}
+        .operate span a.btnAgree{color: #00aced}
+        .cont{padding: 45px 0  40px 0;height: 40vh;
+              overflow: scroll; color: #666}
+        .cont div{text-indent: 2em;padding: 10px 10px 55px 10px; overflow-y: scroll}
+    </style>
+</head>
+
+<body>
+    <div class="wrap empty">
+        <div class="top">
+            <img src="../image/tools/logo.png" alt="">
+        </div>
+        <div class="box">
+            <div class="Oin">
+                <text>账号：</text>
+                <input type="number" name="username" value="" placeholder="请输入手机号" id="userName">
+            </div>
+            <div class="Oin">
+                <text>密码：</text>
+                <input type="password" name=" 密码" value="" placeholder="请输入密码" id="userPwd">
+            </div>
+            <div class="test">
+                <span class="left" tapmode onclick="toRegist()">注册新用户</span>
+                <span class="right" tapmode onclick="toForget()">忘记密码</span>
+            </div>
+            <button class="Obtn" type="button" name="button" tapmode onclick="login()">登录</button>
+        </div>
+        <div class="footer">
+            <text>登录即同意</text><span onclick="article(5)">《用户使用协议》</span>及<span onclick="article(4)">《隐私政策》</span>
+        </div>
+    </div>
+ 
+    <div class="cover">
+          <div class="treatyWrap">
+                 <div class="tle">协议及隐私条款</div>
+                 <div class="cont">
+                     <div>
+                        请您本产品之前，请务必仔细阅读并理解<a  href="javascript:;" onclick="article(5)">用户使用协议</a>
+                        （以下简称“本协议”）中规定的多有权利和限制。
+
+                        我们一向尊重并会严格保护用户在使用本产品时的合法权益（包括用户隐私、用户数据等）不受到任何侵犯。
+                        
+                        本协议（包括本文最后部分的隐私政策）是用户（包括通过各种合法途径获取到本产品的自然人、法人或其他组织机构，
+                        以下简称“用户”或“您”）与我们之间针对本产品相关事项最终的、完整的且排他的协议，并取代、合并之前的当事人之间关
+                        于上述事项的讨论和协议。
+                        
+                        本协议将对用户使用本产品的行为产生法律约束力，您已承诺和保证有权利和能力订立本协议。用户开始使用本产品将视为已
+                        经接受本协议，请认真阅读并理解本协议中各种条款，包括免除和限制我们的免责条款和对用户的权利限制（未成年人审阅时
+                        应由法定监护人陪同），如果您不能接受本协议中的全部条款，请勿开始使用本产品
+                     </div>
+                 </div>
+                 <div class="operate">
+                     <span> <a href="javascript:;" class="btnRefuse" onclick="refuse()">拒绝</a></span>
+                     <span> <a href="javascript:;" class="btnAgree" onclick="agree()">同意</a></span>
+                   
+                   
+                 </div>
+          </div>
+    </div>
+  
+
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript" src="../script/logout.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        ExitApp();
+        api.setStatusBarStyle({
+            style: 'light',
+            color: '#217bfb'
+        });
+
+          var hasRead=$api.getStorage("hasread");
+          console.log("是否已经同意："+hasRead);
+          if(hasRead=="yes"){
+              $(".cover").hide();
+          }
+
+    }
+
+    /*登录*/
+    function login() {
+        var username = kong($api.byId('userName').value);
+        var password = kong($api.byId('userPwd').value);
+        var sdata = {
+            phone: username,
+            type: "1",
+            password: password,
+            clientId: api.deviceId
+        }
+        if (!isNotEmpry(username) || !isTel(username)) {
+            showTip("请输入有效的电话号码", 2000, "bottom")
+            return;
+        }
+        if (!isNotEmpry(password)) {
+            showTip("请输入密码", 2000, "bottom")
+            return;
+        }
+        apidata({
+            url: "/api/jed/login",
+            data: sdata
+        }, function (ret) {
+            if (ret.status == 200) {
+                showTip("登录成功", 2000, "bottom");
+                $api.setStorage('uid', ret.data.info.uid);
+                $api.setStorage('phone', ret.data.info.phone);
+                $api.setStorage('sign', ret.data.sign);
+                $api.setStorage('sign_o', ret.data.sign_o);
+                var jsfun = "";
+                setTimeout(() => {
+                    api.openWin({
+                        name: "home",
+                        url: "./home.html",
+                        reload: true
+                    });
+                }, 1000)
+            } else {
+                showTip(ret.return_msg, 1500, "middle")
+            }
+        });
+    }
+
+    /*忘记密码*/
+    function toForget() {
+        api.openWin({
+            name: 'forgetPwd',
+            url: './forgetPwd.html',
+            reload: true
+        });
+    }
+
+    /*注册*/
+    function toRegist() {
+        api.openWin({
+            name: "regist",
+            url: "./regist.html",
+            reload: true
+        });
+    }
+
+    /*用户使用协议、隐私政策*/
+    function article(item) {
+        api.openWin({
+            name: 'article',
+            url: 'article.html',
+            reload: true,
+            pageParam: {
+                id: item
+            }
+        })
+    }
+
+    /*解决键盘顶起固定定位元素*/
+    var h = $(window).height();
+    $(window).resize(function () {
+        if ($(window).height() < h) {
+            $('.footer').hide();
+        }
+        if ($(window).height() >= h) { $('.footer').show(); }
+    });
+
+
+    function agree(){
+        $api.setStorage('hasread', 'yes');
+    }
+
+    function refuse(){
+        api.closeWidget({
+              silent : true
+            });
+
+    }
+</script>
+
+</html>

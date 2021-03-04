@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <style>
+        html,
+        body {
+            background-color: white;
+            overflow: hidden;
+        }
+
+        .member {
+            font-size: 14px;
+            /* padding-bottom:50px  */
+            /* background: #217bfb; */
+            /* background:#217bfb; */
+            /* padding: 24px 0 0 0; */
+            height: 100%;
+        }
+
+        .member .mbTop {
+            background: #217bfb;
+            height: 44px;
+            padding: 24px 0 0 0;
+            color: white
+        }
+
+        .headerLeft {
+            margin: 10px 0 0 0
+        }
+
+        .vipInfoList {
+            display: flex
+        }
+
+        .vipInfoList li {
+            flex: 1;
+        }
+
+        .userInfos {
+            margin: 0 0px;
+            padding: 10px 20px 50px 20px;
+            background: #217bfb;
+            color: white;
+            font-size: 16px
+        }
+
+        .userInfos dl {
+            display: flex;
+            align-items: center
+        }
+
+        .userInfos dl dt img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%
+        }
+
+        .userInfos dl dd {
+            line-height: 26px;
+            margin: 0 0 0 10px
+        }
+
+        .vip {
+            margin: -30px 10px 0 10px;
+            border: 1px solid #eee;
+            border-radius: 15px;
+            background: white;
+            padding: 10px 5px;
+            /* box-shadow: 0 2px 6px 1px #8c8b8b; */
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .vipInfo {
+            font-size: 12px;
+            margin: 20px 0 0 0
+        }
+
+        .vipInfoList {
+            display: flex
+        }
+
+        .vipInfoList li {
+            flex: 1;
+            text-align: center;
+            margin: 0 5px;
+            height: 100px;
+            padding: 10px 0 10px 0;
+            border: 1px solid #0fbefe;
+            border-radius: 10px;
+        }
+
+        .vipInfoList li.curr {
+            background: #0fbefe;
+            color: white;
+        }
+
+        .vipInfoList li .vipName {
+            font-size: 16px;
+            color: #909090;
+            margin-top: 5px;
+        }
+
+        .vipInfoList li .vipName.curr {
+            color: white !important;
+        }
+
+        .vipInfoList li .vipPrice {
+            font-size: 20px;
+            color: red;
+            font-weight: bold;
+            padding: 3px 0;
+            margin-top: 10px;
+        }
+
+        .vipInfoList li .vipPriceOrigin {
+            text-decoration: line-through;
+            color: #666;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .tips {
+            padding: 5px 10px;
+            margin: 10px 0 0 0
+        }
+
+        .tips h3 {
+            font-weight: normal;
+            color: #217bfb;
+        }
+
+        .tips p {
+            color: #681212
+        }
+
+        .vipIntro {
+            margin: 20px;
+        }
+
+        .vipIntro h2 {
+            font-size: 16px
+        }
+
+        .vipIntroList li {
+            font-size: 12px;
+            margin: 15px 0;
+        }
+
+        .vipIntroList li dl {
+            display: flex
+        }
+
+        .vipIntroList li dl dt {
+            width: 30px;
+            height: 30px;
+            background: red
+        }
+
+        .vipIntroList li dl dd {
+            flex: 1;
+            margin: 0 0 0 10px
+        }
+
+        .vipIntroList li dl dd .tle1 {
+            font-size: 14px
+        }
+
+        /* .botArea{position: fixed; width: 100%;bottom: 0} */
+        .botArea {
+            border-top: 1px solid #eee;
+            height: 50px;
+            position: fixed;
+            width: 100%;
+            bottom: 0
+        }
+
+        .botArea_inner {
+            display: flex;
+            align-items: center;
+            height: 100%
+        }
+
+        .botArea_inner .finalPrice {
+            flex: 1;
+            height: 100%;
+            line-height: 50px;
+            text-align: center;
+        }
+
+        .botArea_inner .pinfo {
+            font-size: 12px;
+            color: black
+        }
+
+        .botArea_inner .pinfo b {
+            font-size: 16px;
+            color: red
+        }
+
+        .botArea_inner .nowStart {
+            height: 100%
+        }
+
+        .botArea_inner .buttonArea {
+            flex: 1;
+            text-align: center;
+            background: #d20404;
+            color: white;
+            height: 100%
+        }
+
+        .botArea_inner .buttonArea b {
+            display: block;
+            padding: 5px 0 0 0;
+            font-size: 14px;
+            line-height: 24px
+        }
+
+        .botArea_inner .buttonArea span {
+            display: block;
+            font-size: 12px
+        }
+
+        .btn {
+            height: 50px;
+            line-height: 50px;
+            background-color: #0fbefe;
+            color: white;
+            border-radius: 30px;
+            margin: 100px 20px 10px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .xieyi {
+            color: #0fbefe;
+            font-size: 14px;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .tip {
+            color: #b2b2b2;
+            padding: 5px 10px;
+        }
+
+        .tip span {
+            color: #434343;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="member" id="vue">
+        <div class="mbTop">
+            <a class="headerLeft" onclick="api.closeWin()">
+                <i class="icon iconfont iconback"></i>
+            </a>
+        </div>
+        <div class="userInfos">
+            <dl>
+                <dt onclick="sendReloadEvent()">
+                    <img :src="userHeader" alt="">
+                </dt>
+                <dd>
+                    <div class="userPhone">{{userPhone}}</div>
+                    <div class="userLv">会员等级：{{isVip==1?"VIP会员":"普通会员"}}</div>
+                </dd>
+            </dl>
+        </div>
+        <div class="vip">
+            <p style="padding-left: 10px ;color:#858585;margin-top: 50px;" v-if="isVip==1">你已是会员,续费更优惠！</p>
+            <p style="padding-left: 10px ;color:#858585;margin-top: 50px;" v-else>你还不是会员,开启会员全场畅读！</p>
+            <div class="vipInfo">
+                <ul class="vipInfoList">
+                    <li @click="sel(vipMonth,1)" :class="flag==1?'curr':''">
+                        <div class="itemWrap">
+                            <div class="vipName" :class="flag==1?'curr':''">包月会员</div>
+                            <div class="vipPrice">￥<em>{{vipMonth}}</em></div>
+                            <!-- <div class="vipPriceOrigin">￥78</div> -->
+                        </div>
+                    </li>
+                    <li @click="sel(vipSeason,2)" :class="flag==2?'curr':''">
+                        <div class="itemWrap">
+                            <div class="vipName" :class="flag==2?'curr':''">季度会员</div>
+                            <div class="vipPrice">￥<em>{{vipSeason}}</em></div>
+                            <!-- <div class="vipPriceOrigin">￥78</div> -->
+                        </div>
+                    </li>
+                    <li @click="sel(vipYear,3)" :class="flag==3?'curr':''">
+                        <div class="itemWrap">
+                            <div class="vipName" :class="flag==3?'curr':''">年度会员</div>
+                            <div class="vipPrice">￥<em>{{vipYear}}</em></div>
+                            <!-- <div class="vipPriceOrigin">￥78</div> -->
+                        </div>
+                    </li>
+                </ul>
+                <div class="btn" @click="pay">支付</div>
+                <div class="xieyi" @click="goarticle">
+                    <span>《客源帮服务协议》</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript">
+    var vm;
+    apiready = function () {
+        vm = new Vue({
+            el: "#vue",
+            data: {
+                userHeader: "",
+                userPhone: "",
+                userLv: "",
+                isVip: null,
+                vipMonth: null,
+                vipSeason: null,
+                vipYear: null,
+                price: null,
+                vipType: 1,
+                flag: 1
+            },
+            mounted: function () {
+                this.getData();
+                this.getP();
+            },
+            methods: {
+                getData() {
+                    var sdata = {
+                        uid: $api.getStorage("uid")
+                    }
+                    apidata({
+                        url: "/api/jed/user_info",
+                        data: sdata
+                    }, function (ret) {
+                        vm.userHeader = ret.data.head;
+                        vm.userPhone = ret.data.phone;
+                        vm.isVip = ret.data.is_vip;
+                    });
+                },
+                getP() {
+                    var sdata = {
+                        uid: $api.getStorage("uid")
+                    }
+                    apidata({
+                        url: "/api/jed/sys_param",
+                        data: sdata
+                    }, function (ret) {
+                        vm.vipMonth = ret.data.month_price;
+                        vm.vipSeason = ret.data.season_price;
+                        vm.vipYear = ret.data.year_price;
+                        vm.price = ret.data.month_price;
+                    });
+                },
+                sel(price, flag) {
+                    vm.price = price;
+                    vm.flag = flag;
+                    vm.vipType = flag
+                },
+                goarticle() {
+                    api.openWin({
+                        name: 'article',
+                        url: './article.html',
+                        reload: true,
+                        pageParam: {
+                            id: 5
+                        }
+                    })
+                },
+                pay() {
+                    var sdata = {
+                        uid: $api.getStorage("uid"),
+                        pay_way: 2,
+                        vip_type: vm.vipType,
+                        total: vm.price
+                    }
+                    apidata({
+                        url: "/api/jed/get_vip",
+                        data: sdata
+                    }, function (ret) {
+                        if (ret.status == 200) {
+                            var order = ret.url;
+                            var aliPayPlus = api.require('aliPayPlus');
+                            aliPayPlus.payOrder({
+                                orderInfo: order
+                            }, function (ret, err) {
+                                if (ret.code == 9000) {
+                                  sendReloadEvent();
+                                    api.openWin({
+                                        name: 'memberCenter',
+                                        url: 'memberCenter.html',
+                                        reload: true
+                                    });
+
+                                    
+                                } else {
+                                    showTip("支付失败！", 1000, "middle")
+                                }
+                            });
+                        } else {
+                            showTip(ret.return_msg, 500, "middle")
+                        }
+                    });
+                }
+            }
+        })
+    };
+
+
+    function sendReloadEvent(){
+        console.log("a 执行")
+        var jsfun = "myreload()";
+        api.execScript({
+                    name: "mapSpiderDetail",
+                    script: jsfun
+                });
+
+        
+
+    }
+</script>
+
+</html>

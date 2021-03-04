@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>短信发送记录</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+      <style>
+          body{
+
+          }
+      </style>
+  </head>
+  <body style="height: auto">
+        <header class="header" id="header">
+                <a class="headerLeft" onclick="api.closeWin()">
+                    <i class="icon iconfont iconback"></i>
+                </a>
+                <div class="headerTle">短信发送记录</div>       
+        </header>
+
+        <div class="record" id="vue">            
+               <div class="listWrap">
+                 <ul>
+                     <li>
+
+                     </li>
+                 </ul>
+               </div>
+        </div>
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/vue.min.js"></script>
+  <script type="text/javascript" src="../script/tools.js"></script>
+  <script type="text/javascript">
+      var vm;
+      var index=0,start=10;
+      apiready=function(){
+        vm=new Vue({
+            el:"#vue",
+            data:{
+                list:[]
+            },
+            mounted:function(){
+                         this.init();
+            },
+            methods:{
+                init(){
+
+                    var sdata={
+                        uid:$api.getStorage("uid"),
+                        start:index,
+                        num:size
+                    };
+                    apidata({
+                        url:"/api/jed/get_msg_lists",
+                        data:sdata
+                    },function(ret){
+
+                      console.log(JSON.stringify(ret))
+                    
+                    },function(err){
+
+                    })
+
+
+
+                }
+
+            }
+
+        })   
+             
+
+      }
+     
+  </script>
+
+  <style>
+.recharge{ font-size: 14px;padding: 68px 0 0 0;}
+  
+  .rechargeInfo{overflow: hidden;}
+  .rechargeInfo dl{ 
+     margin: 20px; 
+     border-radius:10px;
+      display: flex;
+      font-size: 16px;
+      justify-content: space-between;
+      align-items: center;
+     background: #12ada9;
+     padding: 20px 15px;
+  }
+  .rechargeInfo dl dt{ color: white}
+  .rechargeInfo dl dd{ font-size: 12px;position: relative ;  color: white}
+
+  .rechargeInfo dl dd::before{
+       position: absolute;
+       content: "";
+       left: -10px;top:-4px;
+       width: 1px;
+       background: #525757;
+       height: 30px;
+    
+       
+       }
+  
+  .price{ height: auto; overflow: hidden;}
+  .price {padding:0 0 0 2%}
+  .price li{  
+      float: left;
+    width: 30%;
+    margin: 10px 0 10px 2%;
+  }
+  .price li.curr{
+    background:#d8f3f2;
+  }
+
+  .price li dl{width: 98%; margin: 0 auto; background: white; text-align: center;
+    padding: 15px 0px;
+    box-sizing: border-box;
+    border:1px solid white;
+    border-radius:10px
+  }
+
+  .price li.curr dl{
+    border:1px solid #12ada9;
+  }
+  .price li dl dt{font-size: 20px;color: #12ada9; margin: 5px ;}
+  .price li dl dd{margin: 5px 0}
+  
+  .attention{margin: 20px 20px 0 20px; font-size: 14px; padding: 0 0 60px 0}
+
+ .botArea{position:fixed;width: 100%;bottom: 0;}
+ .botArea .botArea_inner{height: 50px; display: flex; align-items: center;background: white;line-height: 50px;text-align: center}
+ .botArea .botArea_inner .price{ width: 60%;}
+ .botArea .botArea_inner .btnRecharge{width: 40%;background: #12ada9;color: white;}
+  </style>
+  </html>

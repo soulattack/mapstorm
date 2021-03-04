@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>运营商客源</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/css.css" />
+    <link rel="stylesheet" type="text/css" href="../css/mobileSelect.css" />
+    <style>
+        .m {
+            padding: 68px 0 0 0
+        }
+
+        .setting .settingList {
+            font-size: 16px;
+            /* margin: 10px 0 0 0; */
+            background: white;
+            color: #202020
+        }
+
+        .setting .settingList li {
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+            padding: 9px 2.5rem 9px 0;
+            background: white;
+            border-bottom: 1px solid #eee;
+            height: 3rem;
+            position: relative;
+            justify-content: space-between;
+        }
+
+        .setting .settingList li.hasArrow::after {
+            position: absolute;
+            right: 10px;
+            top: 23px;
+            content: "";
+            border-top: 2px solid #797979;
+            border-left: 2px solid #797979;
+            width: 10px;
+            height: 10px;
+            transform: rotate(135deg);
+        }
+
+        .setting .settingList li:last-child {
+            border-bottom: none;
+        }
+
+        .setting .settingList li .ii01 {
+            width: 6rem;
+            text-align: center
+        }
+
+        .setting .settingList li .ii02 {
+            flex: 1;
+            text-align: right;
+        }
+
+        .setting .settingList li .ii02 img {
+            width: 3rem;
+            height: 3rem;
+            display: inline-block;
+            border-radius: 50%;
+        }
+
+        .setting .settingList li .iv span {
+            display: block
+        }
+
+        .btaArea button {
+            display: block;
+            height: 44px;
+            line-height: 44px;
+            text-align: center;
+            background: #217bfb;
+            color: white;
+            width: 90%;
+            margin: 10px auto;
+            border-radius: 5px;
+            font-size: 16px
+        }
+
+        #account {
+            text-align: right
+        }
+
+        .cover {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+        }
+
+        .chooseMidBoard {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+
+            z-index: 1001;
+            display: none;
+        }
+
+        .chooseMidBoard dl {
+            width: 85%;
+            margin: 20% auto;
+            height: 80%;
+            background: white;
+            overflow: scroll
+        }
+
+        .midList {
+            padding: 5px
+        }
+
+        .midList span {
+            padding: 2px;
+            margin: 5px 5px;
+            display: inline-block;
+            width: 20%
+        }
+
+        .books {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 1002;
+            /* top: 12%; */
+            top:0;
+            display: none
+        }
+
+        .books dl {
+            position: relative;
+            height: 100%
+        }
+
+        .books dl dt {
+            height: 80%;
+            overflow: scroll
+        }
+
+        .books dl dd {
+            position: absolute;
+            width: 100%;
+            bottom: 10px;
+            text-align: center
+        }
+
+        .books dl dd span {
+            display: inline-block;
+            width: 24%;
+            margin: 0 1%;
+        }
+
+        .books dl dd span input {
+            width: 80px;
+            height: 36px;
+            border: none;
+            background: cornflowerblue;
+            color: white;
+            font-size: 12px;
+        }
+
+        .booksList {
+            padding: 5px;
+        }
+
+        .booksList span {
+            padding: 2px 3px;
+            margin: 0 3px 0 0;
+            min-width: 25%;
+            display: inline-block
+        }
+
+        .bookTle{ height: 44px; line-height: 44px; background:#217bfb;color: white;position: relative;padding: 26px 0 0 0}
+        .bookTle a{position: absolute;left: 0;}
+        .btlemain{text-align: center;font-size: 16px}
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header">
+        <a class="headerLeft" onclick="api.closeWin()">
+            <i class="icon iconfont iconback"></i>
+        </a>
+        <div class="headerTle">运营商客源</div>
+    </header>
+    <div class="m">
+        <div class="setting">
+            <ul class="settingList">
+                <li class="hasArrow" id="chooseCity">
+                    <div class="ii01">
+                        <span class="sp01">城市</span>
+
+                    </div>
+                    <div class="iv">
+                        <span id="city">请选择城市</span>
+                    </div>
+                </li>
+                <li onclick="" class="hasArrow" id="chooseX">
+                    <div class="ii01"><span>运营商</span></div>
+                    <div class="iv">
+                        <span id="numHeadx">请选择运营商及号段</span>
+                    </div>
+                </li>
+                <li onclick="get()" class="hasArrow" id="chooseMid">
+                    <div class="ii01"><span>号码主体</span></div>
+                    <div class="iv">
+                        <span id="numMid">选择主体号段</span>
+                    </div>
+                </li>
+                <li onclick="">
+                    <div class="ii01"><span>数量</span></div>
+                    <div class="iv">
+                        <input id="account" type="number" placeholder="请输入数量">
+                    </div>
+                </li>
+            </ul>
+            <div class="btaArea" onclick="create()">
+                <button>生成号码</button>
+            </div>
+        </div>
+    </div>
+    <div class="cover"></div>
+    <div class="chooseMidBoard">
+        <dl>
+            <dt></dt>
+            <dd>
+                <div class="midList">
+
+                </div>
+            </dd>
+        </dl>
+    </div>
+    <div class="books">
+       
+        <dl>
+                <div class="bookTle" id="">
+                        <a class="headerLeft" onclick="myback()">
+                            <i class="icon iconfont iconback"></i>
+                        </a>
+                        <div class="btlemain">号码列表</div>
+                 </div>
+            <dt>
+                <div class="booksList"></div>
+            </dt>
+            <dd>
+                <span><input type="button" value="添加到通讯录" id="btnContact" onclick="addbooks()"></span>
+                <span><input type="button" value="群发短信" id="btnSendGroup" onclick="sendletter()"></span>
+                <span><input type="button" value="导出excls" id="btnback" onclick="exportTable()"></span>
+                <!-- <span><input type="button" value="分享" id="btnback" onclick="eptBoard()"></span> -->
+                <!-- <span><input type="button" value="返回" id="btnback" onclick="myback()"></span> -->
+            </dd>
+        </dl>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript" src="../script/mobileSelect.min.js"></script>
+<script type="text/javascript">
+    var phoneList = [];
+    apiready = function () {
+        fixbar();
+        getUserInfo();
+    };
+    var us = [
+        { value: "北京", childs: [{ value: "北京" }] },
+        { value: "天津", childs: [{ value: "天津" }] },
+        { value: "河北", childs: [{ value: "石家庄" }, { value: "唐山" }, { value: "秦皇岛" }, { value: "邯郸" }, { value: "邢台" }, { value: "保定" }, { value: "张家口" }, { value: "承德" }, { value: "沧州" }, { value: "廊坊" }, { value: "衡水" }] },
+        { value: "山西", childs: [{ value: "太原" }, { value: "大同" }, { value: "阳泉" }, { value: "长治" }, { value: "晋城" }, { value: "朔州" }, { value: "晋中" }, { value: "运城" }, { value: "忻州" }, { value: "临汾" }, { value: "吕梁" }] },
+        { value: "内蒙古", childs: [{ value: "呼和浩特" }, { value: "包头" }, { value: "乌海" }, { value: "赤峰" }, { value: "通辽" }, { value: "鄂尔多斯" }, { value: "呼伦贝尔" }, { value: "巴彦淖尔" }, { value: "乌兰察布" }, { value: "兴安" }, { value: "锡林郭勒" }, { value: "阿拉善" }] },
+        { value: "辽宁", childs: [{ value: "沈阳" }, { value: "大连" }, { value: "鞍山" }, { value: "抚顺" }, { value: "本溪" }, { value: "丹东" }, { value: "锦州" }, { value: "营口" }, { value: "阜新" }, { value: "辽阳" }, { value: "盘锦" }, { value: "铁岭" }, { value: "朝阳" }, { value: "葫芦岛" }] },
+        { value: "吉林", childs: [{ value: "长春" }, { value: "吉林" }, { value: "四平" }, { value: "辽源" }, { value: "通化" }, { value: "白山" }, { value: "松原" }, { value: "白城" }, { value: "延边" }] },
+        { value: "黑龙江", childs: [{ value: "哈尔滨" }, { value: "齐齐哈尔" }, { value: "鸡西" }, { value: "鹤岗" }, { value: "双鸭山" }, { value: "大庆" }, { value: "伊春" }, { value: "佳木斯" }, { value: "七台河" }, { value: "牡丹江" }, { value: "黑河" }, { value: "绥化" }, { value: "大兴安岭" }] },
+        { value: "上海", childs: [{ value: "上海" }] },
+        {
+            value: "江苏", childs: [{ value: "南京" }, { value: "无锡" }, { value: "徐州" }, { value: "常州" }, { value: "苏州" }, { value: "南通" }, { value: "连云港" }, { value: "盐城" },
+            { value: "扬州" }, { value: "镇江" }, { value: "泰州" }, { value: "宿迁" }
+            ]
+        },
+        {
+            value: "浙江", childs: [{ value: "杭州" }, { value: "宁波" }, { value: "温州" }, { value: "嘉兴" }, { value: "湖州" }, { value: "绍兴" }, { value: "金华" },
+            { value: "衢州" }, { value: "舟山" }, { value: "台州" }, { value: "丽水" }]
+        },
+        {
+            value: "安徽", childs: [{ value: "合肥" }, { value: "芜湖" }, { value: "蚌埠" }, { value: "淮南" }, { value: "马鞍山" }, { value: "淮北" }, { value: "铜陵" }, { value: "安庆" },
+            { value: "黄山" }, { value: "滁州" }, { value: "阜阳" }, { value: "宿州" }, { value: "巢湖" }, { value: "六安" }, { value: "亳州" }, { value: "池州" }, { value: "宣城" }]
+        },
+        { value: "福建", childs: [{ value: "福州" }, { value: "厦门" }, { value: "莆田" }, { value: "三明" }, { value: "泉州" }, { value: "漳州" }, { value: "赣州" }, { value: "吉安" }, { value: "宜春" }, { value: "抚州" }, { value: "上饶" }] },
+        {
+            value: "山东", childs: [{ value: "济南" }, { value: "青岛" }, { value: "淄博" }, { value: "枣庄" }, { value: "东营" }, { value: "烟台" }, { value: "潍坊" }, { value: "济宁" }, { value: "泰安" },
+            { value: "威海" }, { value: "日照" }, { value: "莱芜" }, { value: "临沂" }, { value: "德州" }, { value: "聊城" }, { value: "滨州" }, { value: "菏泽" }]
+        },
+        {
+            value: "河南", childs: [{ value: "郑州" }, { value: "开封" }, { value: "洛阳" }, { value: "平顶山" }, { value: "安阳" }, { value: "鹤壁" }, { value: "新乡" }, { value: "焦作" },
+            { value: "濮阳" }, { value: "许昌" }, { value: "漯河" }, { value: "三门峡" }, { value: "南阳" }, { value: "信阳" }, { value: "周口" }, { value: "驻马店" }]
+        },
+        {
+            value: "湖北", childs: [{ value: "武汉" }, { value: "黄石" }, { value: "十堰" }, { value: "宜昌" }, { value: "襄樊" }, { value: "鄂州" }, { value: "荆门" }, { value: "孝感" }, { value: "荆州" }, { value: "黄冈" },
+            { value: "咸宁" }, { value: "随州" }, { value: "恩施" }, { value: "神农架" }]
+        },
+        {
+            value: "湖南", childs: [{ value: "长沙" }, { value: "株洲" }, { value: "湘潭" }, { value: "衡阳" }, { value: "邵阳" }, { value: "岳阳" }, { value: "常德" }, { value: "张家界" }, { value: "益阳" }, { value: "郴州" },
+            { value: "永州" }, { value: "怀化" }, { value: "娄底" }, { value: "湘西" }]
+        },
+        {
+            value: "广东", childs: [{ value: "广州" }, { value: "深圳" }, { value: "珠海" }, { value: "汕头" }, { value: "韶关" }, { value: "佛山" }, { value: "江门" }, { value: "湛江" }, { value: "肇庆" },
+            { value: "惠州" }, { value: "梅州" }, { value: "汕尾" }, { value: "河源" }, { value: "阳江" }, { value: "清远" }, { value: "东莞" }, { value: "中山" }, { value: "潮州" }, { value: "揭阳" }, { value: "云浮" }]
+        },
+        { value: "广西", childs: [{ value: "南宁" }, { value: "柳州" }, { value: "桂林" }, { value: "梧州" }, { value: "防城港" }, { value: "钦州" }, { value: "玉林" }, { value: "百色" }, { value: "贺州" }, { value: "河池" }, { value: "来宾" }, { value: "崇左" }] },
+        { value: "海南", childs: [{ value: "海口" }, { value: "三亚" }] },
+        { value: "重庆", childs: [{ value: "重庆" }] },
+        {
+            value: "四川", childs: [{ value: "成都" }, { value: "自贡" }, { value: "攀枝花" }, { value: "泸州" }, { value: "德阳" }, { value: "绵阳" }, { value: "广元" }, { value: "遂宁" }, { value: "内江" }, { value: "乐山" }, { value: "南充" }, { value: "眉山" },
+            { value: "宜宾" }, { value: "广安" }, { value: "达州" }, { value: "雅安" }, { value: "巴中" }, { value: "资阳" }, { value: "阿坝" }, { value: "甘孜" }, { value: "凉山" }]
+        },
+        { value: "贵州", childs: [{ value: "贵阳" }, { value: "六盘水" }, { value: "遵义" }, { value: "安顺" }, { value: "同仁" }, { value: "黔西" }, { value: "毕节" }, { value: "黔东" }, { value: "黔南" }] },
+        {
+            value: "云南", childs: [{ value: "昆明" }, { value: "曲靖" }, { value: "玉溪" }, { value: "保山" }, { value: "昭通" }, { value: "丽江" }, { value: "思茅" }, { value: "临沧" }, { value: "楚雄" }, { value: "红河" },
+            { value: "文山" }, { value: "西双版纳" }, { value: "大理" }, { value: "德宏" }, { value: "怒江" }, { value: "迪庆" }]
+        },
+        { value: "西藏", childs: [{ value: "拉萨" }, { value: "昌都" }, { value: "山南" }, { value: "日喀则" }, { value: "那曲" }, { value: "阿里" }, { value: "林芝" }] },
+        { value: "陕西", childs: [{ value: "西安" }, { value: "铜川" }, { value: "宝鸡" }, { value: "咸阳" }, { value: "渭南" }, { value: "延安" }, { value: "汉中" }, { value: "榆林" }, { value: "安康" }, { value: "商洛" }] },
+        {
+            value: "甘肃", childs: [{ value: "兰州" }, { value: "嘉峪关" }, { value: "金昌" }, { value: "白银" }, { value: "天水" }, { value: "武威" }, { value: "张掖" }, { value: "平凉" }, { value: "酒泉" },
+            { value: "庆阳" }, { value: "定阳" }, { value: "陇南" }, { value: "临夏" }, { value: "甘南" }]
+        },
+        { value: "青海", childs: [{ value: "西宁" }, { value: "海东" }, { value: "海北" }, { value: "黄南" }, { value: "海南" }, { value: "果洛" }, { value: "玉树" }, { value: "海西" }] },
+        { value: "宁夏", childs: [{ value: "银川" }, { value: "石嘴山" }, { value: "吴忠" }, { value: "固原" }, { value: "中卫" }] },
+        {
+            value: "新疆", childs: [{ value: "乌鲁木齐" }, { value: "克拉玛依" }, { value: "吐鲁番" }, { value: "哈密" }, { value: "昌吉" }, { value: "博尔塔拉" }, { value: "巴音郭楞" }, { value: "阿克苏" }, { value: "克孜勒苏柯尔克孜自治州" },
+            { value: "喀什" }, { value: "和田" }, { value: "伊犁" }, { value: "阿勒泰" }, { value: "石河子" }, { value: "阿拉尔" }, { value: "图木舒克" }, { value: "五家渠" }]
+        },
+        { value: "台湾", childs: [{ value: "台北" }, { value: "台中" }, { value: "基隆" }] },
+        { value: "香港", childs: [{ value: "香港" }] },
+        { value: "澳门", childs: [{ value: "澳门" }] },
+    ];
+    var us1 = [
+        {
+            value: "北京",
+            childs: [{ value: "北京" }]
+        },
+        {
+            value: "天津",
+            childs: ["天津"]
+        },
+        {
+            value: "河北",
+            childs: ["石家庄", "唐山", "秦皇岛", "邯郸", "邢台", "保定", "张家口", "承德", "沧州", "廊坊", "衡水"]
+        },
+        {
+            value: "山西",
+            childs: ["太原", "大同", "阳泉", "长治", "晋城", "朔州", "晋中", "运城", "忻州", "临汾", "吕梁"]
+        },
+        {
+            value: "内蒙古",
+            childs: ["呼和浩特", "包头", "乌海", "赤峰", "通辽", "鄂尔多斯", "呼伦贝尔", "巴彦淖尔", "乌兰察布", "兴安", "锡林郭勒", "阿拉善"]
+        },
+        {
+            value: "辽宁",
+            childs: ["沈阳", "大连", "鞍山", "抚顺", "本溪", "丹东", "锦州", "营口", "阜新", "辽阳", "盘锦", "铁岭", "朝阳", "葫芦岛"]
+        },
+        {
+            value: "吉林",
+            childs: ["长春", "吉林", "四平", "辽源", "通化", "白山", "松原", "白城", "延边"]
+        },
+        {
+            value: "黑龙江",
+            childs: ["哈尔滨", "齐齐哈尔", "鸡西市", "鹤岗", "双鸭山", "大庆", "伊春", "佳木斯", "七台河", "牡丹江", "黑河", "绥化", "大兴安岭"]
+        },
+        {
+            value: "上海",
+            childs: ["上海"]
+        }, {
+            value: "江苏",
+            childs: ["南京", "无锡", "徐州", "常州", "苏州", "南通", "连云港", "淮安", "盐城", "扬州", "镇江", "泰州", "宿迁"]
+        }, {
+            value: "浙江",
+            childs: ["杭州", "宁波", "温州", "嘉兴", "湖州", "绍兴", "金华", "衢州", "舟山", "台州", "丽水"]
+        }, {
+            value: "安徽",
+            childs: ["合肥", "芜湖", "蚌埠", "淮南", "马鞍山", "淮北", "铜陵", "安庆", "黄山", "滁州", "阜阳", "宿州", "巢湖", "六安", "亳州", "池州", "宣城"]
+        }, {
+            value: "福建",
+            childs: ["福州", "厦门", "莆田", "三明", "泉州", "漳州", "南平", "龙岩", "宁德"]
+        }, {
+            value: "江西",
+            childs: ["南昌", "景德镇", "萍乡", "九江", "新余", "鹰潭", "赣州", "吉安", "宜春", "抚州", "上饶"]
+        }, {
+            value: "山东",
+            childs: ["济南", "青岛", "淄博", "枣庄", "东营", "烟台", "潍坊", "济宁", "泰安", "威海", "日照", "莱芜", "临沂", "德州", "聊城", "滨州", "菏泽"]
+        }, {
+            value: "河南",
+            childs: ["郑州", "开封", "洛阳", "平顶山", "安阳", "鹤壁", "新乡", "焦作", "濮阳", "许昌", "漯河", "三门峡", "南阳", "商丘", "信阳", "周口", "驻马店"]
+        }, {
+            value: "湖北",
+            childs: ["武汉", "黄石", "十堰", "宜昌", "襄樊", "鄂州", "荆门", "孝感", "荆州", "黄冈", "咸宁", "随州", "恩施", "神农架"]
+        }, {
+            value: "湖南",
+            childs: ["长沙", "株洲", "湘潭", "衡阳", "邵阳", "岳阳", "常德", "张家界", "益阳", "郴州", "永州", "怀化", "娄底", "湘西"]
+        }, {
+            value: "广东",
+            childs: ["广州", "深圳", "珠海", "汕头", "韶关", "佛山", "江门", "湛江", "茂名", "肇庆", "惠州", "梅州", "汕尾", "河源", "阳江", "清远", "东莞", "中山", "潮州", "揭阳", "云浮"]
+        },
+        {
+            value: "广西",
+            childs: ["南宁", "柳州", "桂林", "梧州", "北海", "防城港", "钦州", "贵港", "玉林", "百色", "贺州", "河池", "来宾", "崇左"]
+        },
+        {
+            value: "海南",
+            childs: ["海口", "三亚"]
+        }, {
+            value: "重庆",
+            childs: ["重庆"]
+        }, {
+            value: "四川",
+            childs: ["成都", "自贡", "攀枝花", "泸州", "德阳", "绵阳", "广元", "遂宁", "内江", "乐山", "南充", "眉山", "宜宾", "广安", "达州", "雅安", "巴中", "资阳", "阿坝", "甘孜", "凉山"]
+        }, {
+            value: "贵州",
+            childs: ["贵阳", "六盘水", "遵义", "安顺", "铜仁", "黔西", "毕节", "黔东", "黔南"]
+        }, {
+            value: "云南",
+            childs: ["昆明", "曲靖", "玉溪", "保山", "昭通", "丽江", "思茅", "临沧", "楚雄", "红河", "文山", "西双版纳", "大理", "德宏", "怒江", "迪庆"]
+        }, {
+            value: "西藏",
+            childs: ["拉萨", "昌都", "山南", "日喀则", "那曲", "阿里", "林芝"]
+        }, {
+            value: "陕西",
+            childs: ["西安", "铜川", "宝鸡", "咸阳", "渭南", "延安", "汉中", "榆林", "安康", "商洛"]
+        },
+        {
+            value: "甘肃",
+            childs: ["兰州", "嘉峪关", "金昌", "白银", "天水", "武威", "张掖", "平凉", "酒泉", "庆阳", "定西", "陇南", "临夏回族自治州", "甘南藏族自治州"]
+        }, {
+            value: "青海",
+            childs: ["西宁", "海东", "海北", "黄南", "海南藏族", "果洛", "玉树", "海西"]
+        }, {
+            value: "宁夏",
+            childs: ["银川", "石嘴山", "吴忠", "固原", "中卫"]
+        }, {
+            value: "新疆",
+            childs: ["乌鲁木齐", "克拉玛依", "吐鲁番", "哈密", "昌吉", "博尔塔拉", "巴音郭楞", "阿克苏", "克孜勒苏柯尔克孜", "喀什", "和田", "伊犁哈萨克", "塔城", "阿勒泰", "石河子", "阿拉尔", "图木舒克", "五家渠"]
+        }, {
+            value: "台湾",
+            childs: ["台北"]
+        }, {
+            value: "香港",
+            childs: ["香港"]
+        },
+        {
+            value: "澳门",
+            childs: ["澳门"]
+        }
+    ];
+    var isVip = false;
+    var mobileSelect1;
+    var corpList = ["中国联通", "中国移动", "中国电信"];
+    var corpId = 1;
+    var arrMobile = [182, 189, 187, 188];
+    var arrUnicom = [177, 134, 135];
+    var arrTelcom = [124, 146];
+    var mb = null;
+    var mb1 = null;
+    var mb2 = null;
+    var mb3 = null;
+    var topSeven = null;
+    var books = [];
+    var furl="";
+
+    $(document).ready(function () {
+        city();
+        funx();
+        if (corpId == 1) {
+            arr = arrUnicom
+        }
+        if (corpId == 2) {
+            arr = arrMobile
+        }
+        if (corpId == 3) {
+            arr = arrTelcom
+        }
+        $("#chooseHeader").click(function () {
+            var data = $("#corp").text();
+            if (data == " " || data == "" || data == "选择运营商") {
+                showTip("请选择运营商", 1000, "middle");
+                return;
+            }
+            if (data == "中国联通") {
+                corpId = 1;
+                mb.updateWheel(0, arrUnicom)
+            }
+            if (data == "中国移动") {
+                corpId = 2;
+                mb.updateWheel(0, arrMobile)
+            }
+            if (data == "中国电信") {
+                corpId = 3;
+                mb.updateWheel(0, arrTelcom);
+            }
+        });
+
+        $("#chooseCorp").click(function () {
+            if (corpId == 1) {
+                arr = arrUnicom
+            }
+            if (corpId == 2) {
+                arr = arrMobile
+            }
+            if (corpId == 3) {
+                arr = arrTelcom
+            }
+        });
+
+        /*选择 中间段*/
+        $(".midList").on("click", "span", function () {
+            var seven = $(this).text();
+            topSeven = seven;
+            $("#numMid").text(topSeven);
+            bHide();
+        })
+    });
+
+    function clearNum() {
+        mobileSelect1 = null;
+    }
+
+    function city() {
+        var xx = new MobileSelect({
+            trigger: '#city',
+            title: '地区选择',
+            wheels: [
+                { data: us }
+            ],
+            callback: function (indexArr, data) {
+                $("#city").html(data[1].value)
+            }
+        });
+    }
+
+    function initNum(arr) {
+        mb = null;
+        mb = new MobileSelect({
+            trigger: '#numHead',
+            title: '',
+            wheels: [
+                { data: arr }
+            ],
+            position: [1],
+            transitionEnd: function (indexArr, data) {
+
+            },
+            callback: function (indexArr, data) {
+
+            }
+        });
+    }
+
+    function corp() {
+        mobileSelect1 = null;
+        mobileSelect1 = new MobileSelect({
+            trigger: '#corp',
+            title: '',
+            wheels: [
+                { data: corpList }
+            ],
+            position: [2], //初始化定位 打开时默认选中的哪个 如果不填默认为0
+            transitionEnd: function (indexArr, data) { },
+            callback: function (indexArr, data) {
+                var arr = [];
+                if (data == "中国联通") {
+                    corpId = 1;
+                    arr = arrUnicom;
+                }
+                if (data == "中国移动") {
+                    corpId = 2;
+                    arr = arrMobile;
+                }
+                if (data == "中国电信") {
+                    corpId = 3;
+                    arr = arrTelcom;
+                }
+                $("#numHead").text("选择号段");
+            }
+        });
+    }
+
+    // 电信  133、149、153、173、177、180、181、189、199
+    var mbx;
+    var corps = null;
+    var heads = null;
+    var myarr = [
+        {
+            value: "中国联通",
+            childs: [
+                { value: "130" }, { value: "131" }, { value: "132" }, { value: "145" }, { value: "155" }, { value: "156" }, { value: "166" }, { value: "171" }, { value: "175" },
+                { value: "176" }, { value: "185" }, { value: "186" }
+            ]
+        },
+        {
+            value: "中国移动",
+            childs: [
+                { value: "135" }, { value: "136" }, { value: "137" }, { value: "138" }, { value: "139" }, { value: "147" }, { value: "150" }, { value: "151" },
+                { value: "152" }, { value: "157" }, { value: "158" }, { value: "159" }, { value: "172" }, { value: "178" }, { value: "182" }, { value: "183" }, { value: "184" },
+                { value: "184" }, { value: "187" }, { value: "188" }, { value: "198" }
+
+            ]
+        },
+        {
+            value: "中国电信",
+            childs: [{ value: "133" }, { value: "149" }, { value: "153" }, { value: "173" }, { value: "177" }, { value: "180" }, { value: "181" }, { value: "189" }, { value: "191" }, { value: "199" }]
+        }
+    ]
+
+    function funx() {
+        mbx = new MobileSelect({
+            trigger: '#numHeadx',
+            title: '',
+            wheels: [
+                { data: myarr }
+            ],
+            position: [1],
+            transitionEnd: function (indexArr, data) { },
+            callback: function (indexArr, data) {
+                $("#numHeadx").html(data[0].value + " " + data[1].value);
+                heads = data[1].value;
+                corps = data[0].value;
+                $("#numMid").text("请选择主体号段")
+            }
+        });
+    }
+
+    function initMb() {
+        mb1 = new MobileSelect({
+            trigger: '#numHead',
+            title: '',
+            wheels: [
+                { data: arrMobile }
+            ],
+            position: [1],
+            transitionEnd: function (indexArr, data) { },
+            callback: function (indexArr, data) {
+            }
+        });
+    };
+
+    function initUn() {
+        mb1 = new MobileSelect({
+            trigger: '#numHead',
+            title: '',
+            wheels: [
+                { data: arrUnicom }
+            ],
+            position: [1],
+            transitionEnd: function (indexArr, data) { },
+            callback: function (indexArr, data) { }
+        });
+    }
+
+    function initTl() {
+        mb1 = new MobileSelect({
+            trigger: '#numHead',
+            title: '',
+            wheels: [
+                { data: arrTelcom }
+            ],
+            position: [1],
+            transitionEnd: function (indexArr, data) { },
+            callback: function (indexArr, data) {
+            }
+        });
+    }
+
+    function header(id) {
+        var list;
+        if (id == 1) {
+            list = arrUnicom;
+        }
+        if (id == 2) {
+            list = arrMobile;
+        }
+        if (id == 3) {
+            list = arrTelcom;
+        }
+        var mobileSelect2 = new MobileSelect({
+            trigger: '#numHead',
+            title: '',
+            wheels: [
+                { data: list }
+            ],
+            position: [2], //初始化定位 打开时默认选中的哪个 如果不填默认为0
+            transitionEnd: function (indexArr, data) { },
+            callback: function (indexArr, data) {
+                console.log(typeof data);
+                console.log(data);
+            }
+        });
+    }
+
+    var arrLT = [];
+    function nunHead() {
+        var mobileSelect1 = new MobileSelect({
+            trigger: '#corp',
+            title: '',
+            wheels: [
+                { data: corpList }
+            ],
+            position: [2],
+            transitionEnd: function (indexArr, data) {
+            },
+            callback: function (indexArr, data) {
+                console.log(typeof data);
+                console.log(data);
+            }
+        });
+    }
+
+    function get() {
+        var city = $("#city").text();
+        if (!isNotEmpry(city) || city == "请选择城市") {
+            showTip("请选择城市", 1200, "middle");
+            return
+        }
+        if (!isNotEmpry(corps)) {
+            showTip("请选择运营商", 1200, "middle");
+            return
+        }
+        var sdata = {
+            uid: $api.getStorage("uid"),
+            city: city,
+            corp: corpInit(corps),
+            head: heads
+        };
+        apidata({
+            url: "/api/jed/get_mobile_lists",
+            data: sdata
+        }, function (ret) {
+            if (ret.data.length > 0) {
+                var str = "";
+                ret.data.forEach(ele => {
+                    phoneList.push(ele.mobile);
+                });
+                for (i = 0; i < ret.data.length; i++) {
+                    str += "<span>" + ret.data[i].mobile + "</span>"
+                }
+                $(".midList").empty().append(str);
+                bShow();
+            } else {
+                showTip("暂时无法获取主体号段 请稍后再试", 1500, "middle")
+            }
+          //  console.log(JSON.stringify(phoneList))
+        }, function (err) {
+            console.log(JSON.stringify(err))
+        })
+    }
+
+    function bShow() {
+        $(".cover").show();
+        $(".chooseMidBoard").show()
+    }
+
+    function bHide() {
+        $(".cover").hide();
+        $(".chooseMidBoard").hide()
+    }
+
+    /*生成号码*/
+    function create() {
+        getUserInfo();
+        if (!isVip) {
+            tip();
+            return
+        }
+        var city = $("#city").text();
+        var num = $("#account").val();
+        if (!isNotEmpry(city) || city == "请选择城市") {
+            showTip("请选择城市", 1200, "middle");
+            return
+        }
+        if (!isNotEmpry(corps)) {
+            showTip("请选择运营商", 1200, "middle");
+            return
+        }
+        if (!isNotEmpry(num) || num < 1) {
+            showTip("至少生成一个", 1200, "middle");
+            return
+        }
+        if (!isNotEmpry(num) || num > 1000) {
+            showTip("一次最多不能超过1000个", 1200, "middle");
+            return
+        }
+        var finalList = [];
+        var finalStr = "";
+        var newSev = parseInt(topSeven) * 10000;
+        for (var i = 0; i < num; i++) {
+            var m = parseInt(newSev) + parseInt(i);
+            finalList.push(m);
+        }
+        books = [];
+        books = finalList;
+        showborad(books);
+    }
+
+    /*获取用户是否是VIP会员*/
+    function getUserInfo() {
+        apidata({
+            url: "/api/jed/user_info",
+            data: {
+                uid: $api.getStorage("uid"),
+            }
+        }, function (ret) {
+            if (ret.data.is_vip == 1) {
+                isVip = true;
+            }
+        });
+    }
+
+    function showborad(arr) {
+        var str = "";
+        for (var i = 0; i < arr.length; i++) {
+            str += "<span>" + arr[i] + "</span>"
+        }
+        $(".booksList").empty().append(str);
+        $(".books").show();
+    }
+
+    function myback() {
+        $(".books").hide();
+    }
+
+    function chooseCity() {
+        api.openFrame({
+            name: "city",
+            url: "city.html",
+            rect: {
+                x: 0,
+                y: 0,
+                w: api.winWidth,
+                h: api.winHeight - 50
+            },
+            pageParam: {
+                from: "resource"
+            }
+        })
+    }
+
+    function corpInit(corp) {
+        var corpid = "";
+        if (corp == "中国联通") {
+            corpid = 1;
+        }
+        if (corp == "中国移动") {
+            corpid = 2;
+        }
+        if (corp == "中国电信") {
+            corpid = 3;
+        }
+        return corpid.toString();
+    }
+
+    /*城市选择回传*/
+    function defCity(city) {
+        $("#city").html(city);
+    }
+
+    /*添加到通讯录*/
+    function addbooks() {
+        if (isVip == false) {
+            tip();
+            return;
+        }
+        api.confirm({
+            title: '提示',
+            msg: '确定添加' + books.length + '位联系人到通讯录 ',
+            buttons: ['确定', '取消']
+        }, function (ret, err) {
+            var list = books;
+            if (ret.buttonIndex == 1) {
+                if (ret) {
+                    var inum = 0;
+                    for (var i = 0; i < list.length; i++) {
+                        if (list[i]) {
+                            var contacts = api.require('DVContacts');
+                            contacts.add({
+                                firstName:"城市客源"+(i+1)+"-"+list[i],
+                                phones: [{
+                                    '工作': list[i]
+                                }]
+                            }, function (ret, err) {
+                                if (ret) {
+                                    if (ret.status == true) {
+                                        console.log("cegong")
+                                        inum++;
+                                    }
+                                } else {
+                                    showTip(JSON.stringify(err), 2000, "middle");
+                                }
+                            });
+                        }
+                        if (i == list.length - 1) {
+                            showTip("成功导入" + (i + 1) + "个联系人", 2000, "middle");
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+    /*群发短信*/
+    function sendletter() {
+        if (isVip == false) {
+            tip();
+            return;
+        }
+        var phones = books;
+        api.openWin({
+            name: 'myGroupSend',
+            url: 'myGroupSend.html',
+            reload: true,
+            pageParam: {
+                phone: phones
+            }
+        })
+    }
+
+    /*导出excls*/
+
+
+    function exportTable() {
+      console.log("显示 报表框");
+      var dbs = api.require('dialogBox');
+      dbs.actionMenu ({
+                rect:{
+                    h: 150
+                },
+                texts:{
+                    cancel: '取消'
+                },
+                items:[
+                {
+                    text: '下载',
+                    icon: 'widget://image/tools/dl.png'
+                },
+                {
+                    text: '分享',
+                    icon: 'widget://image/tools/wx.png'
+                },
+                
+                ],
+                styles:{
+                    bg:'#FFF',
+                    column: 2,
+                    itemText: {
+                        color: '#000',
+                        size: 12,
+                        marginT:8
+                    },
+                    itemIcon:{
+                        size:50
+                    },
+                    cancel:{  
+                        bg: 'fs://icon.png',   
+                        color:'#000',          
+                        h: 44 ,                 
+                        size: 14       
+                    }
+                }
+            }, function(ret){
+                console.log(JSON.stringify(ret));
+                if(ret.eventType=="click"){
+                        if(ret.index==0){
+                          console.log("点击下载")
+                          dbs.close();
+                          download()
+                       }else if(ret.index==1){
+                         console.log("点击分享")
+                         dbs.close();
+                         shareUrl()
+                       }
+                }else if(ret.eventType=="cancel")
+                {
+                    console.log("guanbi")
+                    dbs.close();
+                    download()
+                }
+              //   dbs.close();
+
+            });
+
+    }
+
+  function download(){
+      console.log(JSON.stringify(books))
+         if (isVip == false) {
+            tip();
+            return;
+        }
+        apidata({
+            url: "/api/jed/to_excel",
+            data: {
+                uid: $api.getStorage("uid"),
+                lists: books
+            }
+        }, function (ret) {
+            if (ret.status == 200) {
+                var urls = ret.data;
+                console.log("xian:"+urls);
+                api.download({
+                    url: urls
+                }, function (ret, err) {
+                    var url = ret.savePath;
+                  
+                    showTip('导出地址为:' + url, '5000', 'bottom');
+                  console.log("url:"+url)
+                   // share(urls)
+                })
+            } else {
+                showTip(ret.return_msg, 1200, "middle")
+            }
+        });  
+
+  }
+
+  function shareUrl(){
+      console.log(JSON.stringify(books))
+            if (isVip == false) {
+            tip();
+            return;
+        }
+        apidata({
+            url: "/api/jed/to_excel",
+            data: {
+                uid: $api.getStorage("uid"),
+                lists: books
+            }
+        }, function (ret) {
+            if (ret.status == 200) {
+                var urls = ret.data;
+                console.log("xian:"+urls);
+                api.download({
+                    url: urls
+                }, function (ret, err) {
+                    var url = ret.savePath;
+               
+                    console.log("url:"+url)
+                    share(urls)
+                })
+            } else {
+                showTip(ret.return_msg, 1200, "middle")
+            }
+        });  
+
+
+  }
+
+function toObjArr(arr){
+ 
+}
+
+
+    /*会员开通提示窗*/
+    function tip() {
+        var dialogBox = api.require('dialogBox');
+        dialogBox.taskPlan({
+            rect: {
+                w: 300
+            },
+            texts: {
+                mainTitle: '温馨提示',
+                subTitle: '',
+                content: [{
+                    text: '权限不足，请开通会员解锁所有功能'
+                }],
+                btnTitle: '开通会员'
+            },
+            styles: {
+                bg: '#fff',
+                corner: 10,
+                main: {
+                    marginT: 20,
+                    color: '#636363',
+                    size: 18,
+                    bold: true,
+                },
+                sub: {
+                    marginT: 0,
+                    color: '#999999',
+                    size: 12,
+                },
+                content: [{
+                    bg: '#fff',
+                    marginT: 0,
+                    marginB: 30,
+                    w: 280,
+                    h: 40,
+                    align: 'center',
+                    color: '#bcbcbc',
+                    size: 16
+                }],
+                ok: {
+                    marginB: 10,
+                    marginL: 10,
+                    marginR: 0,
+                    w: 280,
+                    h: 40,
+                    bg: '#217bfb',
+                    color: '#fff',
+                    size: 16,
+                    corner: 10,
+
+                }
+            },
+            tapClose: true
+        }, function (ret) {
+            if (ret.eventType == 'ok') {
+                api.openWin({
+                    name: 'memberCenter',
+                    url: './memberCenter.html',
+                    reload: true
+                })
+                var dialogBox = api.require('dialogBox');
+                dialogBox.close({
+                    dialogName: 'taskPlan'
+                });
+            }
+        });
+    }
+   
+
+    /**/
+    function share(url){
+                var wxPlus = api.require('wxPlus');
+                wxPlus.shareWebpage({
+                    apiKey: 'wx828b89a03fd25df3',
+                    scene: 'session',
+                    title: '报表分享',
+                       description: '“客源帮”是一个同务',
+                    // thumb: app(),
+                    //  contentUrl: fen() + 'index.php?s=/home/index/user/uid/' + 100029
+                     contentUrl:url
+                }, function(ret, err) {
+                    if (ret.status) {
+                        //alert('分享成功');
+                    } else {
+                        //alert(err.code);
+                    }
+                });
+    }
+</script>
+
+
+</html>

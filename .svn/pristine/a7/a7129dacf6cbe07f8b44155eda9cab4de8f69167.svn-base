@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>下级会员奖励</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+ 
+  </head>
+  <body>
+        <header class="header" id="header">
+                <a class="headerLeft" onclick="api.closeWin()">
+                    <i class="icon iconfont iconback"></i>
+                </a>
+                <div class="headerTle">下级会员奖励</div>       
+        </header>   
+       <div class="subordinate" id="vue">
+              <div class="ssWrap">
+                    <div class="tabsWrap">
+                            <ul class="tle">
+                                <li><span>用户</span></li>
+                                <li><span>级别</span></li>
+                                <li><span>购买记录</span></li>
+                                <li><span>佣金</span></li>                            
+                            </ul>
+                          </div>
+                <div class="sListWrap">
+                     <ul class="sList">
+                          <li v-for="(item,index) in list" :key="item.id">
+                           <dl>
+                               <dt><img :src="item.head" alt="">
+                                <span>{{item.id}}</span>
+                             </dt>
+                               <dd class="">
+                                   <span class="usertype"> 年卡会员</span>                        
+                               </dd>
+                               <dd>
+                                  <span class="time">2020.07.05</span>
+                               </dd>
+                               <dd class="amount">
+                                   <span>+35</span>
+                               </dd>
+                           </dl>                            
+                        </li>
+                     </ul>
+                                               
+                </div>
+              </div>
+       </div>
+             
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/vue.min.js"></script>
+  <script type="text/javascript" src="../script/tools.js"></script>
+  <script type="text/javascript">
+    var vm;
+     var pageSize=5;
+     var pageIndex=0;
+      apiready = function(){
+          
+        $api.fixStatusBar( $api.byId('header'));
+         
+         vm=new Vue({
+              el:"#vue",
+              data:{
+                 list:[]
+              },
+              mounted:function(){
+                 this.getList()             
+    
+              },
+              methods:{
+                  getList(){
+                      console.log("初始化下级会员奖励数据");
+                      getData();
+
+
+                  }
+              }
+
+
+
+         });
+
+
+         addNew();
+
+
+                    
+    };
+  /*apiready End*/
+
+         function addNew(){
+            api.addEventListener({
+              name: 'scrolltobottom',
+              extra: {threshold: 10 }    
+           }, function(ret, err) {
+         
+        
+              console.log("我要加载的状态"+vm.status);
+
+                pageIndex+=pageSize;
+               // datas(0);
+               getData();
+            
+         });
+
+
+
+
+         }
+
+
+
+
+   function getData(){
+           console.log("数据获取 基本方式");
+                 var sdata={
+                   uid:$api.getStorage("uid"),
+             
+                   start:pageIndex,
+                   num:pageSize
+                };
+
+
+             apidata({
+                  url:"/api/jed/distribution_lists",
+                  data:sdata
+                },function(ret){
+                     console.log(JSON.stringify(ret))
+                     if(ret.data.length==0){
+                        showTip("没有更多数据啦",700,"middle");
+                     }
+
+                      ret.data.forEach(element => {
+                           vm.list.push(element);                 
+                      });
+
+
+                },function(err){
+                  
+                })
+
+   }
+
+
+
+
+
+
+
+  </script>
+  </html>
+<style>
+
+.subordinate{font-size: 14px;padding:64px 0 0 0; }
+.ssWrap{
+   margin: 10px;
+   background: white;
+   border-radius:10px;
+   /*  */
+}
+
+.sListWrap{padding: 10px 0px 10px 0px; }
+.sList{ margin: 5px 0 0 0}
+.sList li {padding: 10px 0 15px 0 }
+.sList li dl{ display: flex; align-items: center}
+.sList li dl dt{ 
+    display: flex;
+    align-items: center;
+    flex:1;
+    text-align: center
+}
+.sList li dl dt img{ border-radius:50%; width: 40px;height: 40px; margin: 0 0 0 5px}
+.sList li dl dt span{ overflow: hidden;
+white-space: nowrap;
+text-overflow: ellipsis;
+max-width: 50%;}
+
+.sList li dl dd{flex: 1;   text-align: center}
+.sList li dl dd.ddTime{flex: 1;text-align: right;padding:  0 10px 0 0 }
+.sList li dl dd.ddInfo{flex: 1; margin: 0 0 0 10px; line-height: 30px }
+.sList li dl dd.ddInfo .level{color:#959595}
+.sList li dl dd.ddInfo .phone{font-size: 16px;color: #000}
+
+
+.amount span{font-size: 16px;color:#ff4e51}
+
+.tabsWrap{}
+.tabsWrap .tle{display: flex;padding: 10px 0}
+.tabsWrap .tle li{text-align: center;flex: 1;font-size: 16px;position: relative;height: 30px;line-height: 30px}
+.tabsWrap .tle li::after{
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 50%;
+    background: #666;
+    right: 0;
+    top:50%;
+    transform:translateY(-50%)
+}
+.tabsWrap .tle li.curr{color:#12ada9;}
+.tabsWrap .tle li:last-child::after{display: none}
+</style>

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>供需</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <style>
+        body {
+            background-color: white;
+        }
+
+        [v-cloak] {
+            opacity: 0;
+        }
+
+        .tle {
+            background-color: #217bfb;
+            color: white;
+            height: 50px;
+            line-height: 50px;
+            text-align-last: center;
+            font-size: 16px;
+        }
+
+        .main {
+            background-color: white;
+            display: flex;
+            flex-wrap: wrap;
+            text-align: center;
+        }
+
+        .main .item {
+            width: 25%;
+        }
+
+        .main .item .imgbox {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 10px auto;
+            background-color: #f3f7fc;
+        }
+
+        .main .item .imgbox img {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            line-height: 70px;
+            border-radius: 50%;
+        }
+
+        .main .item p {
+            font-size: 14px;
+            height: 30px;
+            color: #7d7d7d;
+        }
+
+        .extend {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+        }
+
+        .entendbox {
+            display: flex;
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #217bfb;
+        }
+
+        .entendbox .picbox {
+            background-color: #55af6f;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+        }
+
+        .entendbox .picbox img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .entendbox h4 {
+            height: 25px;
+            line-height: 25px;
+            padding-left: 5px;
+        }
+
+        .entendbox p {
+            color: #bcbcbc;
+            font-size: 14px;
+            padding-left: 5px;
+        }
+
+        .bibingtitle {
+            background-color: white;
+            height: 20px;
+            line-height: 20px;
+            padding: 10px;
+        }
+
+        .bibingtitle div {
+            border-left: 2px solid #2f8df7;
+            padding-left: 10px;
+            font-size: 14px;
+            font-weight: bolder;
+        }
+
+        .content {
+            background-color: white;
+            padding-bottom: 10px;
+        }
+
+        .content .contenitem {
+            display: flex;
+            border-bottom: 1px solid #f5f5f5;
+            padding: 10px;
+        }
+
+        .content .contenitem .contentimg {
+            width: 100px;
+            height: 100px;
+            margin-right: 10px;
+        }
+
+        .content .contenitem .contentimg img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .content .contenitem .contentright {
+            width: calc(100% - 90px);
+        }
+
+        .content .contenitem .contentright h4 {
+            font-weight: normal;
+            font-size: 16px;
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .content .contenitem .contentright p {
+            color: #999999;
+            height: 30px;
+            line-height: 30px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .content .contenitem .contentright .contentbottom {
+            display: flex;
+            justify-content: space-between;
+            height: 30px;
+            line-height: 30px;
+            padding-top: 5px;
+        }
+
+        .content .contenitem .contentright .contentbottom div {
+            margin-left: 20px;
+        }
+
+        .content .contenitem .contentright .contentbottom div span {
+            color: #5399fd;
+            line-height: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="tle" style="text-align: center">供需</div>
+    <div id="vue" v-cloak>
+        <div class="main">
+            <div class="item " v-for="(item,index) in list" :key="item" @click="itemdetail(item)">
+                <div class="imgbox">
+                    <img :src="item.cover?item.cover:'../image/tools/logo.png'" alt="">
+                </div>
+                <p>{{item.type_name}}</p>
+            </div>
+        </div>
+        <div class="extend">
+            <div class="entendbox" onclick="gorelease()">
+                <div class="picbox">
+                    <img src="../image/pic/tuiguang2.png" alt="">
+                </div>
+                <div>
+                    <h4>我要推广</h4>
+                    <p>发布图文推广</p>
+                </div>
+            </div>
+            <div class="entendbox" onclick="mypop()">
+                <div class="picbox">
+                    <img src="../image/pic/touguang.png" alt="">
+                </div>
+                <div>
+                    <h4>我的推广</h4>
+                    <p>查看我的推广</p>
+                </div>
+            </div>
+        </div>
+        <div class="bibingtitle">
+            <div>最新推广</div>
+        </div>
+        <div class="content">
+            <div class="contenitem" v-for="(item,index) in extensionlist" :key="item.id" v-cloak>
+                <div class="contentimg">
+                    <img :src="item.pics?item.pics.split(',')[0]:'../image/tools/logo.png'" alt="">
+                </div>
+                <div class="contentright" @click="propdatail(item)">
+                    <h4>{{item.name}}</h4>
+                    <p>{{item.goods}}</p>
+                    <div class="contentbottom">
+                        <span style="padding-top: 2px;" v-if="!vip">
+                            {{item.phone.substring(0,3) + '****' + item.phone.substring(item.phone.length - 4)}}
+                        </span>
+                        <span style="padding-top: 2px;" v-if="vip">
+                            {{item.phone}}
+                        </span>
+                        <div @click="call(item.phone)">
+                            <img src="../image/pic/phone.png" alt=""
+                                style="width:20px;height:20px;vertical-align: middle;">
+                            拨打
+                        </div>
+                        <div @click="copy(item.phone)">
+                            <span class="iconfont iconbiaodan"></span>
+                            复制
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript" src="../script/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+    var vm, index = 0, size = 10, loadMore = false;
+    apiready = function () {
+        api.setStatusBarStyle({
+            style: 'light',
+            color: '#217bfb'
+        });
+        api.addEventListener({
+            name: 'scrolltobottom',
+            extra: { threshold: 10 }
+        }, function (ret, err) {
+            addDatas();
+        });
+
+
+        api.addEventListener({
+           name: 'refreshEvent'
+          }, function(ret, err) {
+          if (ret.value.state == 'refresh') {
+        
+            console.log("!!!");
+            window.location.reload()
+          }
+     });
+
+        api.setRefreshHeaderInfo({
+            loadingImg: 'widget://image/refresh.png',
+            bgColor: '#217bfb',
+            textColor: '#fff',
+            textDown: '下拉刷新...',
+            textUp: '松开刷新...'
+        }, function (ret, err) {
+            //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
+            if (ret) {
+                api.refreshHeaderLoadDone(); //恢复默认状态
+                //重新加载当前页面
+                window.location.reload();
+            }
+        });
+        vm = new Vue({
+            el: "#vue",
+            data: {
+                vip: false,
+                /*采购分类列表数据*/
+                list: [],
+                /*最新推广列表数据*/
+                extensionlist: []
+            },
+            created: function () {
+                this.getData()
+            },
+            methods: {
+                getData() {
+                    datas();
+                    extension();
+                    userinfo();
+                }
+            }
+        })
+        /*vue end*/
+    }
+
+    /*最新推广*/
+    function addDatas() {
+        index += size;
+        extension();
+    }
+
+    /*获取用户信息*/
+    function userinfo() {
+        apidata({
+            url: "/api/jed/user_info",
+            data: {
+                uid: $api.getStorage("uid"),
+            }
+        }, function (ret) {
+            if (ret.data.is_vip == 1) {
+                vm.vip = true;
+            }
+        });
+    }
+
+    /*分类列表*/
+    function datas() {
+        var deviceid = api.deviceId;
+        var sdata = {
+            uid: $api.getStorage("uid"),
+            type: 2
+        };
+        apidata({
+            url: "/api/jed/types_lists",
+            data: sdata
+        }, function (ret) {
+            let listdata = ret.data;
+            if (listdata.length > 0) {
+                listdata.forEach(element => {
+                    vm.list.push(element)
+                });
+            } else {
+                // showTip("暂无数据","1000","middle");
+            }
+        });
+    }
+
+    /*会员开通提示窗*/
+    function tip() {
+        var dialogBox = api.require('dialogBox');
+        dialogBox.taskPlan({
+            rect: {
+                w: 300
+            },
+            texts: {
+                mainTitle: '温馨提示',
+                subTitle: '',
+                content: [{
+                    text: '权限不足，请开通会员解锁所有功能'
+                }],
+                btnTitle: '开通会员'
+            },
+            styles: {
+                bg: '#fff',
+                corner: 10,
+                main: {
+                    marginT: 20,
+                    color: '#636363',
+                    size: 18,
+                    bold: true,
+                },
+                sub: {
+                    marginT: 0,
+                    color: '#999999',
+                    size: 12,
+                },
+                content: [{
+                    bg: '#fff',
+                    marginT: 0,
+                    marginB: 30,
+                    w: 280,
+                    h: 40,
+                    align: 'center',
+                    color: '#bcbcbc',
+                    size: 16
+                }],
+                ok: {
+                    marginB: 10,
+                    marginL: 10,
+                    marginR: 0,
+                    w: 280,
+                    h: 40,
+                    bg: '#217bfb',
+                    color: '#fff',
+                    size: 16,
+                    corner: 10,
+
+                }
+            },
+            tapClose: true
+        }, function (ret) {
+            if (ret.eventType == 'ok') {
+                api.openWin({
+                    name: 'memberCenter',
+                    url: './memberCenter.html',
+                    reload: true
+                })
+                var dialogBox = api.require('dialogBox');
+                dialogBox.close({
+                    dialogName: 'taskPlan'
+                });
+            }
+        });
+    }
+
+    /*拨打电话*/
+    function call(phone) {
+        event.cancelBubble = true;
+        event.preventDefault = true;
+        if (!vm.vip) {
+            tip();
+            return;
+        }
+        api.call({
+            number: phone
+        })
+    }
+
+    /*复制*/
+    function copy(obj) {
+        event.cancelBubble = true;
+        event.preventDefault = true;
+        if (!vm.vip) {
+            tip();
+            return;
+        }
+        var clipBoard = api.require('clipBoard');
+        clipBoard.set({
+            value: obj
+        }, function (ret, err) {
+            if (ret) {
+                showTip("复制成功", 800, "bottom");
+            } else {
+                showTip("复制失败", 800, "bottom")
+            }
+        });
+    }
+
+    /*获取最新推广列表数据*/
+    function extension() {
+        var sdata = {
+            uid: $api.getStorage("uid"),
+            start: index,
+            num: size
+        };
+        apidata({
+            url: "/api/jed/purchase_lists",
+            data: sdata
+        }, function (ret) {
+            if (!loadMore && ret.data.length == 0) {
+                showTip("暂无数据！", 800, "middle");
+                return;
+            }
+            if (loadMore && ret.data.length == 0) {
+                showTip("没有更多了", 800, "middle");
+                return;
+            }
+            if (ret.data.length) {
+                const list = ret.data;
+                list.forEach(item => {
+                    vm.extensionlist.push(item);
+                })
+                loadMore = true;
+            }
+        })
+    }
+
+    /*跳转至我的推广页面*/
+    function mypop() {
+        api.openWin({
+            name: 'myPop',
+            url: './myPop.html',
+            reload: true
+        })
+    }
+
+    /*跳转至我要推广页面*/
+    function gorelease() {
+        api.openWin({
+            name: 'polularizeRelease',
+            url: './polularizeRelease.html',
+            reload: true
+        })
+    }
+
+    /*点击分类进去*/
+    function itemdetail(obj) {
+        api.openWin({
+            name: 'supply ',
+            url: './supply.html',
+            reload: true,
+            pageParam: {
+                item: obj
+            }
+        })
+    }
+
+    /*详情*/
+    function propdatail(obj) {
+        api.openWin({
+            name: 'propDetail ',
+            url: './propDetail.html',
+            reload: true,
+            pageParam: {
+                item: obj
+            }
+        })
+    }
+
+    function fromRel() {
+        window.location.reload()
+    }
+
+    function myreload() {
+        console.log("popilir reload")
+        window.location.reload()
+    }
+</script>
+
+</html>

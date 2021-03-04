@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>意见与反馈</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+ 
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/css.css"/>
+    <style>
+      
+    </style>
+</head>
+<body>
+    <header class="header" id="header">
+        <a class="headerLeft" onclick="api.closeWin()">
+            <i class="icon iconfont iconback"></i>
+        </a>
+        <div class="headerTle">意见与反馈</div>
+    </header>
+
+
+    <div class="m">
+        <div class="feedback">
+         <div class="textArea">
+             <textarea name="" id="txt" class="txt" cols="30" rows="10" placeholder="请输入您的建议与意见"></textarea>
+             <span class="numcount"><b id="result">0</b>/500</span>
+         </div>
+      
+          <div class="submitArea">
+             <input type="button" value="提交" onclick="submit()" />
+          </div>
+        </div>
+    
+    </div>
+
+
+</body>
+
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+
+
+
+<script>
+
+  apiready=function(){
+
+     fixbar();
+
+    
+
+  };
+
+  
+
+
+
+    $(function(){
+     
+       $('.txt').bind('input propertychange', function() {
+          $('#result').html($(this).val().length);
+       });
+      
+     });
+
+     function submit(){
+            console.log("发布意见与建议！");
+            var txt= $("#txt").val();
+            if(!isNotEmpry(txt)) {
+                    showTip("意见不能为空 说点啥吧",2000,"bottom")
+                    return;
+                }     
+           var sdata={
+                       uid:$api.getStorage("uid"),
+                       content:txt
+                    }
+
+            apidata({
+                url:"/api/jed/feedback",
+                data:sdata
+            },function(ret){
+               console.log(JSON.stringify(ret))
+               if(ret){
+                 if(ret.status==200){
+                      showTip("提交成功","1200","middle");
+                 }else{
+                    showTip(ret.return_msg,"1200","middle");
+                 }
+               }
+
+            },function(err){
+
+            })
+
+     }
+
+
+</script>
+
+<style>
+ .m{padding:68px 0 0 0}
+ #txt{outline: none}
+</style>
+</html>

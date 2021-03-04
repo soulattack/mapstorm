@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <style>
+        
+      </style>
+  </head>
+  <body>
+        <div class="tetstest" id="vue">
+              <div>
+                  标题
+              </div>
+
+           <div class="opt">
+
+            <a href="javascript:;" @click="insert">插入数据</a>
+            <a href="javascript:;" onclick="delAll()">删除所有内容</a>
+        </div>
+
+
+              <ul class="list">
+                 <li v-for="(item,index) in list" :key="item.keytime">
+                     <span>{{item.keyname}}</span>--
+                     <span>{{item.keytime}}</span>
+                 </li>
+              </ul>
+        </div>
+
+      
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/vue.min.js"></script>
+  <script type="text/javascript">
+      var db;
+      var vm;
+      apiready = function(){
+         db = api.require('db');
+
+
+         vm=new Vue({
+             el:"#vue",
+             data:{
+                 list:[]
+             },
+             mounted:function(){
+                 this.datas();
+                 this.create();
+                 this.select()
+
+             },
+             methods:{
+                 datas(){
+                      openDB();
+                 },
+                 create(){
+                      createTbl();
+                 },
+                 insert(){
+                        insertData();
+                 },
+                 select(){
+                      selectData()
+                 }
+             }
+         })
+      
+        
+      
+        
+      };
+
+
+
+
+    function openDB(){
+        //openDB();
+        var db_ret = db.openDatabase({
+				name : 'webtest',
+				path : 'fs://superman.db'
+			}, function(ret, err) {
+				if (ret.status) {
+				//	cfg.db_status = true;
+					console.log('本地数据库连接成功');
+					// selectDBData();
+					//selectDataCount();
+				} else {
+					//cfg.db_status = false;
+					api.toast({
+						msg : '本地数据库连接失败'
+					});
+				}
+			});
+ 
+
+    }
+
+  function createTbl(){
+  //  openDB();
+    db.executeSql({
+    name: 'webtest',
+    sql: 'CREATE TABLE IF NOT EXISTS olist (keytime,keyname,count,user)'
+        }, function(ret, err) {
+            if (ret.status) {
+                console.log(JSON.stringify(ret));
+            } else {
+                console.log(JSON.stringify(err));
+            }
+    });
+  }
+
+
+  function insertData(){
+   // openDB();
+    db.executeSql({
+    name: 'webtest',
+    // sql: 'INSERT INTO List (keytime, keyname,count,user) VALUES ("'+keytime+'","'+keyname+'","0","'+currUser+'")',
+    sql: 'INSERT INTO olist (keytime, keyname,count,user) VALUES ("20211212","测试名字","0","1000002")',
+        }, function(ret, err) {
+            if (ret.status) {
+                console.log(JSON.stringify(ret));
+            } else {
+                console.log(JSON.stringify(err));
+            }
+    });
+  }
+
+  function selectData(){
+   // openDB();
+    db.selectSql({
+    name: 'webtest',
+    // sql: 'INSERT INTO List (keytime, keyname,count,user) VALUES ("'+keytime+'","'+keyname+'","0","'+currUser+'")',
+    sql: 'SELECT * FROM olist',
+        }, function(ret, err) {
+            if (ret.status) {
+                console.log(JSON.stringify(ret));
+                console.log(JSON.stringify("数据信息："+ret.data.length));
+                vm.list=ret.data
+            } else {
+                console.log(JSON.stringify(err));
+            }
+    });
+  }
+
+
+  function delData(){
+      
+  }
+ 
+  function delAll(){
+      console.log("删除数据");
+      db.executeSql({
+    name: 'webtest',
+    // sql: 'INSERT INTO List (keytime, keyname,count,user) VALUES ("'+keytime+'","'+keyname+'","0","'+currUser+'")',
+    sql: 'DELETE  FROM olist',
+        }, function(ret, err) {
+            if (ret.status) {
+                console.log(JSON.stringify(ret));
+            } else {
+                console.log(JSON.stringify(err));
+            }
+    });
+  }
+  
+
+  </script>
+
+  <style>
+    .opt{font-size: 16px;display: flex}
+    .opt a{
+         display: block; padding: 5px; margin: 20px ; width: 100px;
+       height: 44px; line-height: 44px;
+       background: #00aedc;
+       text-align: center;
+       color: white;
+
+    }
+  </style>
+  </html>

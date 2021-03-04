@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/css.css" />
+    <style>
+        html {
+            background: #ededed
+        }
+
+        .choose {
+            padding: 64px 0 0 0
+        }
+
+        .mouldList {
+            margin: 20px 0;
+            background: white;
+            padding: 10px;
+        }
+
+        .mouldList li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header">
+        <a class="headerLeft" onclick="api.closeWin()">
+            <i class="icon iconfont iconback"></i>
+        </a>
+        <div class="headerTle">选择模板</div>
+    </header>
+    <div class="choose" id="choose">
+        <ul class="mouldList">
+            <li v-for="(item,index) in list" :key="item.id" @click="toSendPage(item)">
+                <dl>
+                    <dt>
+                        <div class="rName"><span>{{item.area}}</span><span>{{item.title}}</span></div>
+                    </dt>
+                    <dd>
+                        {{item.content}}
+                    </dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript">
+    var vm;
+    var size = 10, index;
+    apiready = function () {
+        fixbar();
+        vm = new Vue({
+            el: "#choose",
+            data: {
+                list: []
+            },
+            mounted: function () {
+                this.getList();
+            },
+            methods: {
+                /*获取数据*/
+                getList() {
+                    datas(0);
+                },
+                /*选择模板*/
+                toSendPage(item) {
+                    var jsfun = "hasReadFunc('" + JSON.stringify(item) + "')";
+                    api.execScript({
+                        name: "myGroupSend",
+                        winName: "myGroupSend",
+                        script: jsfun
+                    });
+                    api.closeWin({
+                        animation: {
+                            type: "push",
+                            subType: "from_left",
+                            duration: 300
+                        }
+                    });
+                    api.openWin({
+                        name: "myGroupSend",
+                        url: "./myGroupSend.html",
+                        pageParam: {
+                            item: item
+                        }
+                    })
+                }
+            }
+        });
+        add()
+    };
+
+    /*上拉加载数据*/
+    function add() {
+        api.addEventListener({
+            name: 'scrolltobottom',
+            extra: { threshold: 10 }
+        }, function (ret, err) {
+            index += size;
+            datas(index);
+        });
+    }
+
+    /*获取数据*/
+    function datas(pageIndex) {
+        var sdata = {
+            uid: $api.getStorage("uid"),
+            /*0待审核 1已通过 2 已驳回*/
+            status: 1,
+            start: pageIndex,
+            num: size
+        };
+        apidata({
+            url: "/api/jed/model_msg_lists",
+            data: sdata
+        }, function (ret) {
+            if (ret) {
+                if (ret.data.length == 0) {
+                    showTip("暂无模板,请添加后选择", 700, "bottom");
+                }
+                ret.data.forEach(element => {
+                    vm.list.push(element);
+                });
+            }
+        });
+    };
+</script>
+
+</html>

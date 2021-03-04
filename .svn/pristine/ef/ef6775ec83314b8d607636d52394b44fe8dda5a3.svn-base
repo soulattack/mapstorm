@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>采集记录</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/css.css" />
+    <link rel="stylesheet" type="text/css" href="../css/mobileSelect.css" />
+
+    <!-- <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=Sk2jbVWPdmZK0QEGiQ8aB3WuzAOVh1Rk"></script> -->
+
+
+       
+</head>
+
+<body>
+    <div class="mw">
+                <header class="header" id="header">
+                    <a class="headerLeft" onclick="api.closeWin()">
+                        <i class="icon iconfont iconback"></i>
+                    </a>
+                    <div class="headerTle">采集记录</div>
+                    <a class="headerRight" onclick="clearData()" >
+                        <i class="i">清除</i>
+                    </a>
+                </header>
+              
+
+                <div class="result">
+                     <div class="rswrap">
+                                  <ul class="list">
+                                      
+                                  </ul>
+                     </div>
+                </div>
+          
+              
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script src="../script/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript" src="../script/mobileSelect.min.js"></script>
+<!-- <script type="text/javascript" src="./script/results.js"></script>
+<script type="text/javascript" src="./script/mapkeyx.js"></script> -->
+<!-- <script src="../script/mapkey.js"> </script> -->
+<script type="text/javascript">
+var currUser;
+apiready = function () {
+    fixbar();
+  
+
+
+    };
+
+$(document).ready(function () {
+  
+  var db = openDatabase('test001', '1.0', 'Test DB', 2 * 1024 * 1024);
+ // var str="";
+  console.log(db);
+
+    currUser=$api.getStorage("uid");
+ console.log("userid:"+currUser)
+  
+
+
+  db.transaction(function (tx) {
+      console.log("zhxing:"+currUser)
+     //tx.executeSql('SELECT * FROM List where user="100007" ', [], function (tx, results) {
+        tx.executeSql('SELECT * FROM List where user="'+currUser+'"', [], function (tx, results) {
+          console.log(JSON.stringify(results));
+         var len = results.rows.length, i;
+         var str="";
+     //    str+= "<p>查询记录条数: " + len + "</p>";
+    
+         
+          for (i = 0; i < len; i++){
+             str+= "<li><b>" + results.rows.item(i).keyname + "</b>";
+                // str+="<span>"+results.rows.item(i).count+"</span>";
+             str+="<p><em>"+results.rows.item(i).keytime+"</em><span>"+results.rows.item(i).user+"</span></p>";
+             str+="</li>";
+          
+          };
+          $(".list").append(str)
+      }, null);
+   });
+
+   $(".list").on("click","li",function(){
+          var param=$(this).find("em").text();
+             
+           console.log("去详情");
+           api.openWin({
+            name: 'mapSpiderDetail',
+            url: './mapSpiderDetail.html',
+            reload:true,
+            pageParam: {
+                user: currUser,
+                key:param
+
+            }
+        })
+
+
+   })
+
+  
+
+
+
+
+})
+
+function clearData(){
+  var db = openDatabase('test001', '1.0', 'Test DB', 2 * 1024 * 1024);
+
+   db.transaction(function (tx) {
+    tx.executeSql(" DROP TABLE list");
+    tx.executeSql(" DROP TABLE LOGS");
+     
+    
+  });
+
+}
+</script>
+</html>
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0;padding: 0;
+        background: white;
+    }
+    .header{z-index:1000;}
+    .mw {
+        height: 100%;
+    }
+
+ .uBox{width: 100%; padding: 72px 0 0 0;background: white;position: fixed;z-index: 12;}
+
+.result{ padding: 68px 0 0 0;}
+ .list li{border-bottom: 1px solid #dedede; padding: 8px 15px;position: relative;}
+ .list li::after{content: "";
+     position: absolute;
+     right: 15px;
+     top:50%;
+     width: 10px;
+     height: 10px;
+     margin-top: -5px;
+     border-left: 1px solid #5a5a5a;
+     border-top: 1px solid #5a5a5a;
+     transform: rotate(135deg);
+ }
+ .list b{font-size: 14px;}
+ .list span{margin: 0 0 0 10px;}
+ .list li p{margin: 5px 0 0 0; padding: 0; font-size: 12px;}
+
+.botBoard{position: fixed; width: 100%; bottom: 0;}
+
+.headerRight i{font-style: normal;font-size: 14px}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

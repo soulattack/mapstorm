@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>加盟记录</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+ 
+  </head>
+  <body>
+        <header class="header" id="">
+                <a class="headerLeft" >
+                    <i class="icon iconfont iconback"></i>
+                </a>
+                <div class="headerTle">加盟记录</div>
+             
+            </header>
+
+            <!--  -->
+       <div class="apply">
+              <div class="rsWrap">
+                  <div class="tabsWrap">
+                    <ul class="tabs">
+                        <li >
+                            <span>申请加盟商</span>
+                        </li>
+                        <li class="curr">
+                            <span>加盟记录</span>
+                        </li>
+                    </ul>
+                  </div>
+                <div class="rList">
+                          <li>
+                              <div class="rows">
+                                  <span class="name">姓名：<em>王XX</em></span>    
+                                  <span class="time">申请时间：<em>2020.07.12</em></span>    
+                              </div>
+                              <div class="rows"> <span class="phone">手机号: <em>18252167777</em>
+                              </span></div>
+                              <div class="address"><span>地址： <em>江苏省徐州市</em></span> </div>
+
+                             
+                        </li>
+                          <li>2</li>
+                          <li>4</li>
+                </div>
+              </div>
+       </div>
+             
+
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript">
+      apiready = function(){
+
+      };
+  </script>
+  </html>
+<style>
+
+.apply{font-size: 14px;padding:64px 0 0 0;}
+.rsWrap{margin: 20px; background: white;
+  border-radius:15px; padding: 10px 20px; 
+}
+
+
+.rList{ margin: 20px 0 0 0}
+.rList li{ margin:5px 0; color: #666; border-bottom:1px solid #e6e6e6;}
+.rList li:last-child{ border-bottom: none}
+.rList li div{ padding: 5px 0 }
+.rList li .rows  {display: flex;justify-content: space-between}
+.rList li .rows span { flex:1;}
+
+
+.tabsWrap{}
+.tabsWrap .tabs{display: flex;padding: 10px 0}
+.tabsWrap .tabs li{border-right:1px solid #666;text-align: center;flex: 1;font-size: 16px}
+.tabsWrap .tabs li.curr{color:#12ada9;}
+.tabsWrap .tabs li:last-child{border-right: none;text-align: center}
+</style>

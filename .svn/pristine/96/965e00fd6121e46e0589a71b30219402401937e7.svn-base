@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no">
+    <title>个人中心</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <style>
+        /* [v-cloak] {
+            display: none;
+        } */
+        .picjoin {
+            width: 22px;
+            height: 22px;
+            margin-right: 5px;
+        }
+    
+        body {
+            background: white
+        }
+    
+        .personal {
+            padding: 0px 0 0 0;
+            font-size: 14px;
+        }
+    
+        .tle {
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            background: #217bfb;
+            color: white
+        }
+    
+        .btnSet {
+            position: absolute;
+            right: 10px;
+        }
+    
+        .userInfos {
+            margin: 0 0px;
+            padding: 10px 20px 30px 20px;
+            background: #217bfb;
+            color: WHITE;
+            font-size: 16px;
+           /* height: 94px; */
+        }
+    
+        .userInfos .userLv {
+            font-size: 12px
+        }
+    
+        .userInfos dl {
+            display: flex;
+            height: 54px;
+            align-items: center
+        }
+        .userInfos dl dt{margin:0 0 0 10px}
+        .userInfos dl dt img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%
+        }
+    
+        .userInfos dl dd {
+            line-height: 22px;
+            margin: 0 0 0 20px
+        }
+    
+        .dataInfos {
+            margin: 10px
+        }
+         .userVipEnd{font-size: 12px}
+        .dataInfos ul {
+            display: flex
+        }
+    
+        .dataInfos ul li {
+            flex: 1;
+            text-align: center
+        }
+    
+        .dataInfos ul li em {
+            display: block
+        }
+    
+        .dataInfos ul li span {
+            display: block;
+            font-size: 12px;
+        }
+    
+        .ulinks {
+            margin: 20px 10px 20px 10px;
+            border-radius: 30px;
+            background: linear-gradient(to right, #f0af4b, #f5cd7e, #ffc240);
+            color: white;
+            padding: 5px 15px 5px 15px;
+            position: relative;
+        }
+    
+        .ut {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+    
+        .ulinks i {
+            margin: 0 10px 0 0
+        }
+    
+        .ulinks .ut::after {
+            content: "";
+            position: absolute;
+            border-left: 8px solid white;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-right: 5px solid transparent;
+            width: 0;
+            height: 0;
+            right: 0;
+            top: 15px
+        }
+    
+        .service {
+            margin: 20px 15px
+        }
+    
+        .service h3 {
+            margin: 10px 0;
+            font-weight: normal;
+        }
+    
+        .service ul {
+            background: white;
+            display: flex;
+            padding: 20px 0;
+            border-radius: 10px;
+        }
+    
+        .service ul li {
+            flex: 1;
+        }
+    
+        .service ul li div {
+            margin: 10px;
+            text-align: center;
+        }
+    
+        .links {
+            margin: 0px 0 0 0;
+            padding: 0px 0px;
+        }
+    
+        .links ul li {
+            padding: 15px 20px;
+            border-top: 1px solid #f1f2f4;
+            background: white;
+            display: flex;
+            align-items: center;
+            position: relative
+        }
+    
+        .links ul li:last-child {
+            border-bottom: 1px solid #f1f2f4;
+        }
+    
+        .links ul li::after {
+            content: "";
+            display: block;
+            height: 10px;
+            width: 10px;
+            position: absolute;
+            border-top: 2px solid #7f7f7f;
+            border-left: 2px solid #7f7f7f;
+            transform: rotate(135deg);
+            right: 20px;
+            top: 20px;
+        }
+    
+        .links ul li i {
+            display: block;
+            width: 20px;
+            height: 20px;
+            background-position: center;
+            background-size: 20px;
+            background-repeat: no-repeat;
+            margin: 0 10px 0 0
+        }
+    
+        .links ul li i.i01 {
+            background-image: url(../image/user/c_user.png)
+        }
+    
+        .links ul li i.i02 {
+            background-image: url(../image/user/c_diamod.png)
+        }
+    
+        .links ul li i.i03 {
+            background-image: url(../image/user/c_wallet.png)
+        }
+    
+        .links ul li i.i04 {
+            background-image: url(../image/user/c_code.png)
+        }
+    
+        .links ul li i.i05 {
+            background-image: url(../image/user/c_part.png)
+        }
+    
+        .links ul li i.i06 {
+            background-image: url(../image/user/c_recommend.png)
+        }
+    
+        .links ul li i.i07 {
+            background-image: url(../image/user/c_about.png)
+        }
+    
+        .links ul li i.i08 {
+            background-image: url(../image/user/c_service.png)
+        }
+    
+        .links ul li i.i09 {
+            background-image: url(../image/user/c_update.png)
+        }
+    
+        .links ul li i.i10 {
+            background-image: url(../image/user/c_feedback.png)
+        }
+        .links ul li i.i11 {
+            background-image: url(../image/user/c_exvip.png)
+        }
+    </style>
+</head>
+
+<body>
+    <div class="personal" id="vue">
+        <div class="pHeader">
+            <div class="tle">
+                <span>个人中心</span>
+                <b class="btnSet" onclick="toSet()"><i class="icon iconfont iconshezhi"></i></b>
+            </div>
+            <div class="userInfos">
+                <dlv>
+                    <dl>
+                         <dt  v-cloak>
+                        <!-- <img src="../image/pic/guanjian.png" alt=""> -->
+                        <img :src="head" alt="" >
+                    </dt>
+                    <dd v-cloak>
+                        <div class="userPhone">{{phone}}</div>
+                        <!-- <div class="userLv">会员等级：{{is_vip==1?"VIP会员":"普通会员"}}</div> -->
+                        <div class="userLv">会员等级：{{vipType}}</div>
+                        <div class="userVipEnd">到期时间：{{vipEnd}}</div>
+                    </dd>
+                    </dl>
+                 
+                </dl>
+            </div>
+            <div class="ulinks">
+                <div class="ut" onclick="toVip()"><i class="icon iconfont iconzuanshi"></i><span>升级VIP，享受超值服务</span>
+                </div>
+            </div>
+        </div>
+        <div class="links">
+            <ul class="linkList">
+                <li class="l01" onclick="toPersonal()"><i class="i01"></i><span>个人中心</span></li>
+                <li class="l02" onclick="toVip()"><i class="i02"></i><span>开通会员</span></li>
+                <li class="l02" onclick="exVip()"><i class="i11"></i><span>兑换VIP</span></li>
+                <li class="l02" onclick="toJoin()"><img class="picjoin" src="../image/user/join.png" alt=""><span>招商加盟</span></li>
+                <li class="l03" onclick="toWallet()"><i class="i03"></i><span>我的钱包</span></li>
+                <li class="" onclick="toShare()"><i class="i04"></i><span>分享给好友(赚佣金)</span></li>
+                <li class="" onclick="toSubd()"><i class="i05"></i><span>我的下线</span></li>
+                <li class="" onclick="toLetter()"><i class="i06"></i><span>我的短信</span></li>
+                <li class="" onclick="toAboutUS()"><i class="i07"></i><span>关于我们</span></li>
+                <li class="" onclick="toService()"><i class="i08"></i><span>联系客服</span></li>
+                <li class="" onclick="levelUp()"><i class="i09"></i><span>版本更新</span></li>
+                <li class="" onclick="toFeedback()"><i class="i10"></i><span>在线反馈</span></li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        var vm = new Vue({
+            el: "#vue",
+            data: {
+                msg_total: 0,
+                msg_last: 0,
+                phone: "",
+                is_vip: "",
+                vip_type:"",
+                head: "",
+                vipEnd:""
+            },
+            computed: {
+                msg_remain: function () {
+                    return this.msg_total - this.msg_last;
+                },
+                vipType:function(){
+                    var vip="";
+                    if(this.vip_type==1){
+                            vip="月会员"
+                    }
+                    if(this.vip_type==2){
+                            vip="季会员"
+                    }
+                    if(this.vip_type==3){
+                            vip="年会员"
+                    }
+                    return vip
+                }
+
+
+            },
+            created: function () {
+                this.getData();
+            },
+            methods: {
+                getData() {
+                    var sdata = {
+                        uid: $api.getStorage("uid")
+                    }
+                    apidata({
+                        url: "/api/jed/user_info",
+                        data: sdata
+                    }, function (ret) {
+                        vm.phone = ret.data.phone;
+                        vm.is_vip = ret.data.is_vip;
+                        vm.msg_total = ret.data.msg_total;
+                        vm.msg_last = ret.data.msg_last;
+                        vm.head = ret.data.head;
+                        vm.vip_type=ret.data.vip_type;
+                        vm.vipEnd=timeFormatYYYYMMdd(ret.data.vip_end)
+                        
+                    });
+                }
+            }
+        });
+    }
+    /*版本更新*/
+    function levelUp() {
+        var mam = api.require('mam');
+        mam.checkUpdate(function (ret, err) {
+            if (ret) {
+                var result = ret.result;
+                if (result.update == true && result.closed == false) {
+                    var str = '新版本型号:' + result.version + ';更新提示语:' + result.updateTip + ';下载地址:' + result.source + ';发布时间:' + result.time;
+                    api.confirm({
+                        title: '有新的版本,是否下载并安装 ',
+                        msg: str,
+                        buttons: ['确定', '取消']
+                    }, function (ret, err) {
+                        if (ret.buttonIndex == 1) {
+                            if (api.systemType == "android") {
+                                api.download({
+                                    url: result.source,
+                                    report: true
+                                }, function (ret, err) {
+                                    /* 下载进度 */
+                                    if (ret && 0 == ret.state) {
+                                        api.toast({
+                                            msg: "正在下载应用" + ret.percent + "%",
+                                            duration: 2000
+                                        });
+                                    }
+                                    /* 下载完成 */
+                                    if (ret && 1 == ret.state) {
+                                        var savePath = ret.savePath;
+                                        api.installApp({
+                                            appUri: savePath
+                                        });
+                                    }
+                                });
+                            }
+                            if (api.systemType == "ios") {
+                                api.installApp({
+                                    appUri: result.source
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    api.alert({
+                        msg: "暂无更新"
+                    });
+                }
+            } else {
+                api.alert({
+                    msg: err.msg
+                });
+            }
+        });
+    }
+    /*个人信息*/
+    function init() {
+        var sdata = {
+            uid: $api.getStorage("uid")
+        }
+        apidata({
+            url: "/api/jed/user_info",
+            data: sdata
+        }, function (ret) {
+            // console.log(JSON.stringify(ret));
+        }, function (err) {
+
+        })
+    }
+    /*链接方法*/
+    function toPop() {
+        api.openWin({
+            name: "popularize",
+            url: "./popularize.html"
+        })
+    }
+    function toMyPop() {
+        api.openWin({
+            name: "myPop",
+            url: "./myPop.html"
+        })
+    }
+    function toFeedback() {
+        api.openWin({
+            name: "feedBacks",
+            url: "./feedBacks.html"
+        })
+    };
+    function toShortletter() {
+        api.openWin({
+            name: "shortletterMould",
+            url: "./shortletterMould.html"
+        })
+    };
+    function toShortletterRec() {
+        api.openWin({
+            name: "shortletterRecharge",
+            url: "./shortletterRecharge.html"
+        })
+    };
+    function toContact() {
+
+    };
+    function toRewards() {
+        api.openWin({
+            name: "mySubordinatesRewards",
+            url: "./mySubordinatesRewards.html"
+        })
+
+    };
+    function toShare() {
+        api.openWin({
+            name: "share",
+            url: "./share.html"
+        })
+
+    };
+    function toJoin() {
+        api.openWin({
+            name: "join",
+            url: "./join.html"
+        })
+    };
+    function toVer() {
+        api.openWin({
+            name: "version",
+            url: "./version.html"
+        })
+    };
+    function toVip() {
+        api.openWin({
+            name: "memberCenter",
+            url: "./memberCenter.html"
+        })
+    }
+    function myShortletter() {
+        api.openWin({
+            name: "shortletter",
+            url: "./shortletter.html"
+        })
+
+    }
+    /*我的下线*/
+    function toSubd() {
+        api.openWin({
+            name: "mySubordinates",
+            url: "./mySubordinates.html"
+        })
+    }
+    function toMyDis() {
+        api.openWin({
+            name: "myDistributions",
+            url: "./myDistributions.html"
+        })
+    }
+    /*个人中心*/
+    function toPersonal() {
+        api.openWin({
+            name: "personal",
+            url: "./personal.html"
+        })
+    }
+
+    function toWallet() {
+        api.openWin({
+            name: "myWallet",
+            url: "./myWallet.html"
+        })
+    };
+
+    function toLetter() {
+        api.openWin({
+            name: "shortletter",
+            url: "./shortletter.html"
+        })
+
+    };
+
+    function toSet() {
+        api.openWin({
+            name: "setting",
+            url: "./setting.html"
+        })
+    };
+
+    function toAboutUS() {
+        api.openWin({
+            name: 'aboutus',
+            url: 'aboutus.html',
+        })
+    };
+    function toService() {
+        api.openWin({
+            name: 'service',
+            url: 'service.html',
+        })
+    };
+    function exVip() {
+        api.openWin({
+            name: 'vipExchange',
+            url: 'vipExchange.html',
+        })
+    };
+    function setIndex(tag) {
+        var eFootLis = $api.domAll('#footer li'),
+            eHeaderLis = $api.domAll('header li'),
+            index = 0;
+        for (var i = 0, len = eFootLis.length; i < len; i++) {
+
+            if (tag == eFootLis[i]) {
+                console.log(i);
+                index = i;
+            } else {
+                $api.removeCls(eFootLis[i], 'active');
+                $api.removeCls(eHeaderLis[i], 'active');
+            }
+        }
+        $api.addCls(eFootLis[index], 'active');
+        $api.addCls(eHeaderLis[index], 'active');
+        api.setFrameGroupIndex({
+            name: 'group',
+            index: index
+        });
+    }
+
+    function tabs() {
+        api.setFrameGroupIndex({
+            name: 'group',
+            index: 3
+        });
+    }
+
+    /*招商加盟*/
+    function toJoin() {
+        api.openWin({
+            name: 'join',
+            url: './join.html',
+        })
+    }
+</script>
+
+
+
+</html>

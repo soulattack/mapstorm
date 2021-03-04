@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>个人中心</title>
+      <!-- <link rel="stylesheet" type="text/css" href=".css/api.css"/> -->
+      <link rel="stylesheet" type="text/css" href="./css/base.css"/>
+      <link rel="stylesheet" type="text/css" href="./css/style.css"/>
+      <link rel="stylesheet" type="text/css" href="./css/css.css"/>
+      <link rel="stylesheet" type="text/css" href="./css/mobileSelect.css"/>
+
+      <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=Sk2jbVWPdmZK0QEGiQ8aB3WuzAOVh1Rk"></script>
+
+        <script src="./js/jquery-1.7.2.min.js"> </script>
+        <script src="./js/mobileSelect.min.js"> </script>
+ 
+  </head>
+
+  <body>
+   <div id="l-map" style=""></div>
+	
+	<div>
+	   <div></div>
+	   <div class="start">
+	     <dl>
+		   <dt>
+		       <span id="city">徐州</span>
+		       <span id="keyword">娱乐</span>
+		   </dt>
+		   <dd>
+		    <span id="btnStart">START</span>	   
+		   </dd>
+		 </dl>
+	    
+	   </div>
+	   
+	</div>
+	<div id="r-result"></div>
+	<div id="uuu"></div>
+	
+  </body>
+  </html>
+
+<script>
+ var wx=0;
+ /*
+ apiready = function(){
+        var map = api.require('bMap');
+
+
+    console.log(map)
+      
+    map.open({
+      rect:{
+         x: 0,
+         y: 50,
+         w: api.winWidth,
+         h: api.winHeight*2/3 
+         },
+         zoomLevel:15,
+         showUserLocation : true
+         },function(ret){
+         map.getLocation({
+            accuracy: '10m',
+            autoStop:true,
+            filter: 1
+            },function(ret){
+            var sta = ret.status;
+            z = sta;
+            lon_user = ret.lon;
+            x = lon_user;
+            wx=lon_user;
+            lat_user = ret.lat;
+            y = lat_user;
+         map.setCenter({
+            coords: {
+            lon: lon_user,
+            lat: lat_user
+            },
+            animation: true
+            });
+         });
+   });
+   
+};
+
+setTimeout(() => {
+    console.log(wx)
+}, 1000);
+*/
+
+
+
+
+</script>
+
+<script>
+
+
+	
+	
+	
+var map = new BMap.Map("l-map");        
+	var point=new BMap.Point(117.184811, 34.261792);
+	map.centerAndZoom(point, 11);
+   var local;
+ var txt=document.createTextNode("这是一个段落");
+
+
+  // 
+
+
+
+$("#btnStart").click(function(){
+	
+	console.log("开始检索 内容");
+	
+	var param={
+		key:"",
+		city:""
+		
+	}
+	
+	
+	 param.key=$("#keyword").text();
+	param.city=$("#city").text();
+	
+	console.log(param);
+	
+	search(param);
+})
+
+
+
+function search(param){
+	
+ var options = {
+      
+                  renderOptions : {
+                                  map : map,
+                                  selectFirstResult:false
+                              //  panel : "r-result"
+                      },
+		          pageCapacity:5,
+	          	  onSearchComplete: function(results){
+		                     console.log("搜索完毕");
+		                     console.log(results.getCurrentNumPois());
+					  
+		                 // console.log(results.getPoi(0));
+		                     var totalPages = results.getNumPages();
+                        var currPage = results.getPageIndex();
+					
+				         	console.log("全部页面数："+totalPages+"--d当前索引："+currPage);
+		         
+					     /**	
+					  if(results.getPageIndex() < results.getNumPages() - 1){   local.gotoPage(results.getPageIndex() + 1);    } 
+					*/
+				         	
+		          //	if (local.getStatus() == BMAP_STATUS_SUCCESS){
+			              	var s = [];
+					
+			               	for (var i = 0; i < results.getCurrentNumPois(); i ++){
+				           	     s.push(results.getPoi(i).title + ", " + results.getPoi(i).address);
+				 
+						       	     $("#uuu").prepend("----"+results.getPoi(i).title+"----"+results.getPoi(i).phoneNumber+"</br>");
+							
+				          }
+			            document.getElementById("r-result").innerHTML = s.join("<br/>");
+			           
+							
+			        // }
+		           }
+	};
+
+	local = new BMap.LocalSearch(param.city, options);
+	local.search(param.key);
+	
+
+
+	
+}
+
+
+
+
+
+
+
+</script>
+<script type="text/javascript">
+   var lmd=['餐饮','医院','影院','娱乐'];
+var mobileSelect1 = new MobileSelect({
+    trigger: '#keyword',
+    title: '',
+    wheels: [
+                {data: lmd}
+            ],
+    position:[2], //初始化定位 打开时默认选中的哪个 如果不填默认为0
+    transitionEnd:function(indexArr, data){
+   
+    },
+    callback:function(indexArr, data){
+        console.log(data);
+        $("#keyword").val(data);
+    }
+});
+
+
+ var lmd=['无锡','徐州','南京','上海'];
+var mobileSelect2 = new MobileSelect({
+    trigger: '#city',
+    title: '',
+    wheels: [
+                {data: lmd}
+            ],
+    position:[2], //初始化定位 打开时默认选中的哪个 如果不填默认为0
+    transitionEnd:function(indexArr, data){
+   
+    },
+    callback:function(indexArr, data){
+        console.log(data);
+        $("#city").val(data);
+    }
+});
+
+
+</script>
+<style>
+
+#l-map{height:300px;width:100%;height: 30%;}
+		#r-result{width:100%; font-size: 14px; line-height: 20px; height:10%;overflow:scroll;}
+		#uuu{
+		  height:50%;
+		  overflow:scroll;
+		}
+		.start{padding:10px 0}
+		.start dd span{display:block; margin:0 auto;  width:100px;height:100px;border-radius:50%;text-align:center;line-height:100px;
+		
+		  background:#00aced;
+		  color:white;
+		  cursor:pointer;
+		}
+		
+		.start dt {display:flex}
+		.start dt span{display:block;height:20px;flex:1; text-align:center;}
+
+</style>

@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>企业黄页</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/city.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../css/base.css" /> -->
+    <style>
+        body {
+            background: white !important;
+        }
+
+        .bodys {
+            background: white !important;
+            padding-top: 28px;
+        }
+
+        .box {
+            padding: 58px 0 0 0
+        }
+
+        .box .wrap {
+            display: none;
+        }
+
+        .box .SoKing {
+            display: block;
+        }
+
+        .tab {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            width: 100%;
+            display: flex;
+            position: fixed;
+            top: 0px;
+        }
+
+        .tab li {
+            width: 50%;
+            height: 50px;
+            background: white;
+            color: black;
+            background-color: #217bfb;
+            text-align: center;
+            line-height: 50px;
+            font-size: 20px;
+        }
+
+        .on {
+            display: block;
+        }
+
+        .tab li.cur {
+            color: white;
+        }
+
+        .SoKing .top {
+            width: 100%;
+            display: flex;
+            height: 30px;
+            line-height: 30px;
+            background: white;
+        }
+
+        .SoKing .abs {
+            width: 100%;
+            position: fixed;
+            top: 58px;
+        }
+
+        .SoKing .top .left {
+            width: 100%;
+            text-align: center;
+            margin-right: 50px;
+        }
+
+        .SoKing .top .left img {
+            width: 15px;
+            height: 15px;
+            vertical-align: middle;
+        }
+
+        .Oin {
+            height: 30px;
+            margin-left: 5%;
+            margin-top: 10px;
+            margin-right: 5%;
+            display: none;
+        }
+
+        .Oin input {
+            outline: medium;
+            text-align: center;
+            background: white;
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .contant {
+            background: white;
+            /* margin: 10px 0 50px; */
+            margin: 16px 0 50px;
+            margin: 46px 0 50px;
+        }
+
+        .contant .contant-box {
+            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
+            padding: 10px 20px 10px 20px;
+        }
+
+        .contant-box .contant-top {
+            line-height: 24px;
+        }
+
+        .contant-box .contant-main {
+            line-height: 24px;
+            font-size: 14px;
+            display: flex;
+            color: #ccc;
+            justify-content: space-between;
+        }
+
+        /* .contant .contant-main span{display: inline-block;width: 70%;text-align: left;color: #ccc;} */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 50px;
+            background: #eee;
+            display: flex;
+            line-height: 50px;
+        }
+
+        .footer .footertext {
+            /* width: 50%; */
+           flex: 1;
+        }
+
+        .footer .footertext span {
+            display: black;
+            width: 100%;
+            background: #217bfb;
+            /* padding: 0 5px; */
+            text-align: center;
+            font-size: 16px;
+            color: white;
+        }
+
+        .two {
+            margin: 10px 5%;
+            background: white;
+        }
+
+        .maintwo {
+            display: flex;
+            padding-top: 10px;
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .maintwo .mainleft {
+            width: 25%;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .maintwo .mainright {
+            width: 70%;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .maintwo .mainright img {
+            width: 25px;
+            height: 20px;
+            display: inline-block;
+            vertical-align: middle;
+            /* float: right; */
+            padding-top: 5px;
+        }
+
+        .maintwo .operbox {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .maintwo .operbox .operators {
+            width: 50px;
+            height: 25px;
+            line-height: 25px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .operbox .active {
+            color: #12ADA9;
+            border: 1px solid #12ADA9;
+        }
+
+        .phone {
+            width: 80px;
+            height: 35px;
+            line-height: 35px;
+            background-color: #12ADA9;
+            text-align: center;
+            margin-top: 20px;
+            border-radius: 10px;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .phonecontant .phonetop {
+            width: 92%;
+            background: #eee;
+            height: auto;
+            min-height: 150px;
+            margin-left: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            color: #ccc;
+        }
+
+        .phonecontant .clear {
+            color: #ccc;
+            margin-left: 10px;
+            margin-top: 5px;
+        }
+
+        .bottom {
+            width: 100%;
+            display: flex;
+            padding: 0 2%;
+            height: 80px;
+            background: white;
+            margin-top: 20px;
+        }
+
+        .bottom .call {
+            width: 33%;
+            text-align: center;
+            position: relative;
+        }
+
+        .bottom .call img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .bottom .call p {
+            line-height: 0px;
+            padding: 5px 0 0 0;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .bottom .call .line {
+            width: 1px;
+            height: 35px;
+            position: absolute;
+            top: 8px;
+            right: 0;
+            background: #ccc;
+        }
+
+        .conditionW {
+            background: #217bfb;
+            padding: 5px 0 0 0
+        }
+
+        .conditionW ul {
+            display: flex
+        }
+
+        .conditionW li {
+            /* flex: 1; */
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+        }
+
+        .conditionW li span {
+            position: relative;
+            font-size: 16px;
+            padding: 0 20px
+        }
+
+        .conditionW li span::after {
+            position: absolute;
+            content: "";
+            width: 0;
+            height: 0;
+            top: 50%;
+            right: 2px;
+            margin-top: -2px;
+            border-top: 8px solid white;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 0px solid transparent
+        }
+
+        .conditionList li {
+            flex: 1
+        }
+
+        .header {
+            height: 44px;
+            line-height: 44px;
+            background: white;
+            color: #333;
+            position: relative;
+            font-size: 14px;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            top: 0;
+            background: #217bfb;
+            color: white
+        }
+
+        .header .headerLeft {
+            position: absolute;
+            left: 0;
+        }
+
+        .headerLeft i {
+            font-size: 20px;
+            margin: 0 0 0 10px
+        }
+
+        .header .headerRight {
+            position: absolute;
+            /* top:0; */
+            right: 0;
+        }
+
+        .header .headerTle {
+            text-align: center;
+            position: absolute;
+            left: 8rem;
+            right: 8rem;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .header .headerRight i {
+            margin: 0 10px 0 0;
+            font-size: 20px
+        }
+
+        .timebox {
+            background: white;
+            padding: 5px 0;
+            border-bottom: 1px solid #217bfb;
+        }
+
+        .datewrap {
+            display: flex
+        }
+
+        .timebox li:nth-child(1) {
+            width: 35%;
+            border-right: 1px solid #c4c4c4
+        }
+
+        .timebox li:nth-child(2) {
+            width: 35%
+        }
+
+        .timebox li:nth-child(3) {
+            width: 15%
+        }
+
+        .timebox li:nth-child(4) {
+            width: 15%
+        }
+
+        .timebox li input[type=text] {
+            height: 100%;
+            width: 90%;
+            margin: 0 5%;
+            text-align: center
+        }
+
+        .timebox li input[type=button] {
+            width: 100%;
+            height: 30px
+        }
+
+        #timeConfirm {
+            border: none;
+            background: #217bfb;
+            color: white;
+            border-radius: 5px;
+        }
+      .len{background: white; color:#666; text-align: center; line-height: 30px;}
+      .len em{color: red; margin: 0 2px;}
+    </style>
+    <link rel="stylesheet" type="text/css" href="../css/city.css" />
+    <link rel="stylesheet" type="text/css" href="../css/history.css" />
+</head>
+
+<body>
+    <div class="bodys">
+        <header class="header" id="header">
+            <a class="headerLeft" tapmode onclick="api.closeWin()">
+                <i class="icon iconfont iconback"></i>
+            </a>
+            <div class="headerTle">企业黄页</div>
+        </header>
+        <div class="box" id="vue" v-cloak>
+       
+            <div class="wrap SoKing on">
+                <div class="abs" style="background-color: #217bfb;color:white;">
+                    <div class="conditionW">
+                      
+                        <ul class="conditionList" v-if="isVip">
+                            <li onclick="chooseCity()"><span>
+                                    <p>{{cityname}}</p>
+                                </span></li>
+                            <li @click="toggleBox">
+                                <span>
+                                    <p id="industry">发布时间</p>
+                                </span>
+                            </li>
+                        </ul>
+                        <div class="len">搜索到<em>{{len}}</em>家企业，下拉加载更多 </div>
+                        <div>
+                            <div class="timebox" v-show="isShow">
+                                <ul class="datewrap">
+                                    <li>
+                                        <input class="form-control" type="text" id="beginTime" placeholder="开始时间"
+                                            v-model="datestart">
+                                    </li>
+                                    <li>
+                                        <input class="form-control" type="text" id="endTime" placeholder="结束时间"
+                                            v-model="dateend">
+                                    </li>
+                                    <li>
+                                        <input class="form-control" type="button" id="timeConfirm" value="确认"
+                                            @click="dateConfirm">
+                                    </li>
+                                    <li>
+                                        <input class="form-control" type="button" id="timeClear" value="清空"
+                                            @click="dateClear">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contant">
+                    <div class="contant-box" v-for="(item,index) in list" :key="item.id">
+                        <div class="contant-top">
+                            {{item.title}}-{{item.name}}
+                        </div>
+                        <div class="contant-main">
+                            <span>{{item.address}}</span>
+                            <p v-if="!isVip">
+                                <span style="color: black;">
+                                    {{item.phone.substr(0, 3) + '****' + item.phone.substr(7)}}</span>
+                            </p>
+                            <p v-else>
+                                <span style="color: black;">{{item.phone}}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer" v-if="list.length > 0">
+                    <div class="footertext" style="background-color: #f04241;" @click="phonex()">
+                        <span style="background-color: #f04241;">
+                            添加到通讯录
+                        </span>
+                    </div>
+                    <div class="footertext" style="background-color: #f0aa41;"  @click="toGroupSend()">
+                        <span style="background-color: #f0aa41;">
+                            群发短信
+                        </span>
+                    </div>
+                    <div class="footertext "   @click="exp()">
+                        <span  >
+                            导出
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+<!-- <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script> -->
+<script src="../script/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="../script/city.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript" src="../script/jdate.min.js"></script>
+<script type="text/javascript">
+    var vm, size = 50, index = 0;
+    apiready = function () {
+        fixbar();
+        getUserInfo();
+        vm = new Vue({
+            el: "#vue",
+            data: {
+                cityname: "城市",
+                status: false,
+                list: [],
+                exlist:[],
+                phoneList: [],
+                typeList: [],
+                addlist: [],
+                isShow: false,
+                isVip: false,
+                datestart: "",
+                dateend: "",
+                len:0
+            },
+            mounted: function () {
+                this.dateboxInit();
+            },
+            methods: {
+                /*时间初始化*/
+                dateboxInit() {
+                    new Jdate({
+                        el: '#beginTime',
+                        format: 'YYYY-MM-DD',
+                        beginYear: 1990,
+                        endYear: 2100,
+                        confirm: function (date) {
+                            vm.datestart = date;
+                            console.log(vm.datestart);
+                        }
+                    })
+                    new Jdate({
+                        el: '#endTime',
+                        format: 'YYYY-MM-DD',
+                        beginYear: 1990,
+                        endYear: 2100,
+                        confirm: function (date) {
+                            vm.dateend = date;
+                            console.log(vm.dateend);
+                        }
+                    })
+                },
+                /*隐藏、显示时间选择窗*/
+                toggleBox() {
+                    vm.isShow = !vm.isShow;
+                },
+                /*确认时间*/
+                dateConfirm() {
+                    if (!isNotEmpry(vm.datestart) || !isNotEmpry(vm.dateend)) {
+                        showTip("请选择发布时间获取数据！", 2000, "middle");
+                        return;
+                    }
+                    this.toggleBox();
+                    if (!isNotEmpry(vm.cityname) || "城市" == vm.cityname) {
+                        showTip("请选择城市获取数据！", 2000, "middle");
+                        return;
+                    }
+                    vm.list = [];
+                    datas(0, vm.cityname);
+                },
+                /*清除时间*/
+                dateClear() {
+                    vm.datestart = "";
+                    vm.dateend = "";
+                },
+                /*添加到通讯录*/
+                phonex() {
+                    var importNum = vm.phoneList.length;
+                    if (!vm.isVip) {
+                        tip();
+                        return;
+                    }
+                    api.confirm({
+                        title: '提示',
+                        msg: '确定添加' + importNum + '位联系人到通讯录 ',
+                        buttons: ['确定', '取消']
+                    }, function (ret, err) {
+                        var list = vm.list;
+                        if (ret.buttonIndex == 1) {
+                            api.showProgress({
+                                title: '加载中...',
+                                text: ''
+                            });
+                            if (ret) {
+                                var inum = 0;
+                                for (var i = 0; i < list.length; i++) {
+                                    if (list[i].phone) {
+                                        var contacts = api.require('DVContacts');
+                                        contacts.add({
+                                            firstName: list[i].name,
+                                            phones: [{
+                                                '工作': list[i].phone
+                                            }],
+                                            company: list[i].title,
+                                        }, function (ret, err) {
+                                            if (ret) {
+                                                if (ret.status == true) {
+                                                    inum++;
+                                                }
+                                            } else {
+                                                console.log(JSON.stringify(err));
+                                            }
+                                        });
+                                    }
+                                    if (i == list.length - 1) {
+                                        showTip("成功导入" + (i + 1) + "个联系人", 2000, "middle");
+                                        api.hideProgress();
+                                    }
+                                }
+                            }
+                        }
+                    })
+                },
+                /*短信群发*/
+                toGroupSend() {
+                    if (!vm.isVip) {
+                        tip();
+                        return;
+                    }
+                    var phones = vm.phoneList
+                    api.openWin({
+                        name: 'myGroupSend',
+                        url: 'myGroupSend.html',
+                        reload: true,
+                        pageParam: {
+                            phone: phones
+                        }
+                    })
+                },
+
+                exp(){
+
+                            console.log("打开弹窗");
+                            dbs = api.require('dialogBox');
+                        dbs.actionMenu ({
+                                    rect:{
+                                        h: 150
+                                    },
+                                    texts:{
+                                        cancel: '取消'
+                                    },
+                                    items:[
+                                    {
+                                        text: '下载',
+                                        icon: 'widget://image/tools/dl.png'
+                                    },
+                                    {
+                                        text: '分享',
+                                        icon: 'widget://image/tools/wx.png'
+                                    },
+                                    
+                                    ],
+                        styles:{
+                            bg:'#FFF',
+                            column: 2,
+                            itemText: {
+                                color: '#000',
+                                size: 12,
+                                marginT:8
+                            },
+                            itemIcon:{
+                                size:50
+                            },
+                            cancel:{  
+                                bg: 'fs://icon.png',   
+                                color:'#000',          
+                                h: 44 ,                 
+                                size: 14       
+                            }
+                        }
+                    }, function(ret){
+                        console.log(JSON.stringify(ret));
+                        if(ret.eventType=="click"){
+                                if(ret.index==0){
+                                console.log("点击下载")
+                                dbs.close({
+                                    dialogName: 'actionMenu'
+                                });
+                                vm.download()
+                            }else if(ret.index==1){
+                                console.log("点击分享")
+                                dbs.close({
+                                    dialogName: 'actionMenu'
+                                });
+                                vm.shareUrl()
+                            }
+                        }else if(ret.eventType=="cancel")
+                        {
+                            console.log("guanbi")
+                            dbs.close({
+                                    dialogName: 'actionMenu'
+                            });
+                            
+                        }
+                    
+
+                    });
+                    
+                },
+             
+                download(){
+                    console.log("zdede");
+                    console.log("download!!!!")
+                 if (!vm.isVip) {
+                    tip();
+                     return;
+                }
+               
+
+                var jsonData = vm.exlist;
+                    var tlejson={
+                         title:"商家名称",
+                         city:"所属城市",
+                         name:"负责人",
+                         phone:"手机",
+                         tel:"邮箱",
+                         address:"地址",
+                         money:"注册资金",
+                         build_name:"成立时间",
+                         type_name:"分类"
+                    }
+                    jsonData.unshift(tlejson);
+
+                 apidata({
+                        url: "/api/jed/to_excel",
+                        data: {
+                            uid: $api.getStorage("uid"),
+                            lists: jsonData
+                        }
+                    }, function (ret) {
+                        if (ret.status == 200) {
+                            var urls = ret.data;
+                            console.log("xian:"+urls);
+                            api.download({
+                                url: urls
+                            }, function (ret, err) {
+                                var url = ret.savePath;
+                            
+                                showTip('导出地址为:' + url, '5000', 'bottom');
+                            console.log("url:"+url)
+                          
+                            })
+                        } else {
+                            showTip(ret.return_msg, 1200, "middle")
+                        }
+               });  
+            
+
+                },
+ 
+
+                shareUrl(){
+                 console.log("shareUrl!!!!")
+                 if (!vm.isVip) {
+                    tip();
+                     return;
+                }
+                var jsonData = vm.exlist;
+                    var tlejson={
+                         title:"商家名称",
+                         city:"所属城市",
+                         name:"负责人",
+                         phone:"手机",
+                         tel:"邮箱",
+                         address:"地址",
+                         money:"注册资金",
+                         build_name:"成立时间",
+                         type_name:"分类"
+                    }
+                    jsonData.unshift(tlejson);
+
+                apidata({
+                    url: "/api/jed/to_excel",
+                    data: {
+                        uid: $api.getStorage("uid"),
+                        lists: jsonData
+                    }
+                }, function (ret) {
+                    if (ret.status == 200) {
+                        var urls = ret.data;
+                        console.log("xian:"+urls);
+                        api.download({
+                            url: urls
+                        }, function (ret, err) {
+                            var url = ret.savePath;
+                    
+                            console.log("url:"+url)
+                           vm.share(urls)
+                        })
+                    } else {
+                        showTip(ret.return_msg, 1200, "middle")
+                    }
+                });  
+
+            },
+            share(url){
+                var wxPlus = api.require('wxPlus');
+                wxPlus.shareWebpage({
+                    apiKey: 'wx1b930cf8a9a1c42f',
+                    scene: 'session',
+                    title: '报表分享',
+                       description: '',
+                    // thumb: app(),
+                    //  contentUrl: fen() + 'index.php?s=/home/index/user/uid/' + 100029
+                     contentUrl:url
+                }, function(ret, err) {
+                    if (ret.status) {
+                        //alert('分享成功');
+                    } else {
+                        //alert(err.code);
+                    }
+                });
+             },
+
+            },
+            
+           
+           
+        })
+         
+        /* vm end*/
+
+
+        add();
+    }
+
+    /*选择城市*/
+    function chooseCity() {
+        api.openFrame({
+            name: "city",
+            url: "city.html",
+            rect: {
+                x: 0,
+                y: 0,
+                w: api.winWidth,
+                h: api.winHeight
+            },
+            pageParam: {
+                from: "business"
+            }
+        })
+    }
+
+    /*选择城市回调事件*/
+    function defCity(city) {
+        if (!isNotEmpry(city)) {
+            showTip("请选择城市获取数据！", 2000, "middle");
+            return;
+        }
+        vm.cityname = city;
+        if (!isNotEmpry(vm.datestart) || !isNotEmpry(vm.dateend)) {
+            showTip("请选择发布时间获取数据！", 2000, "middle");
+            return;
+        }
+        vm.list = [];
+        index = 0;
+        datas(0, city)
+    }
+
+    /*获取结果数据*/
+    function datas(index, city) {
+        if (!vm.isVip) {
+            tip();
+            return;
+        }
+        var sdata = {
+            uid: $api.getStorage("uid"),
+            keys: "",
+            start: index,
+            city: city == "城市" ? "0" : city,
+            num: size,
+            start_time: vm.datestart,
+            end_time: vm.dateend
+        };
+        /*注意：开始时间与结束时间偶尔一致*/
+        console.log("注意：开始时间与结束时间偶尔一致!" + JSON.stringify(sdata));
+        apidata({
+            url: "/api/jed/customer_lists",
+            data: sdata
+        }, function (ret) {
+            if (ret) {
+                if (ret.data.length == 0) {
+                    showTip("暂无数据", 1000, "middle")
+                }
+                if (ret.data.length != 0) {
+                    ret.data.forEach(element => {
+                        vm.list.push(element);
+                        vm.phoneList.push(element.phone)
+                    });
+                    // ret.data.forEach(element => {
+                    //     vm.phoneList.push(element.phone)
+                    // });
+
+                    ret.data.forEach(element=>{
+                      delete element.id;
+                      delete element.type;
+                      var btime=timeFormatYYYYMMdd(element.build_time);
+                       element.build_time=btime;
+                      vm.exlist.push(element);
+                     
+               
+                });
+                    vm.len=vm.list.length;
+                    console.log("len:"+vm.len)
+                }
+            }
+        });
+    };
+
+    /*底部上拉获取数据*/
+    function add() {
+        api.addEventListener({
+            name: 'scrolltobottom',
+            extra: { threshold: 10 }
+        }, function (ret, err) {
+            if (!vm.isVip) {
+                tip();
+                return;
+            }
+            var c = vm.cityname;
+            if (kong(c) == "" || c == undefined || c == null || c == "城市") {
+                showTip("请选择城市获取数据！", 2000, "middle");
+                return;
+            }
+            if (!isNotEmpry(vm.datestart) || !isNotEmpry(vm.dateend)) {
+                showTip("请选择发布时间获取数据！", 2000, "middle");
+                return;
+            }
+            index += size;
+            datas(index, c);
+        });
+    };
+
+    /*获取用户是否是VIP会员*/
+    function getUserInfo() {
+        apidata({
+            url: "/api/jed/user_info",
+            data: {
+                uid: $api.getStorage("uid"),
+            }
+        }, function (ret) {
+             
+            var nowstamp=new Date().getTime();
+            console.log(JSON.stringify(ret))
+            console.log("当前时间戳:"+nowstamp);
+            console.log("到期时间戳:"+ret.data.vip_end*1000);
+             
+            if(parseInt(ret.data.vip_end)*1000>nowstamp){
+                vm.isVip = true;
+                showTip("请选择城市和时间获取数据！", 2000, "middle");
+            }else{
+                tip();
+                return;
+            }
+           /*
+             if (ret.data.is_vip == 1) {
+                vm.isVip = true;
+                showTip("请选择城市和时间获取数据！", 2000, "middle");
+            } else {
+                tip();
+                return;
+            }
+           */
+          
+        });
+    }
+
+    /*会员开通提示窗*/
+    function tip() {
+        var dialogBox = api.require('dialogBox');
+        dialogBox.taskPlan({
+            rect: {
+                w: 300
+            },
+            texts: {
+                mainTitle: '温馨提示',
+                subTitle: '',
+                content: [{
+                    text: '权限不足，请开通会员解锁所有功能'
+                }],
+                btnTitle: '开通会员'
+            },
+            styles: {
+                bg: '#fff',
+                corner: 10,
+                main: {
+                    marginT: 20,
+                    color: '#636363',
+                    size: 18,
+                    bold: true,
+                },
+                sub: {
+                    marginT: 0,
+                    color: '#999999',
+                    size: 12,
+                },
+                content: [{
+                    bg: '#fff',
+                    marginT: 0,
+                    marginB: 30,
+                    w: 280,
+                    h: 40,
+                    align: 'center',
+                    color: '#bcbcbc',
+                    size: 16
+                }],
+                ok: {
+                    marginB: 10,
+                    marginL: 10,
+                    marginR: 0,
+                    w: 280,
+                    h: 40,
+                    bg: '#217bfb',
+                    color: '#fff',
+                    size: 16,
+                    corner: 10
+                }
+            },
+            tapClose: true
+        }, function (ret) {
+            if (ret.eventType == 'ok') {
+                api.openWin({
+                    name: 'memberCenter',
+                    url: './memberCenter.html',
+                    reload: true
+                })
+                var dialogBox = api.require('dialogBox');
+                dialogBox.close({
+                    dialogName: 'taskPlan'
+                });
+            }
+        });
+    }
+
+
+
+
+</script>
+
+</html>

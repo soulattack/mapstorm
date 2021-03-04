@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>编辑模板</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+ 
+  </head>
+  <body>
+        <header class="header" id="header">
+                <a class="headerLeft" onclick="api.closeWin()">
+                    <i class="icon iconfont iconback"></i>
+                </a>
+                <div class="headerTle">编辑模板</div>
+                <!-- <a class="headerRight addMsg">
+                    <i class="icon iconfont iconicon_addmessage"></i>
+                </a> -->
+            </header>
+
+            <!--  -->
+       <div class="groupsend" id="vue">
+              <div class="gsWrap">
+                 <ul class="gsList">
+                     <li >
+                         <dl class="flex">
+                             <dt><b>短信签名</b></dt>
+                             <dd>
+                                 <input type="text" class="tradeType" v-model="title">
+                             </dd>
+                         </dl>                      
+                     </li>
+               
+                    <li>
+                     <dl class="area">
+                        <dt> <b>短信内容</b></dt>
+                         <dd>
+                             <textarea name="" cols="30" rows="8"
+                             id="textarea"
+                             maxlength="60"
+                             v-on:keyup="content()"
+                        
+                             v-model="contents" 
+                             ></textarea>
+
+                             <!--       <textarea name="" cols="30" rows="8"
+                             id="textarea"
+                             maxlength="60"
+                             v-on:keyup="content()"
+                             v-on:compositionstart="importStart()"
+                             v-on:compositionend="importEnd()"
+                             v-model="contents" 
+                             ></textarea> <p class="p_count"> 字数0  条数0 （60字/条）</p> -->
+                             <p class="p_count"> 字数  <b id="numb">{{ conterNum }}</b>（60字/条）</p>
+                         </dd>
+                        </dl>
+                    </li>
+                 <li class="attx">
+                     <h4>注意</h4>
+                     <p>短信模板 需要2小时审计</p>
+                 </li>
+           
+                <li class="btnArea">
+                    <input type="button" name="" id="submit" value="确定编辑" @click="submit">
+                </li>
+               
+                 </ul>
+              </div>
+       </div>
+             
+
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/tools.js"></script>
+  <script type="text/javascript" src="../script/vue.min.js"></script>
+  <script type="text/javascript">
+      apiready = function(){
+        $api.fixStatusBar( $api.byId('header'));
+
+         var id= api.pageParam.id;
+
+          console.log(id);
+        
+        var vm=new Vue({
+
+            el:"#vue",
+            data:{
+		  
+              title:"",   
+			  contents: "",			      			
+			  conterNum: 0,
+			  cInput: false,
+           },
+
+           mounted:function(){
+               console.log("这是是初始化 方法！！！");
+
+               this.initData();
+           },
+           methods:{
+                content() {                 
+                  let self = this;
+                  if (self.cInput == false) {
+                    self.conterNum = self.contents.length;
+                    if(  self.conterNum>=60){
+                          showTip("字数最多60个","500","top")
+                      }
+                   }         
+
+                },
+                importStart() {
+                  this.cInput = true;
+                },
+                importEnd() {
+                  this.cInput = false;
+                 // this.write();
+                },
+
+                /*提交*/
+                submit(){
+                  console.log("开始 提交 内容 ");
+                  console.log(vm.title+"----"+vm.contents) ;
+                 
+                 if(!isNotEmpry(this.title)) {
+                    showTip("请输入有效的标题",2000,"bottom")
+                    return;
+                 }      
+                 if(!isNotEmpry(this.contents)) {
+                    showTip("请输入内容",2000,"bottom")
+                    return;
+                 }
+
+               
+                var sdata={
+                    uid:$api.getStorage("uid"),
+                    title:this.title,
+                    id:id,
+                    content:this.contents
+                }
+                apidata({
+                     url:"/api/jed/model_msg_add",
+                     data:sdata
+                   },function(ret){
+                   console.log(JSON.stringify(ret))
+                   if(ret.status==200){
+                        showTip("发布成功","2000","middle");
+                     setTimeout(()=>{
+                         api.openWin({
+                             name:"shortletterMould",
+                             url:"./shortletterMould.html",
+                             reload:true
+                         })
+                     },2000)
+                   }
+
+                },function(err){
+                   
+                })
+
+
+             },
+
+             initData(){
+                         
+                var sdata={
+                    uid:$api.getStorage("uid"),
+                    id:id
+                };
+                 apidata({
+                     url:"/api/jed/model_msg_details",
+                     data:sdata
+                   },function(ret){
+                   console.log(JSON.stringify(ret));
+
+                   vm.title=ret.data.title;
+                   vm.contents=ret.data.content;
+                   vm.conterNum=ret.data.content.length;
+
+                  },function(err){
+                   
+                  })
+
+             }
+         }
+	  })
+      
+     
+   };
+   /* apicloud End*/
+   
+
+
+
+
+  </script>
+  </html>
+<style>
+
+.groupsend{font-size: 14px;padding: 68px 0 0 0; }
+.gsWrap{margin: 20px; background: white;
+  border-radius:15px; padding: 10px 20px; 
+}
+
+.gsList{ }
+.gsList li{ margin: 15px 0}
+.gsList li .flex{ }
+.gsList li  input{ height: 100%;background: #eee;border-radius:10px; height: 30px; padding: 0 10px}
+
+.gsList li dl dt{}
+
+.gsList li dl dt b{ font-size: 16px;font-weight: normal;position: relative;padding: 0 10px; height: 30px; line-height: 30px; display: inline-block;}
+.gsList li dl dt b::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    top:50%;
+    width: 3px;
+    height: 50%;
+    margin-top:-7px; 
+    background: #12ada9
+ }
+ .area dd{width:100%; margin:0 0 0 0%; position: relative;}
+ .area dd p{bottom:5px; right: 0px;position: absolute;color: #919191}
+ .area textarea{ background: #eee;resize: none; width: 90%;padding: 10px 5%; outline: none}
+
+ .gsList li.btnArea{ margin: 20px 0 20px 0%}
+ .gsList li.btnArea input{ display: block; width: 80%; height: 36px; background: #12ada9;color:white; margin: 0 auto;
+   border-radius:5px; text-align: center;font-size: 16px;
+}
+
+.attx{ color: #666;}
+.attx h4{ color: #12ada9;}
+</style>

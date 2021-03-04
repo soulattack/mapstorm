@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>招商加盟</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <style>
+        html,
+        body {
+            background-color: white;
+        }
+
+        .join {
+            font-size: 16px;
+            padding: 68px 0 0 0
+        }
+
+        .join .itemList {
+            margin: 20px 0;
+        }
+
+        .join .itemList li {
+            margin: 10px 0;
+            padding: 10px 15px;
+            background: white;
+            position: relative;
+            border-bottom: 1px solid #f1f2f4;
+        }
+
+        .join .itemList li::after {
+            content: "";
+            position: absolute;
+            right: 15px;
+            top: 17px;
+
+            width: 11px;
+            height: 11px;
+            transform: rotate(135deg);
+            border-top: 2px solid #434343;
+            border-left: 2px solid #434343;
+        }
+
+        .join .itemList li i {
+            font-size: 20px;
+            color: #217bfb;
+        }
+
+        .join .itemList li span {
+            font-size: 18px;
+            margin: 0 5px
+        }
+
+        .addMsg {
+            margin: 0 15px 0 0;
+            color: cadetblue
+        }
+
+        .addMsg i {
+            font-size: 20px;
+            font-weight: bold
+        }
+
+        .headerLeft i {
+            font-size: 26px;
+            margin: 0 0 0 10px
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header">
+        <a class="headerLeft" onclick="api.closeWin()">
+            <i class="icon iconfont iconback"></i>
+        </a>
+        <div class="headerTle">招商加盟</div>
+    </header>
+    <div class="shortletter join">
+        <ul class="itemList">
+            <li>
+                <div onclick="toApply()">
+                    <i class="icon iconfont iconshenqing2"></i><span>申请加盟商</span>
+                </div>
+            </li>
+            <!-- <li>
+                <div>
+                    <i class="icon iconfont iconbiaodan"></i><span>加盟商介绍</span>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <i class="icon iconfont iconfenxi "></i><span>市场远景</span>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <i class="icon iconfont iconjiangli "></i><span>政策奖励</span>
+                </div>
+            </li> -->
+            <li>
+                <div onclick="toVideo()">
+                    <i class="icon iconfont iconicon- "></i><span>培训视频</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        fixbar();
+    };
+
+    /*申请加盟商*/
+    function toApply() {
+        api.openWin({
+            name: "applyToJoin",
+            url: "./applyToJoin.html",
+            reload: true
+        })
+    }
+
+    /*培训视频*/
+    function toVideo() {
+        var sdata = {
+            uid: $api.getStorage("uid"),
+            type: 7
+        }
+        apidata({
+            url: "/api/jed/sys_article",
+            data: sdata
+        }, function (ret) {
+            if (ret.data) {
+                api.openWin({
+                    name: "noticeDetail",
+                    url: "./noticeDetail.html",
+                    reload: true,
+                    pageParam: {
+                        item: ret.data[0]
+                    }
+                })
+            } else {
+                showTip("暂无数据！", 1000, "middle");
+                return;
+            }
+        });
+    }
+</script>
+
+</html>

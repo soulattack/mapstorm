@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>我的下线</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+ 
+  </head>
+  <body>
+        <header class="header" id="header">
+                <a class="headerLeft" onclick="api.closeWin()">
+                    <i class="icon iconfont iconback"></i>
+                </a>
+                <div class="headerTle">我的下线</div>
+             
+            </header>
+
+            <!--  -->
+       <div class="subordinate" id="vue">
+              <div class="ssWrap">
+                    <ul class="cateList">                      
+                        <!-- <li @click="sel(1)" :class="{on:curr==1}">一级代理</li> -->
+                        <li @click="sel(1)" :class="curr==1?'on':''">一级代理</li>
+                        <li @click="sel(2)" :class="{on:curr==2}">二级代理</li>
+                        <li @click="sel(3)" :class="{on:curr==3}">三级代理</li>                     
+                    </ul>
+                <!-- <div class="sList" v-show="isShow"> -->
+                <div class="sList" >
+                    <ul v-show="isD==1"> 
+                          <li v-for="(item,index) in listlv1" :key="item.id">
+                           <dl>
+                               <dt><img :src="item.head" alt=""></dt>
+                               <dd class="ddInfo">
+                                   <div class="phone">{{item.phone}}</div>
+                                   <div class="level">{{formatVip(item.vip_type)}}</div>
+                               </dd>
+                               <!-- <dd class="ddTime">
+                                   <span>今日 12:50</span>
+                               </dd> -->
+                           </dl>
+                             
+                        </li>
+                          <div class="msg" v-show="!num1">
+                                <span>您还没有一级下线会员</span>
+                         </div>
+                    </ul>
+                  
+                    <ul v-show="isD==2">
+                            <li v-for="(item,index) in listlv3" :key="item.id">
+                                    <dl>
+                                        <dt><img :src="item.head" alt=""></dt>
+                                        <dd class="ddInfo">
+                                            <div class="phone">{{item.phone}}</div>
+                                            <div class="level">{{formatVip(item.vip_type)}}</div>
+                                        </dd>
+                                        <!-- <dd class="ddTime">
+                                            <span>今日 12:50</span>
+                                        </dd> -->
+                                    </dl>
+                                      
+                                 </li>
+                                 <div class="msg" v-show="!num2">
+                                        <span>您还没有二级下线会员</span>
+                                 </div>
+                    </ul>                 
+                    <ul v-show="isD==3">
+                            <li v-for="(item,index) in listlv3" :key="item.id">
+                                    <dl>
+                                        <dt><img :src="item.head"  alt=""></dt>
+                                        <dd class="ddInfo">
+                                            <div class="phone">18252160456</div>
+                                            <div class="level">三级会员</div>
+                                        </dd>
+                                        <!-- <dd class="ddTime">
+                                            <span>今日 12:50</span>
+                                        </dd> -->
+                                    </dl>                                   
+                                 </li>
+                                 <div class="msg" v-show="!num3">
+                                        <span>您还没有三级下线会员</span>
+                                 </div>
+                    </ul>   
+                                                   
+                </div>
+                <!-- <div class="msg" v-show="!isShow">
+                       <span>您还没有下线成员</span>
+                </div> -->
+              </div>
+       </div>
+             
+
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/vue.min.js"></script>
+  <script type="text/javascript" src="../script/tools.js"></script>
+  <script type="text/javascript">
+  var vm;
+   apiready = function(){
+            fixbar();
+
+          
+          vm =new Vue({
+              el:"#vue",
+              data:{
+                  isShow:false,
+                 listlv1:[], 
+                 listlv2:[], 
+                 listlv3:[],
+                 num1:0,
+                 num2:0,
+                 num3:0,
+                 vs1:null, 
+                 vs2:null, 
+                 vs3:null,
+                 isD:1,
+                 curr:1
+
+              },
+              mounted:function(){
+                 this.getData()
+              },
+
+              methods:{
+
+                   getData(){
+                            datas();
+                   },
+
+                   sel(i){
+                       console.log(i);
+                       vm.isD=i;
+                       vm.curr=i;
+                       console.log(vm.isD)
+                   }
+
+              }
+          })
+
+   };
+
+  function datas(){
+     var sdata={
+         uid:$api.getStorage("uid")
+
+     };
+     apidata({
+         url:"/api/jed/user_sons_lists",
+         data:sdata
+     },function(ret){
+            console.log(JSON.stringify(ret));
+            if(ret.data.info1.length==0&&ret.data.info2.length==0&&ret.data.info3.length==0){
+              //   vm.isShow=false;
+            }else{
+               // vm.isShow=true
+            }
+            vm.listlv1=ret.data.info1;
+            
+            vm.listlv2=ret.data.info2;
+            vm.listlv3=ret.data.info3;
+
+            vm.vs1=ret.data.info1.length;
+            vm.vs2=ret.data.info2.length;
+            vm.vs3=ret.data.info3.length;
+
+            vm.num1=ret.data.num1;
+            vm.num2=ret.data.num2;
+            vm.num3=ret.data.num3;
+
+            console.log(!vm.num1)
+
+            
+
+     },function(){
+
+     })
+
+  }
+  
+  function formatLv(lv){
+         var sort="";
+         switch(lv){
+           case 1:
+           sort="一级代理";
+           break;
+           case 2:
+           sort="二级代理";
+           break;
+           case 3:
+           sort="三级代理";
+           break;
+         }
+         return sort;
+  }
+
+  function formatVip(vip){
+         var sort="";
+         switch(vip){
+           case 1:
+           sort="月卡会员";
+           break;
+           case 2:
+           sort="季卡会员";
+           break;
+           case 3:
+           sort="年卡会员";
+           break;
+         }
+         return sort;
+  }
+
+
+
+
+
+
+
+
+
+
+  </script>
+  </html>
+<style>
+
+html,body{background: white}
+
+.subordinate{font-size: 14px;padding:68px 0 0 0;}
+.ssWrap{
+   /* margin: 20px; */
+
+}
+
+.cateList{display: flex;background: white; padding: 10px 0;
+  /* border-radius: 10px 10px 0 0 */
+}
+.cateList li{ flex:1;text-align: center}
+.cateList li.on{color:#217bfb}
+
+.sList{ margin: 0px 0 0 0;   background: white;
+   border-radius:0 0 10px 10px;
+   padding: 10px 10px 10px 10px; }
+.sList li {border-bottom: 1px solid #b5b5b5;padding: 10px 0 15px 0 }
+.sList li dl{ display: flex; align-items: center}
+.sList li dl dt{ width: 50px; height: 50px;}
+.sList li dl dt img{ width: 100%; height: 100%; display: block;border-radius:50%;}
+.sList li dl dd.ddTime{width: 100px;text-align: right;padding:  0 10px 0 0 }
+.sList li dl dd.ddInfo{flex: 1; margin: 0 0 0 10px; line-height: 30px }
+.sList li dl dd.ddInfo .level{color:#959595}
+.sList li dl dd.ddInfo .phone{font-size: 16px;color: #000}
+
+.tabsWrap{}
+.tabsWrap .tabs{display: flex;padding: 10px 0}
+.tabsWrap .tabs li{border-right:1px solid #666;text-align: center;flex: 1;font-size: 16px}
+.tabsWrap .tabs li.curr{color:#12ada9;}
+.tabsWrap .tabs li:last-child{border-right: none;text-align: center}
+.msg{ text-align: center; padding: 10px 0; margin:0px 0 0 0}
+</style>

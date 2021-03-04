@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>推广详情</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <style>
+    body,html{background: white url(../image/bgblue.jpg) repeat-x}
+        .empty{ padding:28px 0; }
+        .back{height: 50px;line-height: 70px;display: flex;text-align: center;color: white;
+            font-size: 18px;line-height: 50px;background: #217bfb;z-index: 666;margin:0;
+            position: fixed;width: 100%;top: 24px; }
+        .back span{display: inline-block;width: 100%;line-height: 50px;}
+        .back .left{width: 10%;font-size: 26px;line-height: 50px;}
+        .main {margin: 55px 10px 5px 10px;background: white;border-radius: 10px; }
+        .main .content{padding: 10px;}
+        .main .content p {line-height: 20px;}
+        .main .content p img{width: 100%!important;margin: 10px auto; }
+        .description p  {text-align: center!important;}
+        .main .content .picbox{display: flex;flex-wrap: wrap;margin: 15px 0;}
+        .main .content .pic {width: 49%;height: 150px; margin-bottom: 5px;}
+        .main .content .pic:nth-child(2n){margin-left: 5px;}
+        .main .content .pic  img{ width: 100%;height: 150px;}
+        .footer{position: fixed;bottom: 0;width: 100%;display: flex;height: 60px;line-height: 60px;border-top: 1px solid #eee;}
+        .footer div{width: 30%;color: white;text-align: center; background-color: white;}
+        .footer .phone{width:40%;color: black;}
+        img{width: 150px;height: 150px;display: flex;}
+        .picbox{display: flex;}
+    </style>
+</head>
+<body>
+    <header>
+            <div class="abs"  style="z-index:33;">
+                <div class="back">
+                    <span class="left" tapmode onclick="api.closeWin()">  <i class="icon iconfont iconback" style="font-size: 22px;"></i> </span>
+                    <span style="width:80%;" class="title">公司名称</span>
+                </div>
+            </div>
+       
+    </header>
+    <div class="empty">
+        <div class="main">
+            <div class="content">
+            
+            </div>
+        </div>
+        <div class="footer">
+            <div class="phone"></div>
+            <div style="background-color: #f04241;" onclick="call()">拨打电话</div>
+            <div style="background-color:#217bfb;" onclick="copy()">复制电话</div>
+        </div>
+    </div>
+</body>
+<script src="../script/api.js" charset="utf-8"></script>
+<script src="../script/tools.js" charset="utf-8"></script>
+<script src="../script/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script type="text/javascript">
+var vip = false;
+apiready = function(){
+    userinfo();
+    setTimeout(() => {
+        creat();
+    }, 800); 
+}
+/*获取用户信息*/
+function userinfo(){     
+     apidata({
+         url:"/api/jed/user_info",
+         data:{
+        uid:$api.getStorage("uid"),
+         }
+     },function(ret){   
+         console.log(JSON.stringify(ret))  
+        // if(ret.data.is_vip){
+        //     vip = true;
+        //     console.log(521541);    
+        // } 
+
+        var nowstamp=new Date().getTime();
+            console.log(JSON.stringify(ret));
+            console.log("当前时间戳:"+nowstamp);
+            console.log("到期时间戳:"+ret.data.vip_end*1000);
+             
+            if(parseInt(ret.data.vip_end)*1000>nowstamp){
+                vip = true;
+              
+            }
+     },function(err){
+     })
+  }
+/*接收数据*/
+function creat(){
+    var list = api.pageParam.item;
+    console.log(JSON.stringify(list));
+    
+    var val = '';
+    if (list) {
+        $('.title').text(list.name);
+        if (vip == true) {
+        $('.phone').text(list.phone);       
+        } else{            
+            var phone =list.phone.substring(0,3) + '****' + list.phone.substring(list.phone.length - 4);
+            $('.phone').text(phone);        
+        }
+        val+='<p>'+list.goods+'</p>';
+        val+='<p class="description">'+list.description+'</p>';
+        // val+='<div class="addrees">宁波江北区众冠商业广场2楼6-11</div>';
+        if (list.pics&&list.pics !=""&&list.pics !=" ") {
+            var arr = list.pics.split(',');
+            val +='<div class="picbox">'
+                for (var i = 0; i < arr.length; i++) {
+                    val +='<div class="pic"><img src="'+arr[i]+'" alt=""></div>'
+                }
+                val+='</div>'
+        } else {
+            val+='<div class="pic"><img src="../image/pic/01.jpg" alt=""> </div>';
+        }
+        if (list.add_time) {
+            var dd = formatDate(list.add_time)
+            val+='<div class="time">'+dd+'</div>';
+        }
+            $('.content').html(val)
+    }
+}
+/*弹窗*/
+function tip() {
+    var dialogBox = api.require('dialogBox');
+            dialogBox.taskPlan({
+                rect: {
+                w: 300
+            },
+                texts: {
+                mainTitle: '温馨提示',
+                subTitle: '',
+                content: [{
+                    text: '权限不足，请开通会员解锁所有功能'
+                }],
+                btnTitle: '开通会员'
+            },
+            styles: {
+                bg: '#fff',
+                corner:10,
+                main: {
+                    marginT: 20,
+                    color: '#636363',
+                    size: 18,
+                    bold: true,
+                },
+                sub: {
+                    marginT: 0,
+                    color: '#999999',
+                    size: 12,
+                },
+                content: [{
+                    bg: '#fff',
+                    marginT: 0,
+                    marginB: 30,
+                    w: 280,
+                    h: 40,
+                    align: 'center',
+                    color: '#bcbcbc',
+                    size: 16
+                }],
+                ok: {
+                    marginB: 10,
+                    marginL: 10,
+                    marginR:0,
+                    w: 280,
+                    h: 40,
+                    bg: '#217bfb',
+                    color: '#fff',
+                    size: 16,
+                    corner:10,
+
+                }
+            },
+            tapClose:true
+        }, function(ret) {
+            if (ret.eventType == 'ok') {
+                api.openWin({
+                    name: 'memberCenter',
+                    url: './memberCenter.html',
+                })
+                var dialogBox = api.require('dialogBox');
+                dialogBox.close({
+                    dialogName: 'taskPlan'
+                });
+            }
+        });
+  }
+/*拨打电话*/
+function call() {
+    var list = api.pageParam.item;
+    var phone  = list.phone;
+    event.cancelBubble = true;
+    event.preventDefault = true;
+    console.log(JSON.stringify(vip));
+    if (vip == false) {
+        tip(); 
+        return;    
+    }
+    api.call({
+          number:phone
+    })
+  } 
+ /*复制*/
+function copy(obj) {
+    var list = api.pageParam.item;
+    var phone  = list.phone;
+    event.cancelBubble = true;
+    event.preventDefault = true;
+    if (vip == false) {
+        tip();  
+        return;    
+    }
+    var clipBoard = api.require('clipBoard');
+    clipBoard.set({
+        value: obj
+    }, function(ret, err) {
+        if (ret) {
+          showTip("复制成功",800,"bottom")
+        } else {
+            alert(JSON.stringify(err));
+        }
+    }); 
+  }
+//时间戳
+ function formatDate(datetime) {
+                 var date = new Date(datetime*1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+                 var year = date.getFullYear(),
+                     month = ("0" + (date.getMonth() + 1)).slice(-2),
+                     sdate = ("0" + date.getDate()).slice(-2);
+                     // hour = ("0" + date.getHours()).slice(-2),
+                     // minute = ("0" + date.getMinutes()).slice(-2),
+                     // second = ("0" + date.getSeconds()).slice(-2);
+                 // 拼接
+                 // var result = year + "-"+ month +"-"+ sdate +" "+ hour +":"+ minute +":" + second;
+                 var result = year + "-"+ month +"-"+ sdate ;
+                 // 返回
+                 return result;
+ }
+
+
+
+</script>
+</html>

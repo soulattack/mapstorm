@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>忘记密码</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <style>
+        body {
+            background: white
+        }
+
+        .empty {
+            margin: 0;
+        }
+
+        .regist {
+            padding: 25px 0 0 0
+        }
+
+        .box {
+            width: 90%;
+            margin-left: 5%;
+        }
+
+        .Oin {
+            display: flex;
+            margin-top: 5px;
+            line-height: 50px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .Oin text {
+            width: 20%;
+        }
+
+        .Oin input {
+            display: inline-block;
+            width: 80%;
+            height: 50px;
+            border: none;
+        }
+
+        .Oin input:focus {
+            outline: medium;
+        }
+
+        .bottom {
+            height: 50px;
+            display: flex;
+            line-height: 50px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .bottom text {
+            width: 20%;
+        }
+
+        .bottom input {
+            height: 50px;
+            width: 50%;
+            outline: medium;
+        }
+
+        .bottom .Btn {
+            height: 50px;
+            color: white;
+            /* margin-top: 10px; */
+            background-color: #217bfb;
+            line-height: 50px;
+            width: 30%;
+            outline: medium;
+            text-align: center;
+            border-left: 1px solid #f5f5f5;
+
+        }
+
+        .sure {
+            width: 100%;
+            height: 50px;
+            background-color: #217bfb;
+            border-radius: 10px;
+            color: white;
+            line-height: 50px;
+            margin-top: 80px;
+            text-align: center
+        }
+
+        .boxtop {
+            height: 44px;
+            line-height: 44px;
+            background-color: #217bfb;
+            display: flex;
+            color: white;
+        }
+
+        .boxtop a {
+            /* margin: 0 0 0 5px; */
+            padding: 0 10px;
+            font-size: 20px
+        }
+
+        .boxtop a i {
+            font-size: 24px;
+            color: white;
+        }
+
+        .tle {
+            width: 70%;
+            font-size: 16px;
+            text-align: center
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin: 50px auto;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="regist">
+        <div class="boxtop">
+            <a href="" onclick="api.closeWin()"><i class="icon iconfont iconback"></i></a>
+            <div class="tle">修改密码</div>
+        </div>
+        <div class="empty" id="app">
+            <div class="logo">
+                <img src="../image/tools/logo.png" alt="">
+            </div>
+            <div class="box">
+                <div class="Oin">
+                    <text>手机号</text> <input type="number" name="phone" value="" placeholder="输入手机号"
+                        id="phone">
+                </div>
+                <div class="bottom">
+                    <text>验证码</text> <input type="text" name="" value="" placeholder="输入验证码" id="checkCode">
+                    <span class="Btn" id="btnGetCode" onclick="getCodex()">获取验证码</span>
+                </div>
+                <div class="Oin">
+                    <text>设置密码</text> <input type="password" name="password" value="" placeholder="设置8~16位密码"
+                        id="password">
+                </div>
+                <div class="Oin">
+                    <text>确认密码</text><input type="password" name="rePwd" value="" placeholder="请重复密码" id="rePwd">
+                </div>
+
+                <div class="sure" onclick="regist()"> 确定 </div>
+
+            </div>
+        </div>
+
+
+
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery-1.7.2.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+<script src="../script/tools.js"></script>
+
+<script type="text/javascript">
+    apiready = function () {
+
+        api.setStatusBarStyle({
+            style: 'light',
+            color: '#217bfb'
+        });
+
+
+
+    }
+
+    function getCode() {
+        console.log("获取验证码");
+
+        var phone = kong($api.byId('phone').value);
+        var password = kong($api.byId('password').value);
+        console.log(phone);
+        if (!isNotEmpry(phone) || !isTel(phone)) {
+            showTip("请输入有效的电话号码", 2000, "middle")
+            return;
+        }
+
+
+        apidata({
+            url: "api/jed/get_phone_code",
+            data: {
+                phone: phone,
+                type: "forget"
+            }
+        }, function (ret) {
+            if (ret) {
+                api.alert({ msg: JSON.stringify(ret) });
+            } else {
+                console.log(JSON.stringify(err));
+                api.alert({ msg: JSON.stringify(err) });
+            }
+        })
+    }
+
+
+
+    /* 获取验证码 封装请求*/
+    var num = 60, timer = null;
+    function getCodex() {
+        console.log("获取验证码");
+        /* */
+        var phone = kong($api.byId('phone').value);
+        var password = kong($api.byId('password').value);
+        console.log(phone);
+        if (!isNotEmpry(phone) || !isTel(phone)) {
+            showTip("请输入有效的电话号码", 2000, "middle")
+            return;
+        }
+
+
+        var phone = $("#phone").val();
+        console.log(phone)
+        console.log($("#btnGetCode").hasClass("gray"));
+        var sdata = {};
+        sdata.phone = phone;
+        sdata.type = "forget";
+        console.log(JSON.stringify(sdata))
+        /* */
+        if (!$("#btnGetCode").hasClass("gray")) {
+            apidata({
+                url: "/api/jed/get_phone_code",
+                data: sdata
+
+            }, function (ret) {
+                console.log(JSON.stringify(ret));
+                
+                if (ret.status == 200) {
+                    showTip(ret.return_msg, 2000, "middle");
+                    countdown();
+                }
+
+            }, function (err) {
+                console.log(err);
+            })
+        }
+
+    }
+
+
+    /*注册*/
+    function regist() {
+
+        console.log("我要注册");
+        var phone = $("#phone").val();
+        var pwd = $("#password").val();
+        var rePwd = $("#rePwd").val();
+        var ccode = $("#checkCode").val();
+        var sdata = {
+            phone: phone,
+            new: pwd,
+            re_new: rePwd,
+            code: ccode,
+            openid: api.appId
+
+        };
+        console.log(phone + "-" + pwd + "-" + ccode);
+        console.log(JSON.stringify(sdata));
+
+        if (!isNotEmpry(phone) || !isTel(phone)) {
+            showTip("请输入有效的电话号码", 2000, "middle")
+            return;
+        }
+        if (!isNotEmpry(pwd) || !isPwd(pwd)) {
+            showTip("请输入6-20位密码!", 2000, "top")
+            return;
+        }
+
+        if (!isNotEmpry(rePwd) || !isPwd(rePwd)) {
+            showTip("请输入6-20位密码!", 2000, "top")
+            return;
+        }
+        if (pwd != rePwd) {
+            showTip("输入的密码不一致", 2000, "middle")
+            return
+        }
+        if (!isNotEmpry(ccode)) {
+            showTip("验证码", 2000, "top")
+            return;
+        }
+
+        apidata({
+            url: "/api/jed/forget_pass",
+            data: sdata
+        },
+            function (ret) {
+                if (ret.status == 200) {
+                    showTip("修改成功", 2000, "top")
+                } else {
+                    showTip(ret.status + "--" + ret.return_msg, 2000, "top")
+                }
+
+
+            }, function (err) {
+
+
+            })
+
+    }
+
+
+
+
+    /**/
+    function countdown() {
+
+        clearTimeout(timer);
+        var sc = $("#btnGetCode");
+        if (num == 0) {
+            sc.removeClass("gray").text("重发");
+            num = 60;
+            clearTimeout(timer);
+            timer = null;
+            return;
+        } else {
+            sc.addClass("gray").text(num);
+            num--;
+        }
+        timer = setTimeout(() => {
+            countdown();
+        }, 1000)
+    }
+
+
+
+</script>
+
+</html>

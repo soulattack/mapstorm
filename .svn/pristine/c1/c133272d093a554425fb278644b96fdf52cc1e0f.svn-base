@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>IDC</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <style>
+        html,
+        body {
+            background-color: white;
+        }
+
+        #header {
+            background-color: #217bfb;
+            color: white;
+            height: 50px;
+            line-height: 50px;
+            text-align-last: center;
+            font-size: 16px;
+        }
+
+        .box {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .box .index {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header" style="padding-top: 30px;">
+        <a class="headerLeft" onclick="api.closeWin()">
+            <i class="icon iconfont iconback"></i>
+        </a>
+        <div class="title">IDC</div>
+    </header>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        var item = api.pageParam;
+        $('.title').text(item.name);
+        api.openFrame({
+            name: '12',
+            url: item.url,
+            rect: {
+                x: 0,
+                y: 40,
+                marginLeft: 0,
+                marginTop: 40
+            }
+        })
+    };
+</script>
+
+</html>

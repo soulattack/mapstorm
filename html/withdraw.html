@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>申请提现</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+   
+  </head>
+  <body>
+    <header class="header" id="header">
+        <a class="headerLeft" onclick="api.closeWin()">
+            <i class="icon iconfont iconback"></i>
+        </a>
+        <div class="headerTle">提现申请</div>
+        <a class="headerRight" onclick="withdrawList()">
+                <i class="icon iconfont iconList"></i>
+        </a>
+    </header>
+   <div class="withdraw" id="vue">
+            <dl class="cash">
+                <dt>转账金额</dt>
+                <dd class="cs_d01">
+                    <span>￥</span>
+                    <input type="text" name="" id="" placeholder="请输入提现金额"  v-model="money">
+                    
+                </dd>
+                <dd class="cs_d02">
+                    <div class="ms">
+                         <span>可用余额:<em>{{cash}}</em></span>
+                         <button @click="all">全部提现</button>
+                    </div>
+                   
+                </dd>
+            </dl>
+
+           <ul class="ulist">
+               <!-- <li> <input type="number" name="" id="money" placeholder="提现金额" v-model="money"> </li> -->
+               <li class="itemType"><span>提现方式：<b>支付宝</b></span></li>
+               <li> <i>姓名</i> <input type="text" name="" id="name" placeholder="用户名" v-model="name"> </li>
+               <li> <i>账户</i>  <input type="text" name="" id="account" placeholder="支付宝账号" v-model="account"> </li>
+
+               <!-- <li> <input type="number" name="" id="phone" placeholder="手机号" v-model="phone"> </li> -->
+                  
+              
+           </ul>
+           <div class="opt">
+                 <span class="btnWrap">
+                    <a href="javascript:;" id="btn" @click="withdraw">提现</a>
+                 </span>
+           </div>
+   </div>
+
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/vue.min.js"></script>
+  <!-- <script type="text/javascript" src="../script/jquery-1.7.2.min.js"></script> -->
+  <script type="text/javascript" src="../script/tools.js"></script>
+  <script type="text/javascript">
+      var vm;
+      apiready = function(){
+         fixbar();
+
+
+         vm =new Vue({
+             el:"#vue",
+             data:{
+                 money:null,
+                 account:null,
+                 name:null,
+                 phone:null,
+                 cash:null
+             },
+             mounted:function(){
+                this.getData()
+             },
+             methods:{
+
+                 withdraw(){
+                       console.log("点击");
+                       if(!isNotEmpry(vm.money)||!isNat(vm.money)) {
+                            showTip("请输入至少为1元的整数金额",2000,"bottom")
+                            return;
+                        }
+                        if(!isNotEmpry(vm.account)) {
+                            showTip("请输入支付宝账号",2000,"bottom")
+                            return;
+                        }
+                        if(!isNotEmpry(vm.name)) {
+                            showTip("姓名不能为空",2000,"bottom")
+                            return;
+                        }
+                        
+                    //    if(!isNotEmpry(vm.phone) || !isTel(vm.phone)) {
+                    //         showTip("请输入有效的电话号码",2000,"bottom")
+                    //         return;
+                    //     }      
+                     var sdata={
+                         uid:$api.getStorage("uid"),
+                         amount:vm.money,
+                         account:vm.account,
+                         account_name:vm.name,
+                         phone:vm.phone
+
+                     }
+
+
+                       apidata({
+                         url:"/api/jed/withdrawal_add",
+                         data:sdata
+                         },function(ret){
+                            if(ret){ 
+                                console.log(JSON.stringify(ret))
+                                if(ret.status==200){
+                                    showTip(ret.return_msg,1000,"middle");
+                                    sendReloadEvent();
+
+                                    setTimeout(function(){
+                                           window.location.reload();
+                                           api.closeWin();
+                                    },500)
+                 
+                                }else{
+                                    showTip(ret.return_msg,1000,"middle");
+                                }
+                               
+                              
+
+                            }
+
+                         },function(err){
+
+                       })
+
+                     
+
+
+
+                 },
+
+                 getData(){
+                        console.log("个人中心 数据初始化");
+                        var sdata={
+                            uid:$api.getStorage("uid")
+                        }
+
+                    apidata({
+                        url:"/api/jed/user_info",
+                        data:sdata
+                    },function(ret){
+                        console.log(JSON.stringify(ret));
+                    
+                     
+                        vm.cash=ret.data.money
+
+                    },function(err){
+
+                    })
+                 },
+                 all(){
+                   
+                 vm.money=vm.cash
+                 }
+             }
+         })
+        
+      };
+
+ function withdrawList(){
+   api.openWin({
+       name:"withdrawRecord",
+       url:"./withdrawRecord.html"
+   })
+ }
+
+ function sendReloadEvent(){
+        console.log("a 执行")
+        var jsfun = "myreload()";
+        api.execScript({
+                    name: "myWallet",
+                    script: jsfun
+                });
+
+        
+
+    }
+
+
+  </script>
+  </html>
+   <style>
+    html,body{background-color: white;}
+
+       /* html{background: #ededed} */
+      .withdraw{ font-size: 14px; padding: 68px 0 0 0}
+      .ulist{ margin: 10px; background: white; padding: 12px 0;border-radius:5px;  font-size: 14px;}
+      
+      .ulist li{
+          margin: 0px 15px 5px 15px;
+          display: flex;
+          align-items: center;
+        
+          padding: 4px 0
+      }
+      .ulist li i{width: 30px; margin: 0 5px 0 0;font-style: normal}
+      .ulist li input{
+           /* padding: 5px 2%; 
+           width: 96%; */
+            height: 26px; 
+          /* border-bottom: 1px solid #b7b7b7 */
+    }
+     .opt{margin: 20px 10px }
+     .opt span{display: block; width: 100%}
+     .opt span a{
+        display: block;
+        /* width: 100%; */
+        margin: 0 35px;
+        height: 44px;
+        line-height: 44px;
+        text-align: center;
+        background: #217bfb;
+        font-size: 16px;
+        color:white;
+        border-radius: 4px;
+        box-shadow: 0 1px  1px 1px #b0b0b0;
+     }
+    
+     .cash{
+         margin: 10px; 
+         background: white;
+         border-radius:10px;
+         padding:15px
+     }
+   
+     .cash  dt{font-size: 16px;}
+     .cash  dd.cs_d01{ margin: 10px 0;display: flex;align-items: center}
+     .cash  dd.cs_d01 span{ line-height: 40px;font-size: 24px}
+     .cash  dd.cs_d01 input{ height: 40px;  margin: 0 5px 0 5px;font-size: 20px}
+
+     .ms{display: flex;justify-content: space-between}
+     .ms span{color: #666}
+     .ms span em{color:#555;}
+     .ms button{color:#00aced}
+
+     .itemType {font-size: 16px}
+     .itemType b{
+         color: #048a04
+     }
+</style>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>培训视频</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/css.css" />
+    <style>
+        html,
+        body {
+            background: #ededed;
+        }
+
+        .video {
+            padding: 80px 0 0 0
+        }
+
+        .videoListWrap {
+            margin: 20px;
+            background: white;
+            border-radius: 15px;
+        }
+
+        .vList {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 10px 0
+        }
+
+        .vList:after {
+            content: '';
+            width: 40%;
+            border: 1px solid transparent;
+        }
+
+        .vList li {
+            width: 40%;
+            height: 100px;
+            border: 1px solid #eeeeee;
+            margin: 10px 0 10px 0
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header">
+        <a class="headerLeft" onclick="api.closeWin()">
+            <i class="icon iconfont iconback"></i>
+        </a>
+        <div class="headerTle">培训视频</div>
+    </header>
+    <div class="video">
+        <div class="videoListWrap">
+            <ul class="vList">
+                <li>11</li>
+                <li>11</li>
+                <li>11</li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        fixbar();
+        vm = new Vue({
+            el: "#vue",
+            data: {
+                title: "",
+                content: null
+            },
+            mounted: function () {
+                this.getData()
+            },
+            methods: {
+                getData() {
+                    var sdata = {
+                        uid: $api.getStorage("uid"),
+                        type: 7
+                    }
+                    apidata({
+                        url: "/api/jed/sys_article",
+                        data: sdata
+                    }, function (ret) {
+
+                    });
+                }
+            }
+        })
+    };
+</script>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="../css/api.css" />
+  <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+  <link rel="stylesheet" type="text/css" href="../css/base.css" />
+  <link rel="stylesheet" type="text/css" href="../css/css.css" />
+  <style>
+    html,
+    body {
+      background: white
+    }
+
+    .m {
+      padding: 68px 0 0 0
+    }
+
+    .desc {
+      overflow: hidden;
+    }
+
+    .desc h2 {
+      font-weight: 400;
+      padding: 0 10px;
+      margin: 5px 0;
+      text-align: center;
+      font-size: 16px
+    }
+
+    desc .cont {
+      line-height: 24px;
+      margin: 20px 0 0 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <header class="header" id="header">
+      <a class="headerLeft" onclick="api.closeWin()">
+        <i class="icon iconfont iconback"></i>
+      </a>
+      <div class="headerTle">通知详细</div>
+    </header>
+    <div class="m" id="vue">
+      <div class="desc">
+        <div class="">
+          <div v-html="content" class="cont"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+<script type="text/javascript">
+  apiready = function () {
+    fixbar();
+    var item = api.pageParam.item;
+    console.log("item" + JSON.stringify(item));
+
+    vm = new Vue({
+      el: "#vue",
+      data: {
+        title: item.title,
+        content: item.content
+      }
+    })
+  };
+</script>
+
+</html>

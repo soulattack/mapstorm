@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>注册</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+
+    <script type="text/javascript"
+        src="https://api.map.baidu.com/api?v=2.0&ak=Sk2jbVWPdmZK0QEGiQ8aB3WuzAOVh1Rk"></script>
+    <style>
+        html {
+            background: white
+        }
+
+        body {
+            background: white
+        }
+
+        .empty {
+            margin: 0;
+        }
+
+        .regist {
+            padding: 25px 0 0 0
+        }
+
+        .box {
+            width: 90%;
+            margin-left: 5%;
+        }
+
+        .Oin {
+            display: flex;
+            margin-top: 5px;
+            line-height: 50px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .Oin text {
+            width: 20%;
+        }
+
+        .Oin input {
+            display: inline-block;
+            width: 80%;
+            height: 50px;
+            border: none;
+        }
+
+        .Oin input:focus {
+            outline: medium;
+        }
+
+        .bottom {
+            height: 50px;
+            display: flex;
+            line-height: 50px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .bottom text {
+            width: 20%;
+        }
+
+        .bottom input {
+            height: 50px;
+            width: 50%;
+            outline: medium;
+        }
+
+        .bottom .Btn {
+            height: 50px;
+            color: white;
+            background-color: #217bfb;
+            /* margin-top: 10px; */
+            line-height: 50px;
+            width: 30%;
+            outline: medium;
+            text-align: center;
+            border-left: 1px solid #f5f5f5;
+
+        }
+
+        .sure {
+            width: 100%;
+            height: 50px;
+            background-color: #217bfb;
+            border-radius: 10px;
+            color: white;
+            line-height: 50px;
+            margin-top: 80px;
+            text-align: center
+        }
+
+        .boxtop {
+            height: 44px;
+            line-height: 44px;
+            background-color: #217bfb;
+            display: flex;
+            color: white;
+        }
+
+        .boxtop a {
+            /* margin: 0 0 0 5px; */
+            padding: 0 10px;
+            font-size: 20px
+        }
+
+        .boxtop a i {
+            font-size: 24px;
+            color: white;
+        }
+
+        .tle {
+            width: 70%;
+            font-size: 16px;
+            text-align: center
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin: 50px auto;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .toggle {
+            display: none;
+        }
+
+        .lockon {
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .area {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            bottom: -100%;
+            z-index: 5;
+            height: 300px;
+            background: white;
+        }
+
+        .cover {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2;
+            display: none
+        }
+
+        .area {
+            color: #666
+        }
+
+        .area dl {
+            height: 100%;
+        }
+
+        .area dd {
+            display: flex;
+            height: 100%
+        }
+
+        .area dd ul {
+            flex: 1
+        }
+
+        .area dd li {
+            list-style: none;
+            cursor: pointer;
+        }
+
+        .provinceList {
+            height: 100%;
+            overflow: scroll;
+            border-right: 1px solid #eee;
+        }
+
+        .cityList {
+            height: 100%;
+            overflow: scroll
+        }
+
+        .provinceList li {
+            padding: 15px;
+            border-bottom: 1px solid #eee
+        }
+
+        .provinceList li.on {
+            color: #217bfb
+        }
+
+        .cityList li {
+            padding: 10px 0 10px 5px;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
+</head>
+
+<body class="">
+
+    <div class="regist">
+        <div class="boxtop">
+            <a href="" onclick="api.closeWin()"><i class="icon iconfont iconback"></i></a>
+            <div class="tle">注册</div>
+        </div>
+        <div class="empty" id="app">
+            <div class="logo">
+                <img src="../image/tools/logo.png" alt="">
+            </div>
+            <div class="box">
+                <div class="Oin">
+                    <text>手机号</text> <input type="number" name="phone" value="" placeholder="输入手机号" id="phone">
+                </div>
+                <div class="bottom">
+                    <text>验证码</text> <input type="text" name="" value="" placeholder="输入验证码" id="checkCode">
+                    <span class="Btn" id="btnGetCode" onclick="getCodex()">获取验证码</span>
+                </div>
+                <div class="Oin">
+                    <text>设置密码</text> <input type="password" name="password" value="" placeholder="设置8~16位密码"
+                        id="password">
+                </div>
+                <div class="Oin">
+                    <text>确认密码</text><input type="password" name="rePwd" value="" placeholder="请重复密码" id="rePwd">
+                </div>
+                <div class="Oin">
+                    <text>邀请码</text><input type="text" name="rePwd" value="" placeholder="邀请码(非必填)" id="yaocode">
+                </div>
+                <div class="Oin toggle">
+                    <text>城市</text><input type="text" name="" value="" placeholder="请输入所属城市(必填)" id="city" readonly
+                        onclick="chooseCity()">
+                </div>
+                <div class="sure" onclick="regist()">注册</div>
+
+            </div>
+        </div>
+
+        <div class="cover"></div>
+        <div class="area">
+            <dl>
+                <dt></dt>
+                <dd>
+                    <ul class="provinceList"></ul>
+                    <ul class="cityList"></ul>
+                </dd>
+            </dl>
+        </div>
+
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery-1.7.2.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+<script src="../script/tools.js"></script>
+<script src="../script/cityr.js"></script>
+
+<script type="text/javascript">
+
+    var xlon = null; var xlat = null;
+    var position = null;
+
+    apiready = function () {
+
+
+        /*
+        
+        */
+        api.requestPermission({
+            list: ['camera', 'location', 'photos', 'microphone'],
+            code: 1
+        }, function (ret, err) {
+            console.log(JSON.stringify(ret));
+        });
+
+        /*
+          api.confirm({
+                    msg: '应用需要您的授权才能定位',
+                    buttons: ['取消', '去设置']
+                }, function (ret) {
+                    if (ret.buttonIndex == 2) {
+                        api.requestPermission({
+                            list: [permission],
+                        }, function (res) {
+    
+                            console.log(JSON.stringify(res))
+                            alert(JSON.stringify(res))
+                          
+                        });
+                    }
+                });
+        */
+
+
+
+
+
+
+        api.setStatusBarStyle({
+            style: 'dark',
+            color: '#217bfb',
+        });
+
+        var map = api.require('bMap');
+
+
+
+        map.getLocation({
+            accuracy: '100m',
+            autoStop: true,
+            filter: 1
+        }, function (ret, err) {
+            if (ret.status) {
+                console.log(JSON.stringify(ret));
+                // lon = ret.lon;
+                // lat = ret.lat;
+                xlon = ret.lon;
+                xlat = ret.lat;
+                console.log("xlon:" + xlon);
+
+
+                var map = new BMap.Map();
+                var point = new BMap.Point(xlon, xlat);
+                //  var point = new BMap.Point(90.896327,39.679685);
+                var gc = new BMap.Geocoder();
+                gc.getLocation(point, function (rs) {
+                    var addComp = rs.addressComponents;
+                    console.log(JSON.stringify(addComp));
+                    //console.log(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+                    position = addComp.city;
+                    console.log("我的位置：" + posFormat(position));
+
+                    if (addComp.city == "" || addComp.city == undefined || addComp.city == null) {
+                        $(".toggle").show();
+
+                    } else {
+                        $(".toggle").hide();
+                        position = posFormat(position);
+                    }
+
+
+                });
+            } else {
+                console.log(JSON.stringify(err.code));
+                $(".toggle").show();
+            }
+        });
+        // console.log("lon:"+lon+"--lat:"+lat);
+
+
+
+
+
+    }
+
+
+
+    function getCode() {
+        console.log("获取验证码");
+        var phone = kong($api.byId('phone').value);
+        var password = kong($api.byId('password').value);
+        console.log(phone);
+        if (!isNotEmpry(phone) || !isTel(phone)) {
+            showTip("请输入有效的电话号码", 2000, "middle")
+            return;
+        }
+        this.
+
+            apidata({
+                url: "api/jed/get_phone_code",
+                data: {
+                    phone: phone,
+                    type: "register"
+                }
+            }, function (ret) {
+                if (ret) {
+                    api.alert({ msg: JSON.stringify(ret) });
+                } else {
+                    console.log(JSON.stringify(err));
+                    api.alert({ msg: JSON.stringify(err) });
+                }
+            })
+    }
+
+
+
+    /* 获取验证码 封装请求*/
+    var num = 60, timer = null;
+    function getCodex() {
+        console.log("获取验证码");
+        /* */
+        var phone = kong($api.byId('phone').value);
+        var password = kong($api.byId('password').value);
+        console.log(phone);
+        if (!isNotEmpry(phone) || !isTel(phone)) {
+            showTip("请输入有效的电话号码", 2000, "middle")
+            return;
+        }
+        var phone = $("#phone").val();
+        var sdata = {};
+        sdata.phone = phone;
+        sdata.type = "register";
+        console.log(JSON.stringify(sdata))
+        /* */
+        if (!$("#btnGetCode").hasClass("gray")) {
+            apidata({
+                url: "/api/jed/get_phone_code",
+                data: sdata
+
+            }, function (ret) {
+                if (ret.status == 200) {
+                    showTip(ret.return_msg, 2000, "middle");
+                    countdown();
+                } else {
+                    showTip(ret.return_msg)
+                }
+
+            }, function (err) {
+                console.log(err);
+            })
+        }
+
+    }
+
+
+    /*注册*/
+    function regist() {
+        var area;
+        if (position) {
+            area = position
+        } else {
+            area = $("#city").val()
+        }
+
+
+
+        console.log("我要注册");
+        var phone = $("#phone").val();
+        var pwd = $("#password").val();
+        var rePwd = $("#rePwd").val();
+        var ccode = $("#checkCode").val();
+        var sdata = {
+            phone: phone,
+            password: pwd,
+            re_password: rePwd,
+            code: ccode,
+            openid: api.appId,
+            area: area
+
+        };
+        console.log(phone + "-" + pwd + "-" + ccode);
+        console.log(JSON.stringify(sdata));
+
+        if (!isNotEmpry(phone) || !isTel(phone)) {
+            showTip("请输入有效的电话号码", 2000, "middle")
+            return;
+        }
+        if (!isNotEmpry(pwd) || !isPwd(pwd)) {
+            showTip("请输入6-20位密码!", 2000, "top")
+            return;
+        }
+
+        if (!isNotEmpry(rePwd) || !isPwd(rePwd)) {
+            showTip("重复密码必须6位以上!", 2000, "top")
+            return;
+        }
+        if (pwd != rePwd) {
+            showTip("输入的密码不一致", 2000, "middle")
+            return
+        }
+        if (!isNotEmpry(ccode)) {
+            showTip("请输入验证码", 2000, "top")
+            return;
+        }
+
+        apidata({
+            url: "/api/jed/register_user",
+            data: sdata
+        },
+            function (ret) {
+                if (ret.status == 200) {
+                    showTip("注册成功，准备跳转到登录页", 2000, "top");
+                    api.openWin({
+                        name: "login",
+                        url: "./login.html"
+                    })
+
+                } else {
+                    showTip(ret.status + "--" + ret.return_msg, 2000, "top")
+                }
+
+
+            }, function (err) {
+
+
+            })
+
+    }
+
+
+    baidu();
+
+    /* */
+    function countdown() {
+
+        clearTimeout(timer);
+        var sc = $("#btnGetCode");
+        if (num == 0) {
+            sc.removeClass("gray").text("重发");
+            num = 60;
+            clearTimeout(timer);
+            timer = null;
+            return;
+        } else {
+            sc.addClass("gray").text(num);
+            num--;
+        }
+        timer = setTimeout(() => {
+            countdown();
+        }, 1000)
+    }
+
+
+    function baidu() {
+        //默认地理位置设置为上海市浦东新区  
+        var x = 121.48789949, y = 31.24916171;
+
+        //    console.log("eeeeee");
+
+    }
+
+
+
+    function posFormat(str) {
+
+        // console.log(address);  
+        //return str.replace(/.+?(省|市|自治区|自治州|县|区)/g,'')
+        // return address
+        //     var adds="";
+        //   console.log( str.substring(0,str.length-1)) 
+        //   console.log( str.substring(str.length-1,str.length)) 
+        //     return str;
+        var cityName = "";
+        var last = str.substring(str.length - 1, str.length);
+        if (last == "市") {
+            cityName = str.substring(0, str.length - 1)
+        } else {
+            cityName = str;
+        }
+        return cityName
+
+
+    }
+
+
+
+
+</script>
+
+</html>

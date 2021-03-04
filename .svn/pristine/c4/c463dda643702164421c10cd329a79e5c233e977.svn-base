@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>底部导航XXXX</title>
+    <link rel="stylesheet" type="text/css" href="./css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/style.css"/>
+    <style>
+        header{ background-color: #f2f2f2;}
+        header ul li { height: 50px; line-height: 50px; text-align: center; display: none; color: #323237; position: relative;font-size: 18px;  }
+        header ul li.active{ display: block; }
+        #footer{  background-color: #f2f2f2; }
+        #footer ul li{  padding-top: 36px; padding-bottom: 4px; background: url() no-repeat center 2px; background-size: auto 30px; text-align: center; }
+        #footer ul li.active{ color: #6ab494;}
+        #footer ul li:nth-child(1){ background-image: url(./image/bottombtn0101.png); }
+        #footer ul li:nth-child(2){ background-image: url(./image/bottombtn0201.png); }
+        #footer ul li:nth-child(3){ background-image: url(./image/bottombtn0301.png); }
+        #footer ul li:nth-child(4){ background-image: url(./image/bottombtn0401.png); }
+        #footer ul li:nth-child(5){ background-image: url(./image/bottombtn0401.png); }
+        #footer ul li:nth-child(1).active{ background-image: url(./image/bottombtn0102.png); }
+        #footer ul li:nth-child(2).active{ background-image: url(./image/bottombtn0202.png); }
+        #footer ul li:nth-child(3).active{ background-image: url(./image/bottombtn0302.png); }
+        #footer ul li:nth-child(4).active{ background-image: url(./image/bottombtn0402.png); }
+        #footer ul li:nth-child(5).active{ background-image: url(./image/bottombtn0402.png); }
+        .flex-con{
+          overflow: auto
+        }
+    </style>
+</head>
+<body>
+<div id="wrap" class="flex-wrap flex-vertical">
+
+    <!-- 111111111111111111122334<br>
+    111111111111111<br>
+    11111111111111切尔奇翁1<br>
+    111111111111111www<br>
+    111111111111111<br>
+    11111111111111切尔奇二无群二v1<br>
+    111111111111111<br> -->
+</div>
+</body>
+</html>
+<script type="text/javascript" src="script/api.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        
+    //    //异步返回结果：
+    //     api.getPrefs({
+    //         key: 'haslogin'
+    //     }, function(ret, err) {
+    //        console.log(JSON.stringify(ret));
+           
+    //     });
+      
+           /*  var isLogin = api.getPrefs({
+            sync: true,
+            key: 'haslogin'
+        });
+
+           console.log(JSON.stringify(isLogin));
+
+  */
+        var isLogin=true;
+
+              if(isLogin == 'false' || isLogin == "" ||isLogin ==''){
+             api.openWin({
+                        name:"login",
+                        // url:"./html/login.html",
+                        url:"./html/index.html",
+                        reload:true
+                    })
+            }else{
+                api.openWin({
+                        name:"home",
+                        url:"./html/home.html",
+                        reload:true
+                    })
+                
+            }
+           
+         
+         
+
+  
+   
+
+
+
+    }
+
+
+    
+
+</script>

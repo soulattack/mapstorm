@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>分享有礼</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+     
+  </head>
+  <body>
+        <header class="header" id="header">
+                <a class="headerLeft" onclick="api.closeWin()">
+                    <i class="icon iconfont iconback"></i>
+                </a>
+                <div class="headerTle">分享</div>
+               
+        </header>
+        <div class="share">
+              <div class="s1">
+                  <img src="../image/share.png" alt="">
+              </div>
+             
+              <div class="code">
+                  <div id="qrcode"></div>
+              </div>  
+              <div class="ids">
+                     
+               </div>
+              <div style="display: none">
+                  <ul>
+                      <li>1.分享您的推广二维码或者链接给浩宇，好友完成账号注册</li>
+                      <li>2.好友试用满意后，通过APP或者公众号在线支付开通vip会员</li>
+                      <li>3.系统跟进你的好友实付金额不低于10%的比例计算等额积分至您的账户，你可以跟进个人中心规则进行提现</li>
+                      <li>4.</li>
+                  </ul>
+              </div>
+        </div>
+  </body>
+  <script type="text/javascript" src="../script/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/tools.js"></script>
+ 
+  <script type="text/javascript" src="../script/qrcode.min.js"></script>
+  <script type="text/javascript">
+      apiready = function(){
+            fixbar();
+      };
+      
+      var uuid=$api.getStorage("uid");
+     console.log(uuid);
+   $(".ids").html("邀请码："+uuid);
+
+
+    // var rgurl="http://www.acfun.cn";
+     var rgurl="http://www.keyuanbang.net/login/register_user.html?pstr="+uuid;
+
+      var qrcode = new QRCode(document.getElementById("qrcode"), {
+     	width : 150,
+	    height : 150
+      });
+
+      qrcode.makeCode(rgurl);
+
+  </script>
+  </html>
+ <style>
+    body{background: white}
+    .share{padding: 68px 0 0 0 }
+    
+    .s1 img {width: 100%}
+
+    #qrcode{ text-align: center; margin: 20px 0 0 0}
+    #qrcode img{ margin: 0 auto}
+
+    .ids{ text-align: center;font-size: 14px; padding: 10px;}
+
+ </style>

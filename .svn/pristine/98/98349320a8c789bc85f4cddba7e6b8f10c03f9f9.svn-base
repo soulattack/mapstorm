@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/css.css" />
+
+
+</head>
+
+<body>
+    <header class="header" id="header">
+        <a class="headerLeft" onclick="api.closeWin()">
+            <i class="icon iconfont iconback"></i>
+        </a>
+        <div class="headerTle">修改信息</div>
+    </header>
+
+    <div class="edit">
+        <div>
+            <dl>
+                <dt onclick="up()">
+                    <img src="" alt="">
+                </dt>
+                <dd><button>确定</button></dd>
+            </dl>
+        </div>
+
+        <div class="head" tapmode onclick="showAction()"><img id="img_src" src="../image/shoplogo.jpg" /></div>
+
+        <div id="taskProvList">
+            <input type="file" class="loader" id="loader" class="imgupload">
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+<script type="text/javascript">
+var idid=$api.getStorage("uid");
+
+var ssign= $api.getStorage('sign');
+var  ssign_o= $api.getStorage('sign_o'),
+    apiready = function () {
+
+        fixbar();
+
+    };
+    function up() {
+        console.log("DEDE")
+
+        api.confirm({
+            title: "提示",
+            msg: "选择图片",
+            buttons: ["现在照", "相册选", "取消"]
+        }, function (ret, err) {
+            //定义图片来源类型
+            var sourceType;
+            if (1 == ret.buttonIndex) {/* 打开相机*/
+                sourceType = "camera";
+                openPicture(sourceType);
+            } else if (2 == ret.buttonIndex) {
+                sourceType = "album";
+                openPicture(sourceType);
+            } else {
+                return;
+            }
+        });
+    }
+
+    function openPicture(sourceType) {
+        var q = 100;
+        //获取一张图片
+        api.getPicture({
+            sourceType: sourceType,
+            //  sourceType: "library",
+            encodingType: 'png',
+            mediaValue: 'pic',
+
+
+            destinationType: 'url',
+
+            allowEdit: false,
+
+            // quality: q
+
+
+        }, function (ret, err) {
+            console.log(JSON.stringify(ret));
+
+            //   $api.attr($api.byId('aaa'),'src', ret.data)
+
+
+            /* */
+
+
+            api.ajax({
+
+
+                url: "http://103.45.123.251/api/jed/pic_uploads",
+
+                method: 'post',
+                cache: 'false',
+                timeout: 30,
+                dataTpye: 'json',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                    sign: $api.getStorage('sign'),
+                    sign_o: $api.getStorage('sign_o'),
+
+                },
+                data: {
+                    files: {
+                        file: ret.data
+                    }
+                }
+            }, function (ret, err) {
+                console.log(JSON.stringify(ret));
+
+
+
+            });
+
+
+            api.ajax({
+
+                url: "http://www.keyuanbang.net/api/jed/pic_uploads",
+
+                method: 'post',
+                cache: 'false',
+                timeout: 30,
+                dataTpye: 'json',
+
+
+                data: {
+                    files: {
+                        file: ret.data
+                    }
+                }
+
+            }, function (ret, err) {
+                console.log(JSON.stringify(ret))
+            })
+
+
+
+        });
+    };
+
+
+    function showAction() {
+        api.actionSheet({
+            title: '上传图片',
+            cancelTitle: '取消',
+            buttons: ['拍照', '从手机相册选择']
+        }, function (ret, err) {
+            if (ret) {
+                getPicture(ret.buttonIndex);
+            }
+        });
+    }
+    function getPicture(sourceType) {
+        if (sourceType == 1) { // 拍照
+            api.getPicture({
+                sourceType: 'camera',
+                encodingType: 'jpg',
+                mediaValue: 'pic',
+                allowEdit: false,
+                destinationType: 'url',
+                quality: 100,
+                targetWidth: 200,
+                targetHeight: 200,
+                saveToPhotoAlbum: true
+            }, function (ret, err) {
+                if (ret) {
+                    /*
+                     api.showProgress({
+                        style: 'default',
+                        animationType: 'fade',
+                        text: '图片上传中...',
+                        modal: false
+                    });
+                    */
+
+                    document.getElementById("img_src").src = ret.data;//图片链接
+                    uploading(ret.data)
+                }
+            });
+        } else if (sourceType == 2) { // 从相机中选择
+            api.getPicture({
+                sourceType: 'library',
+                encodingType: 'jpg',
+                mediaValue: 'pic',
+                destinationType: 'url',
+                quality: 100,
+                targetWidth: 200,
+                targetHeight: 200
+            }, function (ret, err) {
+                if (ret) {
+                    /*
+                      api.showProgress({
+                        style: 'default',
+                        animationType: 'fade',
+                        text: '图片上传中...',
+                        modal: false
+                    });
+                    */
+
+                    document.getElementById("img_src").src = ret.data;//图片链接
+                    uploading(ret.data)
+                }
+            });
+        } else {
+            return;
+        }
+    }
+
+    //上传
+
+    function uploading(avatar) {
+
+        console.log(avatar+"="+idid+"ssign:"+ssign)
+        api.ajax({
+           //  url: 'http://103.45.123.251/api/jed/pic_uploads',
+            // url:"http://waimai.tlinghuo.com/api/jed/pic_uploads",
+            url: "http://www.keyuanbang.net/api/jed/pic_uploads",
+           //  url: 'http://fp2xsx.natappfree.cc/api/upload/1',
+            method: 'post',
+           headers: {
+                //'Content-Type': 'multipart/form-data',
+              //  'Content-Type': 'application/json;charset=utf-8',
+               // 'Content-Type': 'image/*;charset=utf-8',
+            //    sign: $api.getStorage('sign'),
+            //    sign_o: $api.getStorage('sign_o')
+               sign: ssign,
+               sign_o: ssign_o
+
+           },
+            data: {
+
+                files: {
+                    file: avatar
+                },
+                // files:avatar,
+
+                 values: {
+                    uid:  idid
+                 }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                console.log(JSON.stringify(ret))
+                console.log("成功")
+            } else {
+                console.log(JSON.stringify(err))
+                console.log("失败")
+
+            }
+        })
+    }
+
+    // 
+
+
+    $(document).ready(function () {
+
+        $("#loader").on("change", function () {
+            console.log("改变");
+            var _this = $(this);
+            console.log(($(this).get(0).files[0]))
+        //    alert(JSON.stringify($(this).get(0)))
+            var formdata = new FormData();
+           formdata.append('file',$(this).get(0).files[0]);
+            var ff=$(this).get(0).files[0];
+
+            console.log(ff);
+            formdata.append('file', $(this).get(0).files[0]);
+           // formdata.append("sign",ssign);
+            //formdata.append("sign_o",ssign_o);
+         formdata.append("uid",idid);
+            //  console.log($(this).get(0).files[0])
+            console.log(JSON.stringify(formdata));
+
+            $.ajax({
+
+                // url: 'http://shop.88zhaopu.com/api/jed/pic_uploads',
+               //   url: 'http://shop.88zhaopu.com/api/jed/pic_uploads',
+               //   url:"http://shop.xzwanqun.com//task/upload",
+             //   url:"http://waimai.tlinghuo.com/api/jed/pic_uploads",
+             url: "http://www.keyuanbang.net/api/jed/pic_uploads",
+
+             headers:{
+            
+          
+               sign: ssign,
+               sign_o: ssign_o
+
+              },
+                data:formdata,
+                type: "POST",
+                async: false,
+                cache: false,
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    console.log("ok");
+                    console.log(JSON.stringify(data));
+
+                },
+                error: function (data) {
+               console.log( JSON.stringify(data) )
+                }
+            });
+
+
+
+
+
+        });
+
+
+
+
+
+
+    })
+
+
+
+</script>
+
+</html>
+<style>
+  
+
+    .edit dt {
+        cursor: pointer;
+    }
+
+    .edit dd {
+        width: 120px;
+        height: 120px;
+        background: #00aced
+    }
+
+    .edit img {
+        display: block;
+        width: 100px;
+        height: 100px
+    }
+</style>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+ 
+   
+  </head>
+  <body>
+        <header class="header" id="header">
+                <a class="headerLeft" onclick="api.closeWin()">
+                    <i class="icon iconfont iconback"></i>
+                </a>
+                <div class="headerTle">余额</div>       
+        </header>
+
+         <div class="wallet" id="vue">
+           <div class="w01">
+             <dl>
+                 <dt>账户余额(元)</dt>
+                 <dd class="txt">{{money}}</dd>
+             </dl>
+           </div>
+           <div class="w02">
+               <div class="links">
+                    <ul>
+                        <li onclick="toWithdraw()"><i class="iw01"></i><span>提现</span></li>
+                        <li onclick="withdrawList()"><i class="iw02"></i><span>提现记录</span></li>
+                        <li onclick="toSub()"><i class="iw03"></i><span>分销记录</span></li>
+                    </ul>
+               </div>            
+           </div>
+         </div>
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/tools.js"></script>
+  <script type="text/javascript" src="../script/vue.min.js"></script>
+  <script type="text/javascript">
+      apiready = function(){ 
+          fixbar();
+
+          var vm=new Vue({
+             el:"#vue",
+             data:{
+               phone:"",
+               money:""
+             },
+            
+             mounted:function(){
+               this.getData();
+             },
+             methods:{
+                getData(){
+                    console.log("个人中心 数据初始化");
+                    var sdata={
+                        uid:$api.getStorage("uid")
+                    }
+
+                apidata({
+                    url:"/api/jed/user_info",
+                    data:sdata
+                },function(ret){
+                    console.log(JSON.stringify(ret));
+                
+                     vm.phone=ret.data.phone;
+                    // vm.is_vip=ret.data.is_vip;
+                    // vm.msg_total=ret.data.msg_total;
+                    // vm.msg_last=ret.data.msg_last;
+                    // vm.head=ret.data.head;
+                    vm.money=ret.data.money
+
+                },function(err){
+
+                })
+
+               }
+                
+
+             }
+          })
+
+      };
+
+       function toWithdraw(){
+         api.openWin({
+            name:"withdraw",
+            url:"./withdraw.html"
+         })
+       };
+
+       function withdrawList(){
+          api.openWin({
+              name:"withdrawRecord",
+              url:"./withdrawRecord.html"
+          })
+          
+
+       }
+       function withdrawList(){
+          api.openWin({
+              name:"withdrawRecord",
+              url:"./withdrawRecord.html"
+          })
+          
+
+       };
+       function toSub(){
+          api.openWin({
+              name:"myDistributions",
+              url:"./myDistributions.html"
+          })
+          
+
+       }
+
+
+  </script>
+  </html>
+  <style>
+      body{background: white}
+        .wallet{padding: 68px 0 0 0;font-size: 14px}
+
+  .w01{}
+  .w01 dl{ background:#217bfb; color: white; padding: 20px}
+  .w01 dl dt{font-size: 20px; margin: 0 0 10px 0}
+  .w01 dl dd{font-size: 18px}
+
+  .links{
+         margin: 10px 0 0 0;    
+         padding: 20px 0px;
+
+        }
+  
+   .links ul li{
+        padding: 15px 20px;
+        border-top: 1px solid #f1f2f4; 
+         background: white;
+        display: flex;
+        align-items: center;
+        position: relative
+    }
+    .links ul li i{
+        display: block;
+        width: 20px;
+        height: 20px;
+        background-position: center;
+        background-size: 20px;
+        background-repeat: no-repeat;
+        margin: 0 10px 0 0;
+    }
+  .links ul li i.iw01{background-image: url(../image/user/u_cash.png)}
+  .links ul li i.iw02{background-image: url(../image/user/cashlist.png)}
+  .links ul li i.iw03{background-image: url(../image/user/sublist.png)}
+
+    .links ul li:last-child{
+        border-bottom: 1px solid #f1f2f4; 
+    }
+    .links ul li::after{
+        content: "";
+        display: block;
+        height: 10px;
+        width: 10px;
+        position: absolute;
+        border-top:2px solid #7f7f7f;
+        border-left: 2px solid  #7f7f7f;
+        transform: rotate(135deg);
+        right: 20px;
+        top:20px;
+
+    }
+    .txt{height: 24px; line-height: 24px}
+  </style>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+        <meta name="format-detection" content="telephone=no">
+    <title>我的推广</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+
+    <style>
+        #header {
+            background-color: #217bfb;
+            color: white;
+            height: 50px;
+            line-height: 50px;
+            text-align-last: center;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header">
+        <a class="headerLeft" onclick="api.closeWin()">
+            <i class="icon iconfont iconback"></i>
+        </a>
+        <div class="headerTle">我的推广</div>
+    </header>
+
+    <div class="pop" id="vue">
+        <div class="popListWrap">
+            <ul class="popList">
+                <li v-for="(item,index) in list" :key="item.id" @click="toEdit(item)">
+                    <div class="pWrap">
+                        <div class="pImg">
+                            <img :src="item.pics?item.pics.split(',')[0]:'../image/tools/logo.png'" alt="">
+
+                            <!-- <img src="../image/shoplogo.jpg" alt=""> -->
+                            <!-- <img :src="item.img==''||item.img==' '?'../image/shoplogo.jpg':item.img" alt=""> -->
+                        </div>
+                        <div class="pInfo">
+                            <p class="pName">{{item.goods}}</p>
+                            <p class="pPhone">{{item.phone}}</p>
+                        </div>
+                        <div class="pEdit"><span>编辑</span></div>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript">
+    var vm;
+    var index = 0, size = 7;
+    apiready = function () {
+
+        api.addEventListener({
+           name: 'refreshEvent'
+      }, function(ret, err) {
+          if (ret.value.state == 'refresh') {
+            //  abc();
+            console.log("ZDWQWEDSS");
+        window.location.reload()
+          }
+     });
+
+        api.setRefreshHeaderInfo({
+            loadingImg: 'widget://image/refresh.png',
+            bgColor: '#217bfb',
+            textColor: '#fff',
+            textDown: '下拉刷新...',
+            textUp: '松开刷新...'
+        }, function (ret, err) {
+            console.log(JSON.stringify(ret, err));
+
+            //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
+            if (ret) {
+                console.log(5651);
+                api.refreshHeaderLoadDone(); //恢复默认状态
+                //重新加载当前页面
+                window.location.reload();
+
+            } else {
+                console.log(3632);
+            }
+        });
+        fixbar()
+
+        vm = new Vue({
+            el: "#vue",
+            data: {
+                list: []
+            },
+
+            mounted: function () {
+                this.getData()
+            },
+            methods: {
+                getData() {
+                    datas();
+                },
+                toEdit(item) {
+                    api.openWin({
+                        name: "publishEdit",
+                        url: "./publishEdit.html",
+                        pageParam: {
+                            item: item
+                        }
+                    })
+
+                }
+            }
+        })
+
+        /*vue end*/
+
+        api.addEventListener({
+            name: 'scrolltobottom',
+            extra: { threshold: 10 }
+        }, function (ret, err) {
+
+            addDatas();
+
+        });
+
+    };
+    /* api end*/
+    function addDatas() {
+
+        console.log("我要加载 新的数据");
+        index += size;
+        datas();
+    }
+    function datas() {
+        var sdata = {
+            uid: $api.getStorage("uid"),
+            from_uid: $api.getStorage("uid"),
+            start: index,
+            num: size
+        };
+        apidata({
+            url: "/api/jed/purchase_lists",
+            data: sdata
+        }, function (ret) {
+            //   console.log(JSON.stringify(ret.data));
+            if (ret.data.length == 0) {
+                showTip("没有更多了", 800, "middle")
+            }
+            var xlist = ret.data;
+            // vm.list=ret.data;
+            xlist.forEach(element => {
+                // element.img=element.pics.split(",")[0];
+
+                vm.list.push(element)
+            });
+            //  vm.list=xlist;
+            // console.log(JSON.stringify(xlist));
+
+            /*
+               xlist.forEach(ele=>{
+                   vm.list.push(ele)
+              })
+            
+            */
+
+            //console.log(JSON.stringify(xlist));
+
+
+        }, function (err) {
+
+        })
+    }
+
+
+
+</script>
+<style>
+    html,body{background: white}
+    .pop {
+        font-size: 14px;
+        padding-top: 80px;
+    }
+
+    .popListWrap {
+        margin: 10px 15px;
+        background: white;
+        border-radius: 10px;
+        /* padding: 7px 10px */
+    }
+
+   
+
+    .popList li {
+        border-bottom: 1px solid #b5b5b5;
+        padding-bottom: 10px;
+        margin: 10px 0
+    }
+
+    .popList li:last-child {
+        border-bottom: none;
+        padding-bottom: 0px;
+    }
+
+    .popList li .pWrap {
+        display: flex;
+        align-items: center;
+        height: 80px;
+    }
+
+    .popList li .pWrap .pImg {
+        width: 25%;
+        height: 80px;
+    }
+
+    .popList li .pWrap .pImg img {
+        width: 100%;
+        height: 100%;
+        display: block
+    }
+
+    .popList li .pWrap .pInfo {
+        margin: 0 10px;
+        line-height: 36px;
+        flex: 1;
+        font-size: 18px;
+        color: #363636;
+        width: 100px
+    }
+
+    .popList li .pWrap .pEdit {
+        width: 20%;
+        color: #217bfb
+    }
+
+    .popList li .pName {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%
+    }
+</style>
+
+</html>

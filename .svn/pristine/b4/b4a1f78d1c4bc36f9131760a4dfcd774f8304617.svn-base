@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>我的短信</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+ 
+  </head>
+  <body>
+        <header class="header" id="header">
+                <a class="headerLeft" onclick="api.closeWin()">
+                    <i class="icon iconfont iconback"></i>
+                </a>
+                <div class="headerTle">我的短信</div>
+                <!-- 
+                     <a class="headerRight addMsg" onclick="groupSend()">
+                    <i class="icon iconfont iconmessage"></i>
+                </a>
+                 -->
+               
+            </header>
+
+            <!--  -->
+       <div class="shortletter join" id="vue">
+            <div class="w01">
+                    <dl>
+                        <dt>短信剩余数量(条)</dt>
+                        <dd class="txt">{{msgNum}}</dd>
+                    </dl>
+             </div>
+           <div class="w02">
+                <div class="links">
+                        <ul>
+                            <li onclick="toRecharge()"><i class="s01"></i><span>充值短信</span></li>
+                            <li onclick="toRecord()"><i class="s02"></i><span>短信明细</span></li>
+                            <li onclick="toMd()"><i class="s03"></i><span>短信模板</span></li>
+                            <!-- <li onclick="groupSend()"><i class="s04"></i><span>发短信</span></li> -->
+                        </ul>
+                   </div> 
+           </div>
+         <!-- 
+              <ul class="itemList">
+            <li>
+                <div onclick="toRecord()">
+                    <i class="icon iconfont iconshenqing2"></i><span>短信记录</span>
+                </div>
+            </li>
+         
+            <li>
+              <div  onclick="toMd()">
+                 <i class="icon iconfont iconbiaodan"></i><span>短信模板</span>
+               </div>
+           </li>
+           <li>
+             <div  onclick="toRecharge()">
+                     <i class="icon iconfont iconfenxi "></i><span>短信充值</span>
+             </div>
+           </li>
+          </ul>
+          -->
+         
+       </div>
+             
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/tools.js"></script>
+  <script type="text/javascript" src="../script/vue.min.js"></script>
+
+  <!-- <script type="text/javascript" src="../script/normal.js"></script> -->
+  <script type="text/javascript">
+
+    apiready=function(){
+      
+        fixbar();
+        var vm=new Vue({
+             el:"#vue",
+             data:{
+               phone:"",
+               money:"",
+               msgNum:""
+             },
+            
+             mounted:function(){
+               this.getData();
+             },
+             methods:{
+                getData(){
+                    console.log("个人中心 数据初始化");
+                    var sdata={
+                        uid:$api.getStorage("uid")
+                    }
+
+                apidata({
+                    url:"/api/jed/user_info",
+                    data:sdata
+                },function(ret){
+                    console.log(JSON.stringify(ret));
+                
+                     vm.phone=ret.data.phone;
+                 
+                    vm.money=ret.data.money
+                    vm.msgNum=ret.data.msg_last
+
+                },function(err){
+
+                })
+
+               }
+                
+
+             }
+          })
+
+   };
+
+  
+   function toMd(){
+        api.openWin(  {           
+            name:"shortletterMould",
+           url: "./shortletterMould.html"
+       }) 
+
+   }
+    
+   function toVideo(){
+        api.openWin( {           
+            name:"trainVideo",
+            url: "./trainVideo.html"
+            }) 
+
+   }
+     
+   function groupSend(){
+        api.openWin({         
+            name:"myGroupSend",
+            url: "./myGroupSend.html"
+        }) 
+
+   }
+   
+
+   function toRecord(){
+        api.openWin({         
+            name:"shortletterRechargeRecord",
+            url: "./shortletterRechargeRecord.html"
+        }) 
+
+   }
+   
+
+   function toRecharge(){
+        api.openWin({         
+            name:"shortletterRecharge",
+            url: "./shortletterRecharge.html"
+        }) 
+
+   }
+     
+ 
+  </script>
+</html>
+
+
+<style>
+  body{background: white}
+ .iconmessage{color:#14af9d}
+ .join{font-size: 16px;padding: 68px 0 0 0 }
+ .join .itemList{ margin: 20px 15px}
+ .join .itemList li{ margin:  10px 0; padding: 10px 15px; background: white; border-radius:15px;position: relative;}
+ .join .itemList li::after{
+    content: "";
+    position: absolute;
+    right: 15px;
+    top:17px;
+
+    width: 11px;
+    height: 11px;
+    transform: rotate(135deg);
+    border-top:2px solid #434343;
+    border-left:2px solid #434343;
+
+    
+}
+ .join .itemList li i{ font-size: 20px;}
+ .join .itemList li span{ font-size: 18px; margin: 0 5px}
+
+ .addMsg{margin: 0 15px 0 0;color:cadetblue}
+ .addMsg i{font-size: 20px; font-weight: bold}
+ .headerLeft i{font-size: 26px;margin: 0 0 0 10px}
+
+ .w01 dl{ background:#217bfb; color: white; padding: 20px}
+  .w01 dl dt{font-size: 20px; margin: 0 0 10px 0}
+  .w01 dl dd{font-size: 18px}
+
+  .links{
+        margin: 10px 0 0 0;
+      
+      
+         padding: 20px 0px;
+         }
+   .links ul{ }
+   .links ul li{
+        padding: 15px 20px;
+        border-top: 1px solid #f1f2f4; 
+         background: white;
+        display: flex;
+        align-items: center;
+        position: relative
+    }
+    .links ul li i{
+        display: block;
+        width: 20px;
+        height: 20px;
+        background-position: center;
+        background-size: 20px;
+        background-repeat: no-repeat;
+        margin: 0 10px 0 0;
+    }
+  .links ul li i.s01{background-image: url(../image/user/u_recharge.png)}
+  .links ul li i.s02{background-image: url(../image/user/u_list.png)}
+  .links ul li i.s03{background-image: url(../image/user/u_md.png)}
+  .links ul li i.s04{background-image: url(../image/user/u_send.png)}
+
+    .links ul li:last-child{
+        border-bottom: 1px solid #f1f2f4; 
+    }
+    .links ul li::after{
+        content: "";
+        display: block;
+        height: 10px;
+        width: 10px;
+        position: absolute;
+        border-top:2px solid #7f7f7f;
+        border-left: 2px solid  #7f7f7f;
+        transform: rotate(135deg);
+        right: 20px;
+        top:20px;
+    }
+    .txt{height: 24px;line-height: 24px}
+</style>

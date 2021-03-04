@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>个人中心</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/css.css" />
+
+</head>
+
+<body>
+    <header class="header" id="header">
+        <a class="headerLeft" onclick="api.closeWin()">
+            <i class="icon iconfont iconback"></i>
+        </a>
+        <div class="headerTle">个人中心</div>
+    </header>
+    <!--  -->
+
+    <div class="m" id="vue">
+        <div class="personal">
+            <ul class="personalInfoList">
+                <li onclick="pic()">
+                    <!-- <li onclick="editpic()"> -->
+                    <div class="ii01"><span>头像</span></div>
+
+                    <div class="ii02">
+                        <!-- <img src="../image/user/u1.jpg" alt=""> -->
+                        <img class="img" id="img" :src="head" alt="">
+                    </div>
+                </li>
+
+                <li>
+                    <div class="ii01"><span>电话</span></div>
+
+                    <div class="ii02">
+                        <span>{{phone}}</span>
+                    </div>
+
+                </li>
+            </ul>
+
+        </div>
+
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+<script type="text/javascript" src="../script/jquery-3.4.1.min.js"></script>
+
+<script type="text/javascript">
+    var idid = $api.getStorage("uid");
+    var ssign = $api.getStorage('sign');
+    var ssign_o = $api.getStorage('sign_o'),
+        apiready = function () {
+            fixbar();
+            var vm = new Vue({
+                el: "#vue",
+                data: {
+                    msg_total: 0,
+                    msg_last: 0,
+                    phone: "",
+                    is_vip: "",
+                    head: ""
+                },
+                computed: {
+                    msg_remain: function () {
+                        return this.msg_total - this.msg_last;
+                    }
+                },
+                mounted: function () {
+                },
+                created: function () {
+                    this.getData();
+                },
+                methods: {
+                    getData() {
+                        var sdata = {
+                            uid: $api.getStorage("uid")
+                        }
+                        apidata({
+                            url: "/api/jed/user_info",
+                            data: sdata
+                        }, function (ret) { 
+                            vm.phone = ret.data.phone;
+                            vm.is_vip = ret.data.is_vip;
+                            vm.msg_total = ret.data.msg_total;
+                            vm.msg_last = ret.data.msg_last;
+                            vm.head = ret.data.head
+                        }, function (err) {
+                        })
+                    }
+                }
+            })
+        };
+    //   function toEdit(){
+    //      api.openWin({
+    //          name: 'personalEdit',
+    //          url: 'personalEdit.html'
+    //      })
+    //   }
+    function pic(params) {
+        api.actionSheet({
+            title: '上传图片',
+            cancelTitle: '取消',
+            buttons: ['拍照', '从手机相册选择']
+        }, function (ret, err) {
+            if (ret) {
+                getPicture(ret.buttonIndex);
+            }
+        });
+    }
+    /*修改头像*/
+    function getPicture(sourceType) {
+        var type = '';
+        if (sourceType == 1) { // 拍照
+            type = 'camera'
+        } else {
+            type = 'album'
+        }
+        api.getPicture({
+            sourceType: type,
+            encodingType: 'jpg',
+            mediaValue: 'pic',
+            allowEdit: false,
+            destinationType: 'url',
+            quality: 100,
+            targetWidth: 200,
+            targetHeight: 200,
+            saveToPhotoAlbum: true
+        }, function (ret, err) {
+            if (ret) {
+                document.getElementById("img").src = ret.data;//图片链接
+                uploading(ret.data)
+            }
+        });
+    }
+    //上传
+    function uploading(avatar) {
+        api.ajax({
+            url: "http://www.keyuanbang.net/api/jed/pic_uploads",
+            method: 'post',
+            headers: {
+                sign: ssign,
+                sign_o: ssign_o
+            },
+            data: {
+                files: {
+                    file: avatar
+                },
+                values: {
+                    uid: idid
+                }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                console.log(JSON.stringify(ret))
+                console.log("成功")
+                edituser(ret.data.url)
+            } else {
+                console.log(JSON.stringify(err))
+                console.log("失败")
+            }
+        })
+    }
+    /*编辑用户信息*/
+    function edituser(params) {
+        console.log(params);
+        
+        apidata({
+            url:'/api/jed/user_info_edit',
+            data:{
+                uid: $api.getStorage("uid"),
+                head:params
+            }
+        },function (ret) {
+            console.log(JSON.stringify(ret));
+                  
+        },function (err) {
+            
+        })
+      
+        
+    }
+</script>
+<style>
+    .m {
+        padding: 58px 0 0 0
+    }
+
+    html,
+    body {
+        background-color: white;
+    }
+</style>
+
+</html>

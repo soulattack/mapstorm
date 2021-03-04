@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+    content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+  <title>发布编辑</title>
+  <link rel="stylesheet" type="text/css" href="../css/api.css" />
+  <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+  <link rel="stylesheet" type="text/css" href="../css/mobileSelect.css" />
+  <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  <link rel="stylesheet" type="text/css" href="../css/base.css" />
+  <style>
+    .tradeType {
+      padding-left: 10px;
+    }
+
+    .imgItem {
+      position: relative;
+    }
+
+    .imgItem .close {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      display: block;
+      background-color: red;
+      color: white;
+      right: -3px;
+      top: -3px;
+      border-radius: 50%;
+      z-index: 666;
+      text-align: center;
+    }
+
+    .groupsend {
+      font-size: 14px;
+      padding: 64px 0 0 0;
+      overflow: hidden;
+    }
+
+    .gsWrap {
+      margin: 15px 10px 20px;
+      background: white;
+      border-radius: 15px;
+      padding: 10px 20px;
+    }
+
+    #down {
+      position: absolute;
+      transform: rotate(90deg);
+      right: 5px;
+      top: 5px;
+    }
+
+    .gsList li {
+      margin: 10px 0
+    }
+
+    .gsList li input {
+      width: 100%;
+      background: #eee;
+      border-radius: 10px;
+      height: 30px;
+    }
+
+    .gsList li dl dt b {
+      font-size: 16px;
+      font-weight: normal;
+      position: relative;
+      padding: 0 10px;
+      height: 30px;
+      line-height: 30px;
+      display: inline-block;
+    }
+
+    .gsList li dl dt b::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 3px;
+      height: 50%;
+      margin-top: -7px;
+      background: #12ada9
+    }
+
+    .area dd {
+      width: 100%;
+      margin: 0 0 0 0%;
+      position: relative;
+    }
+
+    .area dd p {
+      bottom: 5px;
+      right: 0px;
+      position: absolute;
+      color: #919191
+    }
+
+    .area textarea {
+      background: #eee;
+      resize: none;
+      width: 90%;
+      padding: 10px 5%;
+    }
+
+    .gsList li.btnArea {
+      margin: 20px 0 20px 0%
+    }
+
+    .gsList li.btnArea input {
+      display: block;
+      width: 80%;
+      height: 36px;
+      background: #12ada9;
+      color: white;
+      margin: 0 auto;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .attx {
+      color: #666;
+    }
+
+    .attx h4 {
+      color: #12ada9;
+    }
+
+    textarea {
+      outline: none
+    }
+
+
+    .uploadBox {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .uploadBox span {
+      display: inline-block;
+      margin: 3px;
+      width: 80px;
+      height: 80px;
+      background: #eee
+    }
+
+    .uploadBox span img {
+      width: 100%;
+      height: 100%;
+      display: block
+    }
+
+    .gsList li .loader {
+      height: 60px;
+      margin: 3px
+    }
+  </style>
+</head>
+
+<body>
+  <div id="vue">
+    <header class="header" id="header">
+      <a class="headerLeft" onclick="api.closeWin()">
+        <i class="icon iconfont iconback"></i>
+      </a>
+      <div class="headerTle">发布编辑</div>
+      <a class="headerRight addMsg" style="width:12%">
+        <span class="submit" @click="submit"><b>发布</b></span>
+      </a>
+    </header>
+    <div class="groupsend">
+      <div class="gsWrap">
+        <ul class="gsList">
+          <li>
+            <dl class="flex">
+              <dt><b>推广名称</b></dt>
+              <dd>
+                <input type="text" class="tradeType" v-model="title" placeholder="请输入标题">
+              </dd>
+            </dl>
+          </li>
+          <li>
+            <dl class="flex">
+              <dt><b>信息分类</b></dt>
+              <dd style="position: relative;">
+                <input type="text" class="tradeType" id="cate" v-model="catelogy" readonly="readonly"
+                  placeholder="请选择分类">
+                <span class="iconfont iconright" id="down"></span>
+              </dd>
+            </dl>
+          </li>
+          <li>
+            <dl class="flex">
+              <dt><b>联系人</b></dt>
+              <dd>
+                <input type="text" class="tradeType" v-model="username" placeholder="请输入联系人">
+              </dd>
+            </dl>
+          </li>
+          <li>
+            <dl class="flex">
+              <dt><b>联系方式</b></dt>
+              <dd>
+                <input type="number" class="tradeType" v-model="phone" placeholder="请输入联系方式">
+              </dd>
+            </dl>
+          </li>
+          <li>
+            <dl class="flex">
+              <dt><b>数量</b></dt>
+              <dd>
+                <input type="number" class="tradeType" v-model="number" placeholder="请填写数量">
+              </dd>
+            </dl>
+          </li>
+          <li>
+            <dl class="area">
+              <dt> <b>详情描述</b></dt>
+              <dd>
+                <textarea name="" cols="30" rows="8" id="textarea" maxlength="60" v-on:keyup="content()"
+                  v-model="contents" placeholder="请填写详情"></textarea>
+                <p class="p_count"> 字数 <b id="numb">{{ conterNum }}</b>（60字/条）</p>
+              </dd>
+            </dl>
+          </li>
+          <li>
+            <dl class="flex">
+              <dt><b>上传照片</b><span style="color: #cccccc;font-size: 16px;">({{picslist.length}}/5)</span> </dt>
+              <dd class="uploadBox">
+                <div
+                  style="width: 80px;height:80px;border:1px solid #ccc; text-align: center;border-radius: 5px;margin-right: 5px;"
+                  @click="uploadpic">
+                  <img src="../image/user/add.png" alt="" style="width: 60px;height: 60px;padding-top: 10px;">
+                </div>
+                <span v-for="(item,index) in imgList" :key="index" class="imgItem">
+                  <img :src="item" alt="">
+                  <span class="close" @click="close(index)">×</span>
+                </span>
+              </dd>
+            </dl>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+<script type="text/javascript" src="../script/mobileSelect.min.js"></script>
+<script type="text/javascript" src="../script/tools.js"></script>
+<script type="text/javascript" src="../script/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+  var idid = $api.getStorage("uid");
+  var picslist = [];//图片显示列表
+  var len = 0;
+  apiready = function () {
+    $api.fixStatusBar($api.byId('header'));
+    var vm = new Vue({
+      el: "#vue",
+      data: {
+        title: '',
+        phone: '',
+        catelogy: '',
+        cateId: "",//分类id
+        contents: '',
+        conterNum: 0,
+        cInput: false,
+        cateList: [],
+        number: 0,
+        imgList: picslist,
+        username: ''
+      },
+      mounted: function () {
+        this.initCatelogy();
+      },
+      methods: {
+        content() {
+          let self = this;
+          if (self.cInput == false) {
+            self.conterNum = self.contents.length;
+            if (self.conterNum >= 60) {
+              showTip("字数最多60个", "500", "top")
+            }
+          }
+        },
+        importStart() {
+          this.cInput = true;
+        },
+        importEnd() {
+          this.cInput = false;
+        },
+        /*发布推广*/
+        submit() {
+          var sub = this.imgList.join(',');
+          if (!isNotEmpry(this.title)) {
+            showTip("请输入有效的标题", 2000, "bottom")
+            return;
+          }
+          if (!isNotEmpry(this.cateId)) {
+            showTip("请选择信息分类", 2000, "bottom")
+            return;
+          }
+          if (!isNotEmpry(this.username)) {
+            showTip("请输入联系人", 2000, "bottom")
+            return;
+          }
+          var reg = /[\u4e00-\u9fa5]{2,4}/;
+          if (!reg.test(this.username)) {
+            showTip("请输入正确的联系人", 2000, "bottom")
+            return;
+          }
+          if (!isNotEmpry(this.phone)) {
+            showTip("请输入联系方式", 2000, "bottom")
+            return;
+          }
+          if (!isPositiveInteger(this.number)) {
+            showTip("请填写正确的数量(不能有小数)", 2000, "bottom");
+            return;
+          }
+          if (!isNotEmpry(this.contents)) {
+            showTip("请输入详情", 2000, "bottom")
+            return;
+          }
+          if (!isNotEmpry(this.imgList)) {
+            showTip("请选择图片", 2000, "bottom")
+            return;
+          }
+          var sdata = {
+            uid: $api.getStorage("uid"),
+            type: this.cateId,
+            goods: this.title,
+            pics: sub,
+            num: this.number,
+            name: this.username,
+            phone: this.phone,
+            description: this.contents
+          }
+          apidata({
+            url: "/api/jed/purchase_add",
+            data: sdata
+          }, function (ret) {
+            if (ret.status == 200) {
+              showTip("发布成功", "2000", "middle");
+              setTimeout(() => {
+                api.closeWin();
+                api.execScript({
+                  name: "home",
+                  frameName: "popularize",
+                  script: "fromRel()"
+                });
+                api.closeWin();
+              }, 2000)
+            }
+          });
+        },
+        initData() {
+          var sdata = {
+            uid: $api.getStorage("uid"),
+            id: id
+          };
+          apidata({
+            url: "/api/jed/purchase_lists",
+            data: sdata
+          }, function (ret) {
+            vm.title = ret.data.title;
+          });
+        },
+        initCatelogy() {
+          var sdata = {
+            uid: $api.getStorage("uid"),
+            type: 2
+          };
+          apidata({
+            url: "/api/jed/types_lists",
+            data: sdata
+          }, function (ret) {
+            var clist = [];
+            ret.data.forEach(ele => {
+              clist.push(ele.type_name);
+            })
+            var tlist = ret.data;
+            var mobileSelect1 = new MobileSelect({
+              trigger: '#cate',
+              title: '',
+              wheels: [
+                {
+                  data: clist
+                }
+              ],
+              position: [2],
+              transitionEnd: function (indexArr, data) {
+              },
+              callback: function (indexArr, data) {
+                vm.catelogy = data[0];
+                var objs = tlist.find(function (obj) {
+                  return obj.type_name == vm.catelogy;
+                })
+                vm.cateId = objs.id;
+              }
+            });
+          });
+        },
+        /*图片上传*/
+        uploadpic() {
+          if (picslist.length == 5) {
+            showTip('最多只能选择5张图片');
+            return;
+          }
+          upload();
+        },
+        /*删除图片*/
+        close(index) {
+          var aa = picslist.indexOf(picslist[index]);
+          this.imgList.splice(aa, 1)
+        }
+      }
+    })
+  };
+
+  //多图选择
+  function upload() {
+    var nums = 5;
+    var lens = picslist.length;
+    if (lens == 0) {
+      nums = 5;
+    } else {
+      nums = 5 - Number(lens)
+    }
+    var UIAlbumBrowser = api.require('UIAlbumBrowser');
+    UIAlbumBrowser.open({
+      max: nums,
+      styles: {
+        bg: '#fff',
+        mark: {
+          icon: '',
+          position: 'bottom_left',
+          size: 20
+        },
+        nav: {
+          bg: 'rgba(0,0,0,0.6)',
+          titleColor: '#fff',
+          titleSize: 18,
+          cancelColor: '#fff',
+          cancelSize: 16,
+          finishColor: '#fff',
+          finishSize: 16
+        },
+      },
+      alertTitle: '最多选择' + nums + '张喔',
+      rotation: true
+    }, function (ret) {
+      if (ret) {
+        if (ret.eventType == "confirm") {
+          var list = ret.list;
+          len = list.length;
+          if (list) {
+            for (let i = 0; i < list.length; i++) {
+              var a = list[i].path;
+              uploading(a);
+            }
+          } else {
+            console.log(24);
+          }
+        }
+      }
+    });
+  }
+
+  /*图片上传*/
+  function uploading(avatar) {
+    api.showProgress({
+      title: '上传中...',
+      modal: true
+    });
+    api.ajax({
+      url: "http://www.keyuanbang.net/api/jed/pic_uploads",
+      method: 'post',
+      headers: {
+        sign: $api.getStorage('sign'),
+        sign_o: $api.getStorage('sign_o')
+      },
+      data: {
+        files: {
+          file: avatar
+        },
+        values: {
+          uid: idid
+        }
+      }
+    }, function (ret, err) {
+      if (ret) {
+        picslist.push(ret.data.url);
+        len--;
+        if (len == 0) {
+          api.hideProgress()
+        }
+      } else {
+        api.hideProgress();
+        showTip(msg, '1000', 'bottom');
+      }
+    })
+  }
+</script>
+
+</html>

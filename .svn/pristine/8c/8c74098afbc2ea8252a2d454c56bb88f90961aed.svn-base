@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/css.css" />
+    <link rel="stylesheet" type="text/css" href="../css/mobileSelect.css" />
+
+    <script type="text/javascript"
+        src="https://api.map.baidu.com/api?v=2.0&ak=Sk2jbVWPdmZK0QEGiQ8aB3WuzAOVh1Rk"></script>
+
+
+</head>
+
+<body>
+    <div class="mw">
+        <div id="bmap"></div>
+
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        var map = api.require('bMap');
+
+
+        console.log(map)
+
+
+
+        map.open({
+            rect: {
+                x: 0,
+                y: 50,
+                w: api.winWidth,
+                h: api.winHeight * 2 / 3
+            },
+            zoomLevel: 15,
+            showUserLocation: true
+        }, function (ret) {
+            map.getLocation({
+                accuracy: '10m',
+                autoStop: true,
+                filter: 1
+            }, function (ret) {
+                var sta = ret.status;
+                z = sta;
+                lon_user = ret.lon;
+                x = lon_user;
+                wx = lon_user;
+                lat_user = ret.lat;
+                y = lat_user;
+                map.setCenter({
+                    coords: {
+                        lon: lon_user,
+                        lat: lat_user
+                    },
+                    animation: true
+                });
+            });
+        });
+
+
+
+        map.searchNearby({
+            keyword: 'KTV',
+            lon: 116.384767,
+            lat: 39.989539,
+            radius: 2000
+        }, function (ret, err) {
+            if (ret.status) {
+                console.log(JSON.stringify(ret));
+            } else {
+                console.log(JSON.stringify(err));
+            }
+        });
+
+
+    };
+
+
+    var url = "http://api.map.baidu.com/place/v2/search?query=餐饮&region=北京&ak=Sk2jbVWPdmZK0QEGiQ8aB3WuzAOVh1Rk";
+    //    $.get(url,function(data){
+    //        console.log(data)
+    //    })
+
+    $.ajax({
+        url: url,
+        type: "get",
+        header: {
+            "Access-Control-Allow-Origin": "*"
+        },
+        dataType: "json",
+        async: false,
+        success: function (ret) {
+            console.log(ret);
+        }
+    })
+
+</script>
+
+</html>
+<style>
+    html,
+    body {
+        height: 100%;
+    }
+
+    .mw {
+        height: 100%;
+    }
+
+    #bmap {
+        height: 100%;
+        width: 100%;
+    }
+</style>

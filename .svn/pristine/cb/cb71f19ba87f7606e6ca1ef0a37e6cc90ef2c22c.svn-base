@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/base.css" />
+      <link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+      <link rel="stylesheet" type="text/css" href="../css/style.css" />
+      <style>
+        
+      </style>
+  </head>
+  <body>
+     <div>
+        <header class="header" id="header">
+            <a class="headerLeft" onclick="api.closeWin()">
+                <i class="icon iconfont iconback"></i>
+            </a>
+            <div class="headerTle">VIP兑换</div>         
+        </header>
+        <div class="vexc">
+            <div> 
+                   <dl>
+                       <dt>
+                           <input type="text" placeholder="请输入兑换码" id="code">
+                        </dt>
+                       <dd>
+                           <a href="javascript:;" onclick="submit()">
+                               确认
+                           </a>
+                       </dd>
+
+                   </dl>
+
+                   <div class="tips">
+                         <p>
+                             激活成功后 您将成为客源帮VIP会员
+                         </p>
+                   </div>
+            </div>
+        </div>
+     </div>
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/jquery-1.7.2.min.js "></script>
+  <script type="text/javascript" src="../script/tools.js "></script>
+  <script type="text/javascript">
+      apiready = function(){
+            fixbar();
+
+
+          
+      };
+  
+
+      $(document).ready(function(){
+
+             console.log("vip exchange");
+
+             var uid=$api.getStorage("uid");
+             console.log(uid)
+
+      });
+
+
+      function submit(){
+          var code=$("#code").val();
+    
+          if(code!=""&&code!=" "&&code!=undefined&&code!=undefined){
+             
+             console.log("kaishi duihuan");
+             
+             apidata({
+                url: "/api/jed/to_excel",
+                data: {
+                        uid: $api.getStorage("uid"),
+                        code: code
+                     }
+             },function(ret){
+                 if(ret.status==200){
+                      showTip("成功兑换",800,"middle");
+                 }else{
+                      console.log(JSON.stringify(ret));
+                      showTip(ret.return_msg,800,"middle");  
+                 }
+               
+
+             },function(){
+
+             })
+            
+
+          }else{
+              console.log("bun wei kong");
+              showTip("请输入有效兑换码！")
+          }
+      }
+
+
+  </script>
+
+  <style>
+      HTML,body{background: white}
+   .vexc{
+       padding: 88px 0 0 0;
+   }
+
+   dl{padding: 10px}
+   dl dt{width: 80%;margin: 0 auto}
+   dl dt input{ height: 40px; width: 100%;
+     background: white;
+     border:1px solid #00aced;
+     border-radius: 30px;
+     box-sizing: border-box;
+     padding: 5px 10px
+   
+   }
+   dl dd {margin: 30px 25% 0 25%}
+   dl dd a{
+        display: block;
+     margin: 0 auto;
+     width:100%;
+     height: 40px;
+    line-height: 40px;
+     color: white;
+     background: #00aced;
+     text-align: center;
+     font-size: 16px;
+     cursor: pointer;
+     border-radius: 10px
+     
+   }
+
+ .tips{padding: 20px 0 10px;text-align: center;color: #666}
+
+  </style>
+  </html>
